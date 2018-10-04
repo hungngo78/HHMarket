@@ -49,13 +49,13 @@ body {
 	font-weight: 300;
 }
 .form-full {
-    width: 100%;
+    width: 96%;
     min-height: 1px;
 	padding-top: 20px;
 	padding-left: 20px;	  
 	box-sizing: border-box;
 }
-.form-control {
+.form-control-bk {
     /*font-family: 'Retina'; 
     font-size: 14px;
     font-weight: 400;
@@ -73,8 +73,7 @@ body {
     position: relative;
     outline: 0
 }
-.form-control-bk {
-    width: 90%;
+.form-control {
     background-color: transparent;
     border-top: 0;
     border-right: 0;
