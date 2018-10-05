@@ -8,6 +8,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using HHMarketWebApp.Models;
+using FormsAuth;
 
 namespace HHMarketWebApp.Controllers
 {
@@ -23,24 +24,30 @@ namespace HHMarketWebApp.Controllers
 
         // POST 
         [HttpPost]
-        public ActionResult Login(String username, String password)
+        //public ActionResult Login(String username, String password)
+        public ActionResult Login([Bind(Include = "Username,Password")]Logon logon)
         {
             if (ModelState.IsValid)
             {
-                User user = db.User
-                            .Include(i => i.Carts)
-                            .Where(i => (i.UserName == username && i.Password == password))
-                            .FirstOrDefault();
-                if (user != null)
+                // Authenticate the user.
+                if (UserManager.ValidateUser(logon, Response))
                 {
-                    ViewBag.UserId = user.UserId;
+                    // Redirect to the secure area.
                     return RedirectToAction("Index", "Home");
                 }
             }
 
-            ViewBag.UserId = "";
             ViewBag.LoginFailure = 1;
             return View();
+        }
+
+        // GET
+        public ActionResult Logout()
+        {
+            // Clear the user session and forms auth ticket.
+            UserManager.Logoff(Session, Response);
+
+            return RedirectToAction("Login", "User");
         }
 
         // GET: User

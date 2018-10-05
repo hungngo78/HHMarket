@@ -10,6 +10,11 @@ namespace HHMarketWebApp.Controllers
     {
         public ActionResult Index()
         {
+            if (HttpContext.User != null)
+            {
+                ViewBag.IsAuthenticated = 1;
+            }
+
             return View();
         }
 

@@ -21,7 +21,7 @@
                         <span class="icon-bar"></span>
                     </button>
                 </div>
-                @if (ViewBag.UserId != null && ViewBag.UserId != "")
+                @if (ViewBag.IsAuthenticated == 1)
                 {
                     <div class="collapse navbar-collapse" id="myNavbar">
                         <ul class="nav navbar-nav navbar-right">
@@ -29,7 +29,9 @@
                             <li class="dropdown">
                                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">Account <span class="caret"></span></a>
                                 <ul class="dropdown-menu">
-                                    <li><a href="#">Sign in</a></li>
+                                    <li>
+                                        @Html.ActionLink("Sign out", "Logout", "User")
+                                    </li>
                                     <li><a href="#">Your account</a></li>
                                     <li><a href="#">Your orders</a></li>
                                 </ul>
