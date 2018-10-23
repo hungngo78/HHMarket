@@ -174,7 +174,7 @@ namespace HHMarketWebApp.Provider
         {
             // Lookup user in database, web service, etc. We'll just generate a fake user for this demo.
             DBModelContainer db = new DBModelContainer();
-            Models.User userEntity = db.User
+            Models.User userEntity = db.Users
                             .Include(i => i.Carts)
                             .Where(i => (i.UserName == username && i.Password == password))
                             .FirstOrDefault();

@@ -1,0 +1,336 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="DBModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
+  <EntityContainer Name="DBModelContainer" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="User" EntityType="DBModel.User" />
+    <EntitySet Name="MainCategory" EntityType="DBModel.MainCategory" />
+    <EntitySet Name="Category" EntityType="DBModel.Category" />
+    <AssociationSet Name="MainCategoryCategory" Association="DBModel.MainCategoryCategory">
+      <End Role="MainCategory" EntitySet="MainCategory" />
+      <End Role="Category" EntitySet="Category" />
+    </AssociationSet>
+    <EntitySet Name="Product" EntityType="DBModel.Product" />
+    <AssociationSet Name="CategoryProduct" Association="DBModel.CategoryProduct">
+      <End Role="Category" EntitySet="Category" />
+      <End Role="Product" EntitySet="Product" />
+    </AssociationSet>
+    <AssociationSet Name="UserProduct" Association="DBModel.UserProduct">
+      <End Role="User" EntitySet="User" />
+      <End Role="Product" EntitySet="Product" />
+    </AssociationSet>
+    <EntitySet Name="ProductDetails" EntityType="DBModel.ProductDetails" />
+    <AssociationSet Name="ProductProductDetails" Association="DBModel.ProductProductDetails">
+      <End Role="Product" EntitySet="Product" />
+      <End Role="ProductDetails" EntitySet="ProductDetails" />
+    </AssociationSet>
+    <EntitySet Name="Cart" EntityType="DBModel.Cart" />
+    <AssociationSet Name="UserCart" Association="DBModel.UserCart">
+      <End Role="User" EntitySet="User" />
+      <End Role="Cart" EntitySet="Cart" />
+    </AssociationSet>
+    <EntitySet Name="CartDetails" EntityType="DBModel.CartDetails" />
+    <AssociationSet Name="CartCartDetails" Association="DBModel.CartCartDetails">
+      <End Role="Cart" EntitySet="Cart" />
+      <End Role="CartDetails" EntitySet="CartDetails" />
+    </AssociationSet>
+    <AssociationSet Name="ProductDetailsCartDetails" Association="DBModel.ProductDetailsCartDetails">
+      <End Role="ProductDetails" EntitySet="ProductDetails" />
+      <End Role="CartDetails" EntitySet="CartDetails" />
+    </AssociationSet>
+    <EntitySet Name="Order" EntityType="DBModel.Order" />
+    <AssociationSet Name="UserOrder" Association="DBModel.UserOrder">
+      <End Role="User" EntitySet="User" />
+      <End Role="Order" EntitySet="Order" />
+    </AssociationSet>
+    <EntitySet Name="OrderDetails" EntityType="DBModel.OrderDetails" />
+    <AssociationSet Name="OrderOrderDetails" Association="DBModel.OrderOrderDetails">
+      <End Role="Order" EntitySet="Order" />
+      <End Role="OrderDetails" EntitySet="OrderDetails" />
+    </AssociationSet>
+    <AssociationSet Name="ProductDetailsOrderDetails" Association="DBModel.ProductDetailsOrderDetails">
+      <End Role="ProductDetails" EntitySet="ProductDetails" />
+      <End Role="OrderDetails" EntitySet="OrderDetails" />
+    </AssociationSet>
+    <EntitySet Name="Review" EntityType="DBModel.Review" />
+    <AssociationSet Name="UserReview" Association="DBModel.UserReview">
+      <End Role="User" EntitySet="User" />
+      <End Role="Review" EntitySet="Review" />
+    </AssociationSet>
+    <AssociationSet Name="ProductReview" Association="DBModel.ProductReview">
+      <End Role="Product" EntitySet="Product" />
+      <End Role="Review" EntitySet="Review" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="User">
+    <Key>
+      <PropertyRef Name="UserId" />
+    </Key>
+    <Property Name="UserId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserName" Type="String" Nullable="false" />
+    <Property Name="Password" Type="String" Nullable="false" />
+    <Property Name="Email" Type="String" Nullable="false" />
+    <Property Name="FirstName" Type="String" Nullable="false" />
+    <Property Name="LastName" Type="String" Nullable="false" />
+    <Property Name="Address" Type="String" Nullable="false" />
+    <Property Name="City" Type="String" Nullable="false" />
+    <Property Name="State" Type="String" Nullable="false" />
+    <Property Name="ZipCode" Type="String" Nullable="false" />
+    <NavigationProperty Name="Products" Relationship="DBModel.UserProduct" FromRole="User" ToRole="Product" />
+    <NavigationProperty Name="Carts" Relationship="DBModel.UserCart" FromRole="User" ToRole="Cart" />
+    <NavigationProperty Name="Orders" Relationship="DBModel.UserOrder" FromRole="User" ToRole="Order" />
+    <NavigationProperty Name="Reviews" Relationship="DBModel.UserReview" FromRole="User" ToRole="Review" />
+  </EntityType>
+  <EntityType Name="MainCategory">
+    <Key>
+      <PropertyRef Name="MainCategoryId" />
+    </Key>
+    <Property Name="MainCategoryId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" Nullable="false" />
+    <Property Name="Description" Type="String" Nullable="false" />
+    <NavigationProperty Name="Categories" Relationship="DBModel.MainCategoryCategory" FromRole="MainCategory" ToRole="Category" />
+  </EntityType>
+  <EntityType Name="Category">
+    <Key>
+      <PropertyRef Name="CategoryId" />
+    </Key>
+    <Property Name="CategoryId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" Nullable="false" />
+    <Property Name="Description" Type="String" Nullable="false" />
+    <NavigationProperty Name="MainCategory" Relationship="DBModel.MainCategoryCategory" FromRole="Category" ToRole="MainCategory" />
+    <NavigationProperty Name="Products" Relationship="DBModel.CategoryProduct" FromRole="Category" ToRole="Product" />
+    <Property Name="MainCategoryId" Type="Int32" Nullable="false" />
+  </EntityType>
+  <Association Name="MainCategoryCategory">
+    <End Type="DBModel.MainCategory" Role="MainCategory" Multiplicity="1" />
+    <End Type="DBModel.Category" Role="Category" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MainCategory">
+        <PropertyRef Name="MainCategoryId" />
+      </Principal>
+      <Dependent Role="Category">
+        <PropertyRef Name="MainCategoryId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="Product">
+    <Key>
+      <PropertyRef Name="ProductId" />
+    </Key>
+    <Property Name="ProductId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" Nullable="false" />
+    <NavigationProperty Name="Category" Relationship="DBModel.CategoryProduct" FromRole="Product" ToRole="Category" />
+    <Property Name="Description" Type="String" Nullable="false" />
+    <NavigationProperty Name="User" Relationship="DBModel.UserProduct" FromRole="Product" ToRole="User" />
+    <NavigationProperty Name="ProductDetails" Relationship="DBModel.ProductProductDetails" FromRole="Product" ToRole="ProductDetails" />
+    <Property Name="CategoryId" Type="Int32" Nullable="false" />
+    <Property Name="UserId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Reviews" Relationship="DBModel.ProductReview" FromRole="Product" ToRole="Review" />
+  </EntityType>
+  <Association Name="CategoryProduct">
+    <End Type="DBModel.Category" Role="Category" Multiplicity="1" />
+    <End Type="DBModel.Product" Role="Product" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Category">
+        <PropertyRef Name="CategoryId" />
+      </Principal>
+      <Dependent Role="Product">
+        <PropertyRef Name="CategoryId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="UserProduct">
+    <End Type="DBModel.User" Role="User" Multiplicity="1" />
+    <End Type="DBModel.Product" Role="Product" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="UserId" />
+      </Principal>
+      <Dependent Role="Product">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="ProductDetails">
+    <Key>
+      <PropertyRef Name="ProductDetailsId" />
+    </Key>
+    <Property Name="ProductDetailsId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <NavigationProperty Name="Product" Relationship="DBModel.ProductProductDetails" FromRole="ProductDetails" ToRole="Product" />
+    <Property Name="Size" Type="String" Nullable="false" />
+    <Property Name="Color" Type="String" Nullable="false" />
+    <Property Name="Price" Type="Decimal" Nullable="false" />
+    <Property Name="Amount" Type="Int16" Nullable="false" />
+    <NavigationProperty Name="CartDetails" Relationship="DBModel.ProductDetailsCartDetails" FromRole="ProductDetails" ToRole="CartDetails" />
+    <Property Name="ProductId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="OrderDetails" Relationship="DBModel.ProductDetailsOrderDetails" FromRole="ProductDetails" ToRole="OrderDetails" />
+  </EntityType>
+  <Association Name="ProductProductDetails">
+    <End Type="DBModel.Product" Role="Product" Multiplicity="1" />
+    <End Type="DBModel.ProductDetails" Role="ProductDetails" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Product">
+        <PropertyRef Name="ProductId" />
+      </Principal>
+      <Dependent Role="ProductDetails">
+        <PropertyRef Name="ProductId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="Cart">
+    <Key>
+      <PropertyRef Name="CartId" />
+    </Key>
+    <Property Name="CartId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="DateOpen" Type="DateTime" Nullable="false" />
+    <NavigationProperty Name="User" Relationship="DBModel.UserCart" FromRole="Cart" ToRole="User" />
+    <NavigationProperty Name="CartDetails" Relationship="DBModel.CartCartDetails" FromRole="Cart" ToRole="CartDetails" />
+    <Property Name="UserId" Type="Int32" Nullable="true" />
+  </EntityType>
+  <Association Name="UserCart">
+    <End Type="DBModel.User" Role="User" Multiplicity="0..1" />
+    <End Type="DBModel.Cart" Role="Cart" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="UserId" />
+      </Principal>
+      <Dependent Role="Cart">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="CartDetails">
+    <Key>
+      <PropertyRef Name="CartDetailsId" />
+    </Key>
+    <Property Name="CartDetailsId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Amount" Type="Int16" Nullable="false" />
+    <Property Name="ExtendedPrice" Type="Decimal" Nullable="false" />
+    <Property Name="Type" Type="Int16" Nullable="false" />
+    <NavigationProperty Name="Cart" Relationship="DBModel.CartCartDetails" FromRole="CartDetails" ToRole="Cart" />
+    <NavigationProperty Name="ProductDetail" Relationship="DBModel.ProductDetailsCartDetails" FromRole="CartDetails" ToRole="ProductDetails" />
+    <Property Name="ProductDetailsId" Type="Int32" Nullable="false" />
+    <Property Name="CartId" Type="Int32" Nullable="false" />
+  </EntityType>
+  <Association Name="CartCartDetails">
+    <End Type="DBModel.Cart" Role="Cart" Multiplicity="1" />
+    <End Type="DBModel.CartDetails" Role="CartDetails" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Cart">
+        <PropertyRef Name="CartId" />
+      </Principal>
+      <Dependent Role="CartDetails">
+        <PropertyRef Name="CartId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="ProductDetailsCartDetails">
+    <End Type="DBModel.ProductDetails" Role="ProductDetails" Multiplicity="1" />
+    <End Type="DBModel.CartDetails" Role="CartDetails" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ProductDetails">
+        <PropertyRef Name="ProductDetailsId" />
+      </Principal>
+      <Dependent Role="CartDetails">
+        <PropertyRef Name="ProductDetailsId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="Order">
+    <Key>
+      <PropertyRef Name="OrderId" />
+    </Key>
+    <Property Name="OrderId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="OrderDate" Type="DateTime" Nullable="false" />
+    <Property Name="Status" Type="Int16" Nullable="false" />
+    <Property Name="DeliveryDate" Type="DateTime" Nullable="false" />
+    <Property Name="DeliveryFee" Type="Decimal" Nullable="false" />
+    <Property Name="Note" Type="String" Nullable="false" />
+    <Property Name="UserId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="User" Relationship="DBModel.UserOrder" FromRole="Order" ToRole="User" />
+    <NavigationProperty Name="OrderDetails" Relationship="DBModel.OrderOrderDetails" FromRole="Order" ToRole="OrderDetails" />
+  </EntityType>
+  <Association Name="UserOrder">
+    <End Type="DBModel.User" Role="User" Multiplicity="1" />
+    <End Type="DBModel.Order" Role="Order" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="UserId" />
+      </Principal>
+      <Dependent Role="Order">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="OrderDetails">
+    <Key>
+      <PropertyRef Name="OrderDetailsId" />
+    </Key>
+    <Property Name="OrderDetailsId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Amount" Type="Int16" Nullable="false" />
+    <Property Name="ExtendedPrice" Type="Decimal" Nullable="false" />
+    <Property Name="OrderId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Order" Relationship="DBModel.OrderOrderDetails" FromRole="OrderDetails" ToRole="Order" />
+    <Property Name="ProductDetailsId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="ProductDetail" Relationship="DBModel.ProductDetailsOrderDetails" FromRole="OrderDetails" ToRole="ProductDetails" />
+  </EntityType>
+  <Association Name="OrderOrderDetails">
+    <End Type="DBModel.Order" Role="Order" Multiplicity="1" />
+    <End Type="DBModel.OrderDetails" Role="OrderDetails" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Order">
+        <PropertyRef Name="OrderId" />
+      </Principal>
+      <Dependent Role="OrderDetails">
+        <PropertyRef Name="OrderId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="ProductDetailsOrderDetails">
+    <End Type="DBModel.ProductDetails" Role="ProductDetails" Multiplicity="1" />
+    <End Type="DBModel.OrderDetails" Role="OrderDetails" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ProductDetails">
+        <PropertyRef Name="ProductDetailsId" />
+      </Principal>
+      <Dependent Role="OrderDetails">
+        <PropertyRef Name="ProductDetailsId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="Review">
+    <Key>
+      <PropertyRef Name="ReviewId" />
+    </Key>
+    <Property Name="ReviewId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Content" Type="String" Nullable="false" />
+    <Property Name="OverallRating" Type="Int16" Nullable="false" />
+    <Property Name="ReviewDate" Type="DateTime" Nullable="false" />
+    <Property Name="UserId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="User" Relationship="DBModel.UserReview" FromRole="Review" ToRole="User" />
+    <Property Name="ProductId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Product" Relationship="DBModel.ProductReview" FromRole="Review" ToRole="Product" />
+  </EntityType>
+  <Association Name="UserReview">
+    <End Type="DBModel.User" Role="User" Multiplicity="1" />
+    <End Type="DBModel.Review" Role="Review" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="UserId" />
+      </Principal>
+      <Dependent Role="Review">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="ProductReview">
+    <End Type="DBModel.Product" Role="Product" Multiplicity="1" />
+    <End Type="DBModel.Review" Role="Review" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Product">
+        <PropertyRef Name="ProductId" />
+      </Principal>
+      <Dependent Role="Review">
+        <PropertyRef Name="ProductId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

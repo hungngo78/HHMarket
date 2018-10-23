@@ -33,7 +33,7 @@ namespace HHMarketWebApp.Controllers
                 if (UserManager.ValidateUser(logon, Response))
                 {
                     // Redirect to the secure area.
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "Category");
                 }
             }
 
@@ -53,7 +53,7 @@ namespace HHMarketWebApp.Controllers
         // GET: User
         public async Task<ActionResult> Index()
         {
-            return View(await db.User.ToListAsync());
+            return View(await db.Users.ToListAsync());
         }
 
         // GET: User/Details/5
@@ -63,7 +63,7 @@ namespace HHMarketWebApp.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            User user = await db.User.FindAsync(id);
+            User user = await db.Users.FindAsync(id);
             if (user == null)
             {
                 return HttpNotFound();
@@ -86,7 +86,7 @@ namespace HHMarketWebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.User.Add(user);
+                db.Users.Add(user);
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
@@ -101,7 +101,7 @@ namespace HHMarketWebApp.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            User user = await db.User.FindAsync(id);
+            User user = await db.Users.FindAsync(id);
             if (user == null)
             {
                 return HttpNotFound();
@@ -132,7 +132,7 @@ namespace HHMarketWebApp.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            User user = await db.User.FindAsync(id);
+            User user = await db.Users.FindAsync(id);
             if (user == null)
             {
                 return HttpNotFound();
@@ -145,8 +145,8 @@ namespace HHMarketWebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            User user = await db.User.FindAsync(id);
-            db.User.Remove(user);
+            User user = await db.Users.FindAsync(id);
+            db.Users.Remove(user);
             await db.SaveChangesAsync();
             return RedirectToAction("Index");
         }

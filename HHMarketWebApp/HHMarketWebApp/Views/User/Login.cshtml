@@ -2,64 +2,66 @@
 
 @using (Html.BeginForm())
 {
-    <div class="cardwrapper">
-        <div class="card-pad" id="basic_login">
-            <div class="card-title">Sign In</div>
-            <div class="card-content">
-                <form action="#">
-                    <div class="form-group form-full">
-                        <label for="email">Username:</label>
+    <div class="pages">
+        <div class="cardwrapper">
+            <div class="card-pad" id="basic_login">
+                <div class="card-title">Sign In</div>
+                <div class="card-content">
+                    <form action="#">
+                        <div class="form-group form-full">
+                            <label for="email">Username:</label>
+                            @if (ViewBag.LoginFailure == 1)
+                            {
+                                @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control input-error" } })
+                            }
+                            else
+                            {
+                                @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control" } })
+                                <!----input type="email" class="form-control" id="email" /-->
+                            }
+                        </div>
+                        <div class="form-group form-full">
+                            <label for="pwd">Password:</label>
+                            @if (ViewBag.LoginFailure == 1)
+                            {
+                                @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control input-error", placeholder = "Password" } })
+                            }
+                            else
+                            {
+                                @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", placeholder = "Password" } })
+                                <!--input type = "password" class="form-control" id="pwd" /-->
+                            }
+                        </div>
                         @if (ViewBag.LoginFailure == 1)
                         {
-                            @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control input-error" } })
+                            <div class="form__full" style="">
+                                <p class="errors" id="login-errors" style="">We were unable to find this username and password combination.</p>
+                                <!--p class="errors" id="recaptcha-error" style="display:none" data-token="errorForUser210988">Due to five unsuccessful login attempts, please check the verification box below, re-enter your login details and click Login. For password assistance, click 'Forgot your password?' below.</p-->
+                            </div>
                         }
-                        else
-                        {
-                            @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control" } })
-                            <!----input type="email" class="form-control" id="email" /-->
-                        }
-                    </div>
-                    <div class="form-group form-full">
-                        <label for="pwd">Password:</label>
-                        @if (ViewBag.LoginFailure == 1)
-                        {
-                            @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control input-error", placeholder = "Password" } })
-                        }
-                        else
-                        {
-                            @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", placeholder = "Password" } })
-                            <!--input type = "password" class="form-control" id="pwd" /-->
-                        }
-                    </div>
-                    @if (ViewBag.LoginFailure == 1)
-                    {
-                        <div class="form__full" style="">
-                            <p class="errors" id="login-errors" style="">We were unable to find this username and password combination.</p>
-                            <!--p class="errors" id="recaptcha-error" style="display:none" data-token="errorForUser210988">Due to five unsuccessful login attempts, please check the verification box below, re-enter your login details and click Login. For password assistance, click 'Forgot your password?' below.</p-->
+                        <div class="form-group form-full">
+                            <div class="custom-control custom-checkbox mb-3">
+                                <input type="checkbox" class="custom-control-input" id="customCheck" name="example1">
+                                <label class="custom-control-label" for="customCheck">Remember me</label>
+                            </div>
                         </div>
-                    }
-                    <div class="form-group form-full">
-                        <div class="custom-control custom-checkbox mb-3">
-                            <input type="checkbox" class="custom-control-input" id="customCheck" name="example1">
-                            <label class="custom-control-label" for="customCheck">Remember me</label>
+                        <div class="form-full">
+                            <p><input type="submit" value="Sign In &raquo;" class="btn btn-default" /></p>
                         </div>
-                    </div>
-                    <div class="form-full">
-                        <p><input type="submit" value="Sign In &raquo;" class="btn btn-default" /></p>
-                    </div>
 
-                </form>
-            </div>
-        </div>
-        <div class="card-pad" id="register">
-            <div class="card-subtitle">New to HHMarket?</div>
-            <form action="#">
-                <div class="form-full">
-                    <p class="button button-alt">Register</p>
+                    </form>
                 </div>
-            </form>
+            </div>
+            <div class="card-pad" id="register">
+                <div class="card-subtitle">New to HHMarket?</div>
+                <form action="#">
+                    <div class="form-full">
+                        <p class="button button-alt">Register</p>
+                    </div>
+                </form>
 
 
+            </div>
         </div>
     </div>
 }
