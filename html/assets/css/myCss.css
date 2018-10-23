@@ -1,0 +1,102 @@
+
+.Rectangle {
+  width: 220px;
+  background-color: rgba(216, 216, 216, 0.31);
+  border: solid 1px rgba(151, 151, 151, 0.06);
+  margin-top: 10px;
+  padding-bottom: 10px;
+  padding-left:5px;
+  padding-right: 5px;
+
+}
+
+.img_category {
+  width:100%; 
+  height:400px; 
+  max-height:400px; 
+  background-position:center;  
+  background-size: contain;
+}
+.product_img {
+  width: 200px;
+  height: 200px;
+  opacity: 0.95;
+  padding-top:10px;
+  padding-bottom: 10px;
+  display: block;
+  margin: auto;
+
+}
+
+.product_lb {
+  width: 127px;
+  height: 17px;
+  font-family: AmericanTypewriter;
+  font-size: 13px;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: #000000;
+  
+}
+
+.price_lb {
+  width: 43px;
+  height: 24px;
+  font-family: AmericanTypewriter;
+  font-size: 13px;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: #4a4a4a;
+}
+
+.price {
+  width: 64px;
+  height: 30px;
+  font-family: AmericanTypewriter;
+  font-size: 15px;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: #d0021b;
+}
+
+.orginal_price {
+  width: 39px;
+  height: 15px;
+  font-family: AmericanTypewriter;
+  font-size: 11px;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: #585a5d;
+}
+
+.review_lb {
+  width: 64px;
+  height: 24px;
+  font-family: AmericanTypewriter;
+  font-size: 13px;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: #4a4a4a;
+}
+
+.Star {
+  width: 12px;
+  height: 12px;
+  background-color: #f5a623;
+  border: solid 1px #f5a623;
+}
