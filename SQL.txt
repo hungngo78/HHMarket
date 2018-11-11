@@ -1,0 +1,164 @@
+CREATE TABLE [dbo].[User] (
+    [UserId]    INT            IDENTITY (1, 1) NOT NULL,
+    [UserName]  NVARCHAR (MAX) NOT NULL,
+    [Password]  NVARCHAR (MAX) NOT NULL,
+    [Email]     NVARCHAR (MAX) NOT NULL,
+    [FirstName] NVARCHAR (MAX) NOT NULL,
+    [LastName]  NVARCHAR (MAX) NOT NULL,
+    [Address]   NVARCHAR (MAX) NOT NULL,
+    [City]      NVARCHAR (MAX) NOT NULL,
+    [State]     NVARCHAR (MAX) NOT NULL,
+    [ZipCode]   NVARCHAR (MAX) NOT NULL,
+    CONSTRAINT [PK_User] PRIMARY KEY CLUSTERED ([UserId] ASC)
+);
+
+CREATE TABLE [dbo].[MainCategory] (
+    [MainCategoryId] INT            IDENTITY (1, 1) NOT NULL,
+    [Name]           NVARCHAR (MAX) NOT NULL,
+    [Description]    NVARCHAR (MAX) NOT NULL,
+    CONSTRAINT [PK_MainCategory] PRIMARY KEY CLUSTERED ([MainCategoryId] ASC)
+);
+
+CREATE TABLE [dbo].[Category] (
+    [CategoryId]     INT            IDENTITY (1, 1) NOT NULL,
+    [Name]           NVARCHAR (100) NOT NULL,
+    [Picture]        NVARCHAR (200) NOT NULL,
+    [Description]    NVARCHAR (200) NOT NULL,
+    [MainCategoryId] INT            NOT NULL,
+    CONSTRAINT [PK_Category] PRIMARY KEY CLUSTERED ([CategoryId] ASC),
+    CONSTRAINT [FK_MainCategoryCategory] FOREIGN KEY ([MainCategoryId]) REFERENCES [dbo].[MainCategory] ([MainCategoryId])
+);
+
+CREATE TABLE [dbo].[Product] (
+    [ProductId]   INT            IDENTITY (1, 1) NOT NULL,
+    [Name]        NVARCHAR (100) NOT NULL,
+    [Description] NVARCHAR (200) NOT NULL,
+    [CategoryId]  INT            NOT NULL,
+    [UserId]      INT            NOT NULL,
+    CONSTRAINT [PK_Product] PRIMARY KEY CLUSTERED ([ProductId] ASC),
+    CONSTRAINT [FK_UserProduct] FOREIGN KEY ([UserId]) REFERENCES [dbo].[User] ([UserId]),
+    CONSTRAINT [FK_CategoryProduct] FOREIGN KEY ([CategoryId]) REFERENCES [dbo].[Category] ([CategoryId])
+);
+
+CREATE TABLE [dbo].[ProductDetails] (
+    [ProductDetailsId] INT            IDENTITY (1, 1) NOT NULL,
+    [Color]            NVARCHAR (50)  NOT NULL,
+    [Size]             NVARCHAR (20)  NOT NULL,
+    [Picture]          NVARCHAR (200) NOT NULL,
+    [Price]            DECIMAL (18)   NOT NULL,
+    [Amount]           SMALLINT       NOT NULL,
+    [ProductId]        INT            NOT NULL,
+    CONSTRAINT [PK_ProductDetails] PRIMARY KEY CLUSTERED ([ProductDetailsId] ASC),
+    CONSTRAINT [FK_ProductProductDetails] FOREIGN KEY ([ProductId]) REFERENCES [dbo].[Product] ([ProductId])
+);
+
+CREATE TABLE [dbo].[Cart] (
+    [CartId]   INT      IDENTITY (1, 1) NOT NULL,
+    [DateOpen] DATETIME NOT NULL,
+    [UserId]   INT      NULL,
+    CONSTRAINT [PK_Cart] PRIMARY KEY CLUSTERED ([CartId] ASC),
+    CONSTRAINT [FK_UserCart] FOREIGN KEY ([UserId]) REFERENCES [dbo].[User] ([UserId])
+);
+
+CREATE TABLE [dbo].[CartDetails] (
+    [CartDetailsId]    INT          IDENTITY (1, 1) NOT NULL,
+    [Amount]           SMALLINT     NOT NULL,
+    [ExtendedPrice]    DECIMAL (18) NOT NULL,
+    [Type]             SMALLINT     NOT NULL,
+    [ProductDetailsId] INT          NOT NULL,
+    [CartId]           INT          NOT NULL,
+    CONSTRAINT [PK_CartDetails] PRIMARY KEY CLUSTERED ([CartDetailsId] ASC),
+    CONSTRAINT [FK_CartCartDetails] FOREIGN KEY ([CartId]) REFERENCES [dbo].[Cart] ([CartId]),
+    CONSTRAINT [FK_ProductDetailsCartDetails] FOREIGN KEY ([ProductDetailsId]) REFERENCES [dbo].[ProductDetails] ([ProductDetailsId])
+);
+
+CREATE TABLE [dbo].[Order] (
+    [OrderId]      INT            IDENTITY (1, 1) NOT NULL,
+    [OrderDate]    DATETIME       NOT NULL,
+    [Status]       SMALLINT       NOT NULL,
+    [DeliveryDate] DATETIME       NOT NULL,
+    [DeliveryFee]  DECIMAL (18)   NOT NULL,
+    [Note]         NVARCHAR (MAX) NOT NULL,
+    [UserId]       INT            NOT NULL,
+    CONSTRAINT [PK_Order] PRIMARY KEY CLUSTERED ([OrderId] ASC),
+    CONSTRAINT [FK_UserOrder] FOREIGN KEY ([UserId]) REFERENCES [dbo].[User] ([UserId])
+);
+
+CREATE TABLE [dbo].[OrderDetails] (
+    [OrderDetailsId]   INT          IDENTITY (1, 1) NOT NULL,
+    [Amount]           SMALLINT     NOT NULL,
+    [ExtendedPrice]    DECIMAL (18) NOT NULL,
+    [OrderId]          INT          NOT NULL,
+    [ProductDetailsId] INT          NOT NULL,
+    CONSTRAINT [PK_OrderDetails] PRIMARY KEY CLUSTERED ([OrderDetailsId] ASC),
+    CONSTRAINT [FK_OrderOrderDetails] FOREIGN KEY ([OrderId]) REFERENCES [dbo].[Order] ([OrderId]),
+    CONSTRAINT [FK_ProductDetailsOrderDetails] FOREIGN KEY ([ProductDetailsId]) REFERENCES [dbo].[ProductDetails] ([ProductDetailsId])
+);
+
+CREATE TABLE [dbo].[Review] (
+    [ReviewId]      INT            IDENTITY (1, 1) NOT NULL,
+    [Content]       NVARCHAR (MAX) NOT NULL,
+    [OverallRating] SMALLINT       NOT NULL,
+    [ReviewDate]    DATETIME       NOT NULL,
+    [UserId]        INT            NOT NULL,
+    [ProductId]     INT            NOT NULL,
+    CONSTRAINT [PK_Review] PRIMARY KEY CLUSTERED ([ReviewId] ASC),
+    CONSTRAINT [FK_UserReview] FOREIGN KEY ([UserId]) REFERENCES [dbo].[User] ([UserId]),
+    CONSTRAINT [FK_ProductReview] FOREIGN KEY ([ProductId]) REFERENCES [dbo].[Product] ([ProductId])
+);
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_FK_UserReview]
+    ON [dbo].[Review]([UserId] ASC);
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_FK_ProductReview]
+    ON [dbo].[Review]([ProductId] ASC);
+
+GO
+CREATE NONCLUSTERED INDEX [IX_FK_OrderOrderDetails]
+    ON [dbo].[OrderDetails]([OrderId] ASC);
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_FK_ProductDetailsOrderDetails]
+    ON [dbo].[OrderDetails]([ProductDetailsId] ASC);
+
+GO
+CREATE NONCLUSTERED INDEX [IX_FK_UserOrder]
+    ON [dbo].[Order]([UserId] ASC);
+
+GO
+CREATE NONCLUSTERED INDEX [IX_FK_ProductProductDetails]
+    ON [dbo].[ProductDetails]([ProductId] ASC);
+	
+GO
+CREATE NONCLUSTERED INDEX [IX_FK_CartCartDetails]
+    ON [dbo].[CartDetails]([CartId] ASC);
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_FK_ProductDetailsCartDetails]
+    ON [dbo].[CartDetails]([ProductDetailsId] ASC);
+
+GO
+CREATE NONCLUSTERED INDEX [IX_FK_CategoryProduct]
+    ON [dbo].[Product]([CategoryId] ASC);
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_FK_UserProduct]
+    ON [dbo].[Product]([UserId] ASC);
+
+GO
+CREATE NONCLUSTERED INDEX [IX_FK_UserCart]
+    ON [dbo].[Cart]([UserId] ASC);
+	
+GO
+CREATE NONCLUSTERED INDEX [IX_FK_MainCategoryCategory]
+    ON [dbo].[Category]([MainCategoryId] ASC);
+
+
+	
