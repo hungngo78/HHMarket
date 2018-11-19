@@ -1,0 +1,88 @@
+﻿
+
+@model HHMarketWebApp.Models.User
+
+@using (Html.BeginForm("RegisterUser", "Registration", FormMethod.Post))
+    {
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" />
+        <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha/css/bootstrap.min.css' />
+        <link rel='stylesheet prefetch' href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,300' />
+        <link rel='stylesheet prefetch' href='https://fonts.googleapis.com/css?family=Roboto:400,700,300' />
+        <link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css' />
+        <link rel='stylesheet prefetch' href="~/Content/css/user/style.css" />
+        <div class="pages">
+            <div class="cardwrapper">
+                <div class="card-pad" id="basic_login">
+                    <div class="card-title">Register Account</div>
+                    <div class="card-content">
+                        <div class="container__child signup__form">
+
+                            <form action="#">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.UserName)
+                                    @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control", placeholder = "John" } })
+                                    @Html.ValidationMessageFor(model => model.UserName, "", new { style = "color:red;" })
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.FirstName)
+                                    @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control", placeholder = "John" } })
+                                    @Html.ValidationMessageFor(model => model.UserName, "", new { style = "color:red;" })
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.LastName)
+                                    @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control", placeholder = "John" } })
+                                    @Html.ValidationMessageFor(model => model.LastName, "", new { style = "color:red;" })
+                                    </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Address)
+                                    @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Address, "", new { style = "color:red;" })
+                                    </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.City)
+                                    @Html.EditorFor(model => model.City, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.City, "", new { style = "color:red;" })
+                                    </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.State)
+                                    @Html.EditorFor(model => model.State, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.State, "", new { style = "color:red;" })
+                                    </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.ZipCode)
+                                    @Html.EditorFor(model => model.ZipCode, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.ZipCode, "", new { style = "color:red;" })
+                                    </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Email)
+                                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", placeholder = "aaa@gmail.com" } })
+                                     @Html.ValidationMessageFor(model => model.Email, "", new { style = "color:red;" })
+                                    </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Password)
+                                    @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", type = "password", placeholder = "*******" } })
+                                    @Html.ValidationMessageFor(model => model.Password, "", new { style = "color:red;" })
+                                    </div>
+                              
+                                <div class="m-t-lg">
+                                    <ul class="list-inline">
+                                        <li>
+                                            <input class="btn btn--form" type="submit" value="Registration" />
+                                        </li>
+                                        <li>
+                                            <a class="signup__link" asp-area="" href="Login" asp-controller="User" asp-action="Login">I am already a member</a>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                            </form>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        }
