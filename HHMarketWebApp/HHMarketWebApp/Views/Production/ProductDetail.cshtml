@@ -1,0 +1,124 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model HHMarketWebApp.Models.ProductionDetail
+
+@{var displayItem = Model.listdata.ElementAt(0); }
+<style type="text/css">
+</style>
+
+<link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="~/Content/hhstyle.css">
+<link rel="stylesheet" type="text/css" href="~/Content/productDetail.css">
+
+<div class="container" style="margin-top: 50px;">
+    <div>
+        <p style="color:blue; padding-bottom: 10px;">Smartphone > Samsung > Galaxy S</p>
+        <table style="width:100%">
+            <tr>
+                <td style="width:40%">
+                    <div>
+                        <table>
+                            <td>
+                                <table>
+                                    @{ 
+                                        string[] image = displayItem.Picture.Split(',');
+
+                                    }
+                                    @foreach (var img in image)
+                                    {
+                                       <tr class="productdetail_image_rectangle" align="center">
+                                            <td> <img align="middle" class="productdetail_image" src="~/assets/production/@Html.DisplayFor(model => displayItem.ProductId)/@Html.DisplayFor(model => displayItem.Color)/@Html.DisplayFor(model => img)"></td>
+                                        </tr>
+                                    }
+                                    </table>
+                               </td>
+                            <td>
+                                <img align="middle" class="productdetail_image_large" src="~/assets/production/@Html.DisplayFor(model => displayItem.ProductId)/@Html.DisplayFor(model => displayItem.Color)/@Html.DisplayFor(model => image[0])">
+                            </td>
+                        </table>
+                        <div class="btn_addtocart" align="center">
+                            <button class="Add-to-Cart">Add to Cart</button>
+                        </div>
+                    </div>
+                </td>
+                <td class="product_detail_right">
+                    <div>
+                        <table>
+                            <tr>
+                                <p> @Html.DisplayFor(model => displayItem.ProductionName)</p>
+                            </tr>
+                            <tr>
+                                <td style="padding-right:10px;">by</td>
+                                <td style="color:blue;"> Samsung</td>
+                            </tr>
+                            <tr>
+                                <td style="padding-top: 10px;">
+                                    <table>
+                                        <tr>
+                                            <td> <img src="~/assets/common_img/Star.png"/></td>
+                                            <td> <img src="~/assets/common_img/Star.png"/></td>
+                                            <td> <img src="~/assets/common_img/Star.png"/></td>
+                                            <td> <img src="~/assets/common_img/Star.png"/></td>
+                                            <td> <img src="~/assets/common_img/Star.png"/></td>
+                                        </tr>
+                                    </table>
+
+                                </td>
+                                <td style="color:blue; padding-top: 10px; padding-left: 10px;">
+                                    48 customer reviews
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td style="color: blue; padding-top:10px;">
+                                    Price:
+                                </td>
+                                <td style="color:red; padding-top:10px;">
+                                    @Html.DisplayFor(model => displayItem.Price)$
+                                </td>
+
+                                <td class="orignal_price" style="padding-top:10px; padding-left:10px; padding-right: 10px;"> <strike>500.0$</strike></td>
+
+                                <td style="color:black; padding-top:10px;">
+                                    FREE Shipping
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="color: gray; padding-top:10px;">
+                                    Color:
+                                </td>
+                                <td style="padding-top:10px;">
+                                    <select name="color">
+                                        @foreach (var itemPro in Model.listdata)
+                                        {
+                                            <option value="blue">@itemPro.Color</option>
+                                        }
+                                    </select>
+                                </td>
+                            </tr>
+
+                        </table>
+                        <p style="padding:10px;">
+                            @Html.DisplayFor(model => model.Description)
+                        </p>
+                    </div>
+                </td>
+            <tr>
+        </table>
+
+    </div>
+    <div id="footer" class="footer stable">
+
+        <div>
+            <span>
+                ©
+                <script type="text/javascript" async="" src="https://www.gstatic.com/recaptcha/api2/v1537770717608/recaptcha__en_gb.js"></script>
+                <script type="text/javascript">document.write(new Date().getFullYear());</script>
+            </span>&nbsp;
+            <span data-token="copyRightPhraseDJ">HHMarket Inc. All rights reserved.</span>
+        </div>
+    </div>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+

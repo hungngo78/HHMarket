@@ -49,7 +49,7 @@
         @foreach (var item in Model)
         {
             <div class="col-sm-3" style="background-color:white;">
-                <a href="../Production/ProductDetail?id=2">
+                <a href="ProductDetail.chtml">
                     <div class="Rectangle">
                         <img src="~/assets/@Html.DisplayFor(model =>item.Picture)" style="padding-top:10px; padding-bottom:10px" class="product_img" alt="No Image" />
                         <div class="TempoCategoryTile-content">
@@ -62,6 +62,7 @@
         }
     </div>
     <div class="row text-center">
+P
         @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
     </div>
 </div>
