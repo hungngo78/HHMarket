@@ -3,14 +3,17 @@
 }
 @model HHMarketWebApp.Models.ProductionDetail
 
-@{var displayItem = Model.listdata.ElementAt(0); }
+@{ var displayItem = Model.listdata.ElementAt(0);
+    var arrData = Model.listdata;
+    var colorText="Blue";
+    var productID=0;
+    var listItem = Model.listdata;
+    }
 <style type="text/css">
 </style>
-
 <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="~/Content/hhstyle.css">
 <link rel="stylesheet" type="text/css" href="~/Content/productDetail.css">
-
 <div class="container" style="margin-top: 50px;">
     <div>
         <p style="color:blue; padding-bottom: 10px;">Smartphone > Samsung > Galaxy S</p>
@@ -21,18 +24,17 @@
                         <table>
                             <td>
                                 <table>
-                                    @{ 
+                                    @{
                                         string[] image = displayItem.Picture.Split(',');
-
                                     }
                                     @foreach (var img in image)
                                     {
-                                       <tr class="productdetail_image_rectangle" align="center">
+                                        <tr class="productdetail_image_rectangle" align="center">
                                             <td> <img align="middle" class="productdetail_image" src="~/assets/production/@Html.DisplayFor(model => displayItem.ProductId)/@Html.DisplayFor(model => displayItem.Color)/@Html.DisplayFor(model => img)"></td>
                                         </tr>
                                     }
-                                    </table>
-                               </td>
+                                </table>
+                            </td>
                             <td>
                                 <img align="middle" class="productdetail_image_large" src="~/assets/production/@Html.DisplayFor(model => displayItem.ProductId)/@Html.DisplayFor(model => displayItem.Color)/@Html.DisplayFor(model => image[0])">
                             </td>
@@ -56,11 +58,11 @@
                                 <td style="padding-top: 10px;">
                                     <table>
                                         <tr>
-                                            <td> <img src="~/assets/common_img/Star.png"/></td>
-                                            <td> <img src="~/assets/common_img/Star.png"/></td>
-                                            <td> <img src="~/assets/common_img/Star.png"/></td>
-                                            <td> <img src="~/assets/common_img/Star.png"/></td>
-                                            <td> <img src="~/assets/common_img/Star.png"/></td>
+                                            <td> <img src="~/assets/common_img/Star.png" /></td>
+                                            <td> <img src="~/assets/common_img/Star.png" /></td>
+                                            <td> <img src="~/assets/common_img/Star.png" /></td>
+                                            <td> <img src="~/assets/common_img/Star.png" /></td>
+                                            <td> <img src="~/assets/common_img/Star.png" /></td>
                                         </tr>
                                     </table>
 
@@ -74,7 +76,7 @@
                                 <td style="color: blue; padding-top:10px;">
                                     Price:
                                 </td>
-                                <td style="color:red; padding-top:10px;">
+                                <td style="color:red; padding-top:10px;" id="priceID">
                                     @Html.DisplayFor(model => displayItem.Price)$
                                 </td>
 
@@ -89,18 +91,20 @@
                                     Color:
                                 </td>
                                 <td style="padding-top:10px;">
-                                    <select name="color">
+
+                                    <select name="color" id="colorID">
                                         @foreach (var itemPro in Model.listdata)
                                         {
-                                            <option value="blue">@itemPro.Color</option>
+                                            <option onclick="changeColor(this)" value=@itemPro.ProductDetailsId>@itemPro.Color</option>
                                         }
                                     </select>
                                 </td>
                             </tr>
 
+
                         </table>
-                        <p style="padding:10px;">
-                            @Html.DisplayFor(model => model.Description)
+                        <p style="padding:10px;" id="descriptionID">
+                            @Html.DisplayFor(model => displayItem.Description)
                         </p>
                     </div>
                 </td>
@@ -121,4 +125,44 @@
     </div>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+       // $(document).ready(changeColor)
+
+        $(document).ready(function () {
+
+    @{  var serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
+      //  var json = serializer.Serialize(Model.listdata);
+      
+
+    }
+
+
+            var model = JSON.parse(@Html.Raw(Model.listdata)); 
+            alert("" + model);
+   if(model != null && model != "undefined")
+    {
+        var id = model.ElementAt(0).Price;
+        var colorn = model.ElementAt(0).Color;
+
+        alert("" + colorn + " id " + id);
+
+    }
+    });
+
+
+        function changeColor(ob) {
+            //alert("" + data);
+          var  productID = ob.value;
+           // colorText = ob.text;
+            // var Price = ob.tag;
+           /* for (var pro in data) {
+                document.getElementById("priceID").innerText = pro.Color + "$";
+                document.getElementById("descriptionID").innerText = ob1;
+            }
+            */
+
+        }
+
+    </script>
+
 
