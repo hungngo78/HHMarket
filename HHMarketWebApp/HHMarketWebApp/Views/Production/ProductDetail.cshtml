@@ -5,10 +5,11 @@
 
 @{ var displayItem = Model.listdata.ElementAt(0);
     var arrData = Model.listdata;
-    var colorText="Blue";
-    var productID=0;
+    var colorText = "Blue";
+    var productID = 0;
     var listItem = Model.listdata;
-    }
+}
+
 <style type="text/css">
 </style>
 <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
@@ -136,13 +137,13 @@
 
     }
 
-
-            var model = JSON.parse(@Html.Raw(Model.listdata)); 
-            alert("" + model);
-   if(model != null && model != "undefined")
+             var  modelPro = @Html.Raw(Json.Encode(listItem)); 
+            
+           
+   if (modelPro != null && modelPro != "undefined")
     {
-        var id = model.ElementAt(0).Price;
-        var colorn = model.ElementAt(0).Color;
+                var id = modelPro[0].Price;
+                var colorn = modelPro[0].Color;
 
         alert("" + colorn + " id " + id);
 
@@ -151,15 +152,21 @@
 
 
         function changeColor(ob) {
-            //alert("" + data);
-          var  productID = ob.value;
+            
+            var productID = ob.value;
+            alert("" + modelPro);
            // colorText = ob.text;
             // var Price = ob.tag;
-           /* for (var pro in data) {
-                document.getElementById("priceID").innerText = pro.Color + "$";
-                document.getElementById("descriptionID").innerText = ob1;
+            alert("" + modelPro[0].Price);
+            for (var pro in modelPro) {
+                alert("" + pro.Price);
+                if (productID == pro.ProductDetailsId) {
+                    document.getElementById("priceID").innerText = pro.Color + "$";
+                    document.getElementById("descriptionID").innerText = ob1;
+                    break;
+                }
             }
-            */
+            
 
         }
 
