@@ -154,19 +154,29 @@
             var imageList = modelPro.Picture.split(',');
          
             var table = document.getElementById("imgTable");
+            //var table = $("#imgTable");
             table.innerHTML = ' ';
             for (var r = 0; r < imageList.length; r++) {
                 if (r == 0) {
-                    var largeImage = document.getElementById("largeImageId");
-                    largeImage.src = '/assets/production/' + modelPro.ProductId + '/' + modelPro.Color + '/' + imageList[r];
+                    //var largeImage = document.getElementById("largeImageId");
+                    $("#largeImageId").attr("src", '/assets/production/' + modelPro.ProductId + '/' + modelPro.Color + '/' + imageList[r]);
+                    //var largeImage = $("#largeImageId");
+                    //largeImage.src = '/assets/production/' + modelPro.ProductId + '/' + modelPro.Color + '/' + imageList[r];
                 }
 
                 var row = table.insertRow(r);
                 row.setAttribute("class", "productdetail_image_rectangle");
                 row.setAttribute("align", "center");
-                row.insertCell(0).innerHTML = '<img align="middle" class="productdetail_image" src="/assets/production/' + modelPro.ProductId + '/' + modelPro.Color + '/' + imageList[r] + '">';
+                //row.insertCell(0).innerHTML = '<img align="middle" class="productdetail_image" src="/assets/production/' + modelPro.ProductId + '/' + modelPro.Color + '/' + imageList[r] + '">';
+                row.insertCell(0).innerHTML = '<img align="middle" class="productdetail_image" src="/assets/production/' + modelPro.ProductId + '/' + modelPro.Color + '/' + imageList[r] + '" onmouseover="prev(\'' + imageList[r] + '\',\'' + modelPro.ProductId + '\',\'' + modelPro.Color + '\')" >';
             }
     }
+
+    function prev(image, productId, color) {
+        // sai: $("#largeImageId").src = '/assets/production/' + productId + '/' + color + '/' + image;
+        $("#largeImageId").attr("src", '/assets/production/' + productId + '/' + color + '/' + image);
+    }
+
     function changeSize(ob) {
 
     }
@@ -179,13 +189,13 @@
           
                 for (var s = 0; s < sizeList.length; s++) {
                     if (sizeList.item(s).text == modelPro[i].Size) {
-                        sizeList.item(s).setAttribute("background-color", "black");
+                        sizeList.item(s).setAttribute("style", "color:black");
                         if (chooseItem == false) {
                             document.getElementById("sizeID").selectedIndex = s;
                             chooseItem = true;
                         }
                     } else {
-                        sizeList.item(s).setAttribute("background-color", "gray");
+                        sizeList.item(s).setAttribute("style", "color:gray");
                     }
                 }
                 

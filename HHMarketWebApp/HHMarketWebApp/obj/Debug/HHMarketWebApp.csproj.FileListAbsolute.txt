@@ -1,7 +1,3 @@
-C:\Users\them\Documents\GitHub\hungngo78\master\HHMarket\HHMarketWebApp\HHMarketWebApp\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
-C:\Users\them\Documents\GitHub\hungngo78\master\HHMarket\HHMarketWebApp\HHMarketWebApp\bin\roslyn\System.Net.Http.dll
-C:\Users\them\Documents\GitHub\hungngo78\master\HHMarket\HHMarketWebApp\HHMarketWebApp\bin\roslyn\System.Runtime.InteropServices.RuntimeInformation.dll
-C:\Users\them\Documents\GitHub\hungngo78\master\HHMarket\HHMarketWebApp\HHMarketWebApp\bin\roslyn\System.Text.Encoding.CodePages.dll
 C:\Users\them\Documents\GitHub\hungngo78\master\HHMarket\HHMarketWebApp\HHMarketWebApp\bin\ApplicationInsights.config
 C:\Users\them\Documents\GitHub\hungngo78\master\HHMarket\HHMarketWebApp\HHMarketWebApp\bin\HHMarketWebApp.dll.config
 C:\Users\them\Documents\GitHub\hungngo78\master\HHMarket\HHMarketWebApp\HHMarketWebApp\bin\HHMarketWebApp.dll
@@ -17,6 +13,7 @@ C:\Users\them\Documents\GitHub\hungngo78\master\HHMarket\HHMarketWebApp\HHMarket
 C:\Users\them\Documents\GitHub\hungngo78\master\HHMarket\HHMarketWebApp\HHMarketWebApp\bin\roslyn\Microsoft.CodeAnalysis.CSharp.Scripting.dll
 C:\Users\them\Documents\GitHub\hungngo78\master\HHMarket\HHMarketWebApp\HHMarketWebApp\bin\roslyn\Microsoft.CodeAnalysis.dll
 C:\Users\them\Documents\GitHub\hungngo78\master\HHMarket\HHMarketWebApp\HHMarketWebApp\bin\roslyn\Microsoft.CodeAnalysis.Scripting.dll
+C:\Users\them\Documents\GitHub\hungngo78\master\HHMarket\HHMarketWebApp\HHMarketWebApp\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
 C:\Users\them\Documents\GitHub\hungngo78\master\HHMarket\HHMarketWebApp\HHMarketWebApp\bin\roslyn\Microsoft.CSharp.Core.targets
 C:\Users\them\Documents\GitHub\hungngo78\master\HHMarket\HHMarketWebApp\HHMarketWebApp\bin\roslyn\Microsoft.DiaSymReader.Native.amd64.dll
 C:\Users\them\Documents\GitHub\hungngo78\master\HHMarket\HHMarketWebApp\HHMarketWebApp\bin\roslyn\Microsoft.DiaSymReader.Native.x86.dll
@@ -34,12 +31,15 @@ C:\Users\them\Documents\GitHub\hungngo78\master\HHMarket\HHMarketWebApp\HHMarket
 C:\Users\them\Documents\GitHub\hungngo78\master\HHMarket\HHMarketWebApp\HHMarketWebApp\bin\roslyn\System.IO.Compression.ZipFile.dll
 C:\Users\them\Documents\GitHub\hungngo78\master\HHMarket\HHMarketWebApp\HHMarketWebApp\bin\roslyn\System.IO.FileSystem.dll
 C:\Users\them\Documents\GitHub\hungngo78\master\HHMarket\HHMarketWebApp\HHMarketWebApp\bin\roslyn\System.IO.FileSystem.Primitives.dll
+C:\Users\them\Documents\GitHub\hungngo78\master\HHMarket\HHMarketWebApp\HHMarketWebApp\bin\roslyn\System.Net.Http.dll
 C:\Users\them\Documents\GitHub\hungngo78\master\HHMarket\HHMarketWebApp\HHMarketWebApp\bin\roslyn\System.Net.Sockets.dll
 C:\Users\them\Documents\GitHub\hungngo78\master\HHMarket\HHMarketWebApp\HHMarketWebApp\bin\roslyn\System.Reflection.Metadata.dll
+C:\Users\them\Documents\GitHub\hungngo78\master\HHMarket\HHMarketWebApp\HHMarketWebApp\bin\roslyn\System.Runtime.InteropServices.RuntimeInformation.dll
 C:\Users\them\Documents\GitHub\hungngo78\master\HHMarket\HHMarketWebApp\HHMarketWebApp\bin\roslyn\System.Security.Cryptography.Algorithms.dll
 C:\Users\them\Documents\GitHub\hungngo78\master\HHMarket\HHMarketWebApp\HHMarketWebApp\bin\roslyn\System.Security.Cryptography.Encoding.dll
 C:\Users\them\Documents\GitHub\hungngo78\master\HHMarket\HHMarketWebApp\HHMarketWebApp\bin\roslyn\System.Security.Cryptography.Primitives.dll
 C:\Users\them\Documents\GitHub\hungngo78\master\HHMarket\HHMarketWebApp\HHMarketWebApp\bin\roslyn\System.Security.Cryptography.X509Certificates.dll
+C:\Users\them\Documents\GitHub\hungngo78\master\HHMarket\HHMarketWebApp\HHMarketWebApp\bin\roslyn\System.Text.Encoding.CodePages.dll
 C:\Users\them\Documents\GitHub\hungngo78\master\HHMarket\HHMarketWebApp\HHMarketWebApp\bin\roslyn\System.Threading.Tasks.Extensions.dll
 C:\Users\them\Documents\GitHub\hungngo78\master\HHMarket\HHMarketWebApp\HHMarketWebApp\bin\roslyn\System.ValueTuple.dll
 C:\Users\them\Documents\GitHub\hungngo78\master\HHMarket\HHMarketWebApp\HHMarketWebApp\bin\roslyn\System.Xml.ReaderWriter.dll
