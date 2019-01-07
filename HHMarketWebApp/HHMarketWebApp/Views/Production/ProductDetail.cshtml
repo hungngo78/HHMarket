@@ -5,8 +5,6 @@
 
 @{ var displayItem = Model.listdata.ElementAt(0);
     var arrData = Model.listdata;
-    var colorText = "Blue";
-    var productID = 0;
     var listItem = Model.listdata;
 }
 
@@ -23,22 +21,14 @@
                 <td style="width:40%">
                     <div>
                         <table>
-                            <td>
-                                <table>
-                                    @{
-                                        string[] image = displayItem.Picture.Split(',');
-                                    }
-                                    @foreach (var img in image)
-                                    {
-                                        <tr class="productdetail_image_rectangle" align="center">
-                                            <td> <img align="middle" class="productdetail_image" src="~/assets/production/@Html.DisplayFor(model => displayItem.ProductId)/@Html.DisplayFor(model => displayItem.Color)/@Html.DisplayFor(model => img)"></td>
-                                        </tr>
-                                    }
-                                </table>
-                            </td>
-                            <td>
-                                <img align="middle" class="productdetail_image_large" src="~/assets/production/@Html.DisplayFor(model => displayItem.ProductId)/@Html.DisplayFor(model => displayItem.Color)/@Html.DisplayFor(model => image[0])">
-                            </td>
+                            <tr>
+                                <td>
+                                    <table id="imgTable"></table>
+                                </td>
+                                <td>
+                                    <img id="largeImageId" align="middle" class="productdetail_image_large" src="">
+                                </td>
+                            </tr>
                         </table>
                         <div class="btn_addtocart" align="center">
                             <button class="Add-to-Cart">Add to Cart</button>
@@ -124,52 +114,62 @@
             <span data-token="copyRightPhraseDJ">HHMarket Inc. All rights reserved.</span>
         </div>
     </div>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script type="text/javascript">
-       // $(document).ready(changeColor)
+</div>
 
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+        var modelPro;
         $(document).ready(function () {
+
 
     @{  var serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
       //  var json = serializer.Serialize(Model.listdata);
-      
+
 
     }
 
-             var  modelPro = @Html.Raw(Json.Encode(listItem)); 
-            
-           
-   if (modelPro != null && modelPro != "undefined")
-    {
-                var id = modelPro[0].Price;
-                var colorn = modelPro[0].Color;
+        modelPro = @Html.Raw(Json.Encode(listItem));
+        if (modelPro != null && modelPro != "undefined") {
+            setUpImageTable(modelPro[0]);
+        }
 
-        alert("" + colorn + " id " + id);
-
-    }
     });
 
 
-        function changeColor(ob) {
-            
+        function setUpImageTable(modelPro) {
+            var imageList = modelPro.Picture.split(',');
+         
+            var table = document.getElementById("imgTable");
+            table.innerHTML = ' ';
+            for (var r = 0; r < imageList.length; r++) {
+                if (r == 0) {
+                    var largeImage = document.getElementById("largeImageId");
+                    largeImage.src = '/assets/production/' + modelPro.ProductId + '/' + modelPro.Color + '/' + imageList[r];
+                }
+
+                var row = table.insertRow(r);
+                row.setAttribute("class", "productdetail_image_rectangle");
+                row.setAttribute("align", "center");
+                row.insertCell(0).innerHTML = '<img align="middle" class="productdetail_image" src="/assets/production/' + modelPro.ProductId + '/' + modelPro.Color + '/' + imageList[r] + '">';
+            }
+        }
+    function changeColor(ob) {
+
             var productID = ob.value;
-            alert("" + modelPro);
-           // colorText = ob.text;
-            // var Price = ob.tag;
-            alert("" + modelPro[0].Price);
-            for (var pro in modelPro) {
-                alert("" + pro.Price);
-                if (productID == pro.ProductDetailsId) {
-                    document.getElementById("priceID").innerText = pro.Color + "$";
-                    document.getElementById("descriptionID").innerText = ob1;
-                    break;
+            if (modelPro != null && modelPro != "undefined")
+            for (var i = 0; i < modelPro.length; i++) {
+                if (productID == modelPro[i].ProductDetailsId) {
+                    document.getElementById("priceID").innerText = modelPro[i].Price + "$";
+
+                    var imageList = modelPro[i].Picture.split(",");
+                    setUpImageTable(modelPro[i]);
+                    document.getElementById("descriptionID").innerText = modelPro[i].Description;
+                        break;
                 }
             }
-            
+    }
 
-        }
-
-    </script>
+</script>
 
 
