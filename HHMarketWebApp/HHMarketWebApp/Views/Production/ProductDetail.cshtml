@@ -84,14 +84,27 @@
                                 <td style="padding-top:10px;">
 
                                     <select name="color" id="colorID">
-                                        @foreach (var itemPro in Model.listdata)
+                                        @foreach (var itemPro in Model.listdata.GroupBy(item => item.Color))
                                         {
-                                            <option onclick="changeColor(this)" value=@itemPro.ProductDetailsId>@itemPro.Color</option>
+                                            <option onclick="changeColor(this)" value=@itemPro.Key>@itemPro.Key</option>
                                         }
                                     </select>
                                 </td>
                             </tr>
+                            <tr>
+                                <td style="color: gray; padding-top:10px;">
+                                    Size:
+                                </td>
+                                <td style="padding-top:10px;">
 
+                                    <select name="size" id="sizeID" size="3">
+                                        @foreach (var itemPro in Model.listdata.GroupBy(item => item.Size))
+                                        {
+                                            <option onclick="changeSize(this)" value=@itemPro.Key>@itemPro.Key</option>
+                                        }
+                                    </select>
+                                </td>
+                            </tr>
 
                         </table>
                         <p style="padding:10px;" id="descriptionID">
@@ -153,19 +166,50 @@
                 row.setAttribute("align", "center");
                 row.insertCell(0).innerHTML = '<img align="middle" class="productdetail_image" src="/assets/production/' + modelPro.ProductId + '/' + modelPro.Color + '/' + imageList[r] + '">';
             }
+    }
+    function changeSize(ob) {
+
+    }
+    function displaySize(color) {
+        var sizeList = document.getElementById("sizeID").options;
+        var chooseItem = false;
+        for (var i = 0; i < modelPro.length; i++) {
+
+            if (color == modelPro[i].Color) {
+          
+                for (var s = 0; s < sizeList.length; s++) {
+                    if (sizeList.item(s).text == modelPro[i].Size) {
+                        sizeList.item(s).setAttribute("background-color", "black");
+                        if (chooseItem == false) {
+                            document.getElementById("sizeID").selectedIndex = s;
+                            chooseItem = true;
+                        }
+                    } else {
+                        sizeList.item(s).setAttribute("background-color", "gray");
+                    }
+                }
+                
+            }
+
+            if (chooseItem == false) {
+                document.getElementById("sizeID").selectedIndex = -1;
+            }
+
         }
+
+
+    }
     function changeColor(ob) {
-
-            var productID = ob.value;
+        var color = ob.value;
+        displaySize(color);
+        var size = $("#sizeID option:selected").val();
             if (modelPro != null && modelPro != "undefined")
-            for (var i = 0; i < modelPro.length; i++) {
-                if (productID == modelPro[i].ProductDetailsId) {
+                for (var i = 0; i < modelPro.length; i++) {
+                    if (color == modelPro[i].Color && size == modelPro[i].Size) {
                     document.getElementById("priceID").innerText = modelPro[i].Price + "$";
-
-                    var imageList = modelPro[i].Picture.split(",");
                     setUpImageTable(modelPro[i]);
                     document.getElementById("descriptionID").innerText = modelPro[i].Description;
-                        break;
+                    break;
                 }
             }
     }
