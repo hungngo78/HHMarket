@@ -34,6 +34,7 @@ namespace HHMarketWebApp.Controllers
                                  where p.ProductId == id
                                  select new ReviewProduction()
                                  {
+                                     Title = r.Title,
                                      Content = r.Content,
                                      OverallRating = r.OverallRating,
                                      ProductId = r.ProductId,
@@ -42,7 +43,7 @@ namespace HHMarketWebApp.Controllers
                                      UserName = u.UserName,
                                      ReviewDate = r.ReviewDate
                                  }).ToList(); 
-
+                                 
             return View(pr);
         }
 

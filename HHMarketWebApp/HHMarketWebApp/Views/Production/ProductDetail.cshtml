@@ -129,45 +129,44 @@
 <script type="text/javascript">
     var modelPro;
     var modelReview;
-        $(document).ready(function () {
 
+    $(document).ready(function () {
+        @{  var serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
+        //  var json = serializer.Serialize(Model.listdata);
+        }
 
-    @{  var serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
-      //  var json = serializer.Serialize(Model.listdata);
-    }
+        modelPro = @Html.Raw(Json.Encode(listItem));
+        modelReview =  @Html.Raw(Json.Encode(Model.reviewListData));
 
-            modelPro = @Html.Raw(Json.Encode(listItem));
-            modelReview =  @Html.Raw(Json.Encode(Model.reviewListData));
         if (modelPro != null && modelPro != "undefined") {
             setUpImageTable(modelPro[0]);
             document.getElementById("colorID").selectedIndex = 0;
             changeColor(modelPro[0].Color);
-            }
-            displayReviewStar();
+        }
 
+        displayReviewStar();
     });
 
-
-        function setUpImageTable(modelPro) {
-            var imageList = modelPro.Picture.split(',');
+    function setUpImageTable(modelPro) {
+        var imageList = modelPro.Picture.split(',');
          
-            var table = document.getElementById("imgTable");
-            //var table = $("#imgTable");
-            table.innerHTML = ' ';
-            for (var r = 0; r < imageList.length; r++) {
-                if (r == 0) {
-                    //var largeImage = document.getElementById("largeImageId");
-                    $("#largeImageId").attr("src", '/assets/production/' + modelPro.ProductId + '/' + modelPro.Color + '/' + imageList[r]);
-                    //var largeImage = $("#largeImageId");
-                    //largeImage.src = '/assets/production/' + modelPro.ProductId + '/' + modelPro.Color + '/' + imageList[r];
-                }
-
-                var row = table.insertRow(r);
-                row.setAttribute("class", "productdetail_image_rectangle");
-                row.setAttribute("align", "center");
-                //row.insertCell(0).innerHTML = '<img align="middle" class="productdetail_image" src="/assets/production/' + modelPro.ProductId + '/' + modelPro.Color + '/' + imageList[r] + '">';
-                row.insertCell(0).innerHTML = '<img align="middle" class="productdetail_image" src="/assets/production/' + modelPro.ProductId + '/' + modelPro.Color + '/' + imageList[r] + '" onmouseover="prev(\'' + imageList[r] + '\',\'' + modelPro.ProductId + '\',\'' + modelPro.Color + '\')" >';
+        var table = document.getElementById("imgTable");
+        //var table = $("#imgTable");
+        table.innerHTML = ' ';
+        for (var r = 0; r < imageList.length; r++) {
+            if (r == 0) {
+                //var largeImage = document.getElementById("largeImageId");
+                $("#largeImageId").attr("src", '/assets/production/' + modelPro.ProductId + '/' + modelPro.Color + '/' + imageList[r]);
+                //var largeImage = $("#largeImageId");
+                //largeImage.src = '/assets/production/' + modelPro.ProductId + '/' + modelPro.Color + '/' + imageList[r];
             }
+
+            var row = table.insertRow(r);
+            row.setAttribute("class", "productdetail_image_rectangle");
+            row.setAttribute("align", "center");
+            //row.insertCell(0).innerHTML = '<img align="middle" class="productdetail_image" src="/assets/production/' + modelPro.ProductId + '/' + modelPro.Color + '/' + imageList[r] + '">';
+            row.insertCell(0).innerHTML = '<img align="middle" class="productdetail_image" src="/assets/production/' + modelPro.ProductId + '/' + modelPro.Color + '/' + imageList[r] + '" onmouseover="prev(\'' + imageList[r] + '\',\'' + modelPro.ProductId + '\',\'' + modelPro.Color + '\')" >';
+        }
     }
 
     function prev(image, productId, color) {
@@ -175,29 +174,6 @@
         $("#largeImageId").attr("src", '/assets/production/' + productId + '/' + color + '/' + image);
     }
 
-    function changeSize(ob) {
-        var size = ob.value;
-        displayColor(size);
-        var color = $("#colorID option:selected").val();
-       /*  if (color < 0) {
-            $("#addToCartID").hide();
-        } else {
-            $("#addToCartID").show();
-        }
-        */
-        if (modelPro != null && modelPro != "undefined") {
-            for (var i = 0; i < modelPro.length; i++) {
-                if (color == modelPro[i].Color && size == modelPro[i].Size) {
-                    document.getElementById("priceID").innerText = modelPro[i].Price + "$";
-                    setUpImageTable(modelPro[i]);
-                    document.getElementById("descriptionID").innerText = modelPro[i].Description;
-                    break;
-                }
-            }
-            
-        }
-
-    }
     function displaySize(color) {
         var sizeList = document.getElementById("sizeID").options;  
         var sizeText = "undefined";
@@ -223,17 +199,14 @@
                         chooseItem = true;
                     }
                 }
-                
             }
-
         }
 
         if (chooseItem == false) {
             document.getElementById("sizeID").selectedIndex = -1;
         }
-
-
     }
+
     function displayColor(size) {
         var colorList = document.getElementById("colorID").options;
         var colorText = "undefined";
@@ -242,7 +215,6 @@
         var chooseItem = false;
         for (var a = 0; a < colorList.length; a++) {
             colorList.item(a).setAttribute("style", "color:gray; min-height:25px;");
-
         }
         for (var i = 0; i < modelPro.length; i++) {
 
@@ -261,15 +233,11 @@
                         chooseItem = true;
                     }
                 }
-
             }
-
         }
         if (chooseItem == false) {
             document.getElementById("colorID").selectedIndex = -1;
         }
-
-
     }
 
     function displayReviewStar() {
@@ -280,6 +248,7 @@
         if (modelReview != null && modelReview != "undefined") {
             var count = 0;
             for (var i = 0; i < modelReview.length; i++) {
+                alert(modelReview[i].Title);
                 count += modelReview[i].OverallRating;
             }
             var generalRating = Math.round(count / modelReview.length);
@@ -290,9 +259,7 @@
             for (var k = generalRating; k < 5; k++) {
                 reviewRow.insertCell(j).innerHTML = '<img src="/assets/common_img/StarNone.png" />';
             }
-
         }
-
     }
 
     function changeColor(color) {
@@ -305,16 +272,39 @@
             $("#addToCartID").show();
         }
         */
-        
-            if (modelPro != null && modelPro != "undefined")
-                for (var i = 0; i < modelPro.length; i++) {
-                    if (color == modelPro[i].Color && size == modelPro[i].Size) {
+        if (modelPro != null && modelPro != "undefined")
+            for (var i = 0; i < modelPro.length; i++) {
+                if (color == modelPro[i].Color && size == modelPro[i].Size) {
+                document.getElementById("priceID").innerText = modelPro[i].Price + "$";
+                setUpImageTable(modelPro[i]);
+                document.getElementById("descriptionID").innerText = modelPro[i].Description;
+                break;
+            }
+        }
+    }
+
+    function changeSize(ob) {
+        var size = ob.value;
+        displayColor(size);
+        var color = $("#colorID option:selected").val();
+        /*  if (color < 0) {
+             $("#addToCartID").hide();
+         } else {
+             $("#addToCartID").show();
+         }
+         */
+        if (modelPro != null && modelPro != "undefined") {
+            for (var i = 0; i < modelPro.length; i++) {
+                if (color == modelPro[i].Color && size == modelPro[i].Size) {
                     document.getElementById("priceID").innerText = modelPro[i].Price + "$";
                     setUpImageTable(modelPro[i]);
                     document.getElementById("descriptionID").innerText = modelPro[i].Description;
                     break;
                 }
             }
+
+        }
+
     }
 
 </script>
