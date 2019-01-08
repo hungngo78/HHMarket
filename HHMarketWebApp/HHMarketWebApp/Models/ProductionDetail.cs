@@ -27,6 +27,8 @@ namespace HHMarketWebApp.Models
         public string Description { get; set; }
 
         public string ProductionName { get; set; }
+
+        public System.Collections.Generic.List<ReviewProduction> reviewListData { get; set; }
         public System.Collections.Generic.List<ProductionDetail> listdata {get;set;}
 
 

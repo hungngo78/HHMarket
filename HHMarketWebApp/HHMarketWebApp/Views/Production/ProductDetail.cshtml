@@ -48,19 +48,13 @@
                             <tr>
                                 <td style="padding-top: 10px;">
                                     <table>
-                                        <tr>
-                                            <td> <img src="~/assets/common_img/Star.png" /></td>
-                                            <td> <img src="~/assets/common_img/Star.png" /></td>
-                                            <td> <img src="~/assets/common_img/Star.png" /></td>
-                                            <td> <img src="~/assets/common_img/Star.png" /></td>
-                                            <td> <img src="~/assets/common_img/Star.png" /></td>
+                                        <tr id="starReiewID">
                                         </tr>
                                     </table>
 
                                 </td>
-                                <td style="color:blue; padding-top: 10px; padding-left: 10px;">
-                                    48 customer reviews
-                                </td>
+                               <td id="reviewCountID" style="color:blue; padding-top: 10px; padding-left: 10px;">
+                                     </td>
                             </tr>
 
                             <tr>
@@ -133,22 +127,23 @@
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script type="text/javascript">
-        var modelPro;
+    var modelPro;
+    var modelReview;
         $(document).ready(function () {
 
 
     @{  var serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
       //  var json = serializer.Serialize(Model.listdata);
-
-
     }
 
-        modelPro = @Html.Raw(Json.Encode(listItem));
+            modelPro = @Html.Raw(Json.Encode(listItem));
+            modelReview =  @Html.Raw(Json.Encode(Model.reviewListData));
         if (modelPro != null && modelPro != "undefined") {
             setUpImageTable(modelPro[0]);
             document.getElementById("colorID").selectedIndex = 0;
             changeColor(modelPro[0].Color);
-        }
+            }
+            displayReviewStar();
 
     });
 
@@ -190,7 +185,7 @@
             $("#addToCartID").show();
         }
         */
-        if (modelPro != null && modelPro != "undefined")
+        if (modelPro != null && modelPro != "undefined") {
             for (var i = 0; i < modelPro.length; i++) {
                 if (color == modelPro[i].Color && size == modelPro[i].Size) {
                     document.getElementById("priceID").innerText = modelPro[i].Price + "$";
@@ -199,6 +194,8 @@
                     break;
                 }
             }
+            
+        }
 
     }
     function displaySize(color) {
@@ -274,6 +271,30 @@
 
 
     }
+
+    function displayReviewStar() {
+
+        var reviewRow = document.getElementById("starReiewID");
+        reviewRow.innerHTML = ' ';
+        // add start
+        if (modelReview != null && modelReview != "undefined") {
+            var count = 0;
+            for (var i = 0; i < modelReview.length; i++) {
+                count += modelReview[i].OverallRating;
+            }
+            var generalRating = Math.round(count / modelReview.length);
+            document.getElementById("reviewCountID").textContent = "" + modelReview.length + " customer reviews";
+            for (var j = 0; j < generalRating; j++) {
+                reviewRow.insertCell(j).innerHTML = '<img src="/assets/common_img/Star.png" />';
+            }
+            for (var k = generalRating; k < 5; k++) {
+                reviewRow.insertCell(j).innerHTML = '<img src="/assets/common_img/StarNone.png" />';
+            }
+
+        }
+
+    }
+
     function changeColor(color) {
         displaySize(color);
         var size = $("#sizeID option:selected").val();

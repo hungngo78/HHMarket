@@ -28,7 +28,21 @@ namespace HHMarketWebApp.Controllers
                                    ProductionName = production.Name}).ToList();
 
             // return View(productionDetail.FirstOrDefault());
-         
+            pr.reviewListData = (from r in db.Reviews
+                                 join p in db.Products on r.ProductId equals p.ProductId
+                                 join u in db.Users on r.UserId equals u.UserId
+                                 where p.ProductId == id
+                                 select new ReviewProduction()
+                                 {
+                                     Content = r.Content,
+                                     OverallRating = r.OverallRating,
+                                     ProductId = r.ProductId,
+                                     ReviewId = r.ReviewId,
+                                     UserId = r.UserId,
+                                     UserName = u.UserName,
+                                     ReviewDate = r.ReviewDate
+                                 }).ToList(); 
+
             return View(pr);
         }
 
