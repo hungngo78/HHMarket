@@ -172,6 +172,7 @@
     <Compile Include="Models\Order.cs" />
     <Compile Include="Models\OrderDetail.cs" />
     <Compile Include="Models\Product.cs" />
+    <Compile Include="Models\Production.cs" />
     <Compile Include="Models\ProductionDetail.cs" />
     <Compile Include="Models\ProductDetail.cs" />
     <Compile Include="Models\Review.cs" />
@@ -199,6 +200,7 @@
     <Content Include="Content\myCss.css" />
     <Content Include="Content\PagedList.css" />
     <Content Include="Content\productDetail.css" />
+    <Content Include="Content\review.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -247,6 +249,7 @@
     <Content Include="Views\Registration\Index.cshtml" />
     <Content Include="Views\Production\Index.cshtml" />
     <Content Include="Views\Production\ProductDetail.cshtml" />
+    <Content Include="Views\Production\ReviewProduction.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -45,8 +45,12 @@ namespace HHMarketWebApp.Controllers
 
             return View(prs.ToPagedList(pageNumber, pageSize));
         }
+        public ActionResult ReviewProduction(int id)
+        {
+            return View();
+        }
 
-        public ActionResult ProductDetail(int id)
+            public ActionResult ProductDetail(int id)
         {
             DBModelContainer db = new DBModelContainer();
             ProductionDetail pr = new ProductionDetail();
