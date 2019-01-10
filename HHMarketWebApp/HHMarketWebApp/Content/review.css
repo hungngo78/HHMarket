@@ -1,11 +1,7 @@
-@charset "utf-8";
+﻿@charset "utf-8";
 
 * {
 	box-sizing: border-box
-}
-
-body {
-	line-height: 1.5
 }
 
 .product-review-header {
