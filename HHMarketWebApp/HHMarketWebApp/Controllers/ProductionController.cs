@@ -9,12 +9,43 @@ using System.Web;
 using System.Web.Mvc;
 using HHMarketWebApp.Models;
 using FormsAuth;
+using PagedList;
 
 namespace HHMarketWebApp.Controllers
 {
     public class ProductionController : Controller
     {
-        
+        public ActionResult Index(int categoryId, int? page)
+        {
+            DBModelContainer db = new DBModelContainer();
+
+            List<Production> prs = (from p in db.Products
+                                    join pDetail in db.ProductDetails on  p.ProductId equals pDetail.ProductId 
+                                    where p.CategoryId == categoryId
+                                    select new
+                                    {
+                                        p,
+                                        pDetail
+                                    } into t1
+
+                                    group t1 by t1.p.ProductId into g
+                                    select new Production()
+                                    {
+                                        ProductId = g.Key,
+                                        ProductionName = g.FirstOrDefault().p.Name,
+                                        Description = g.FirstOrDefault().p.Description,
+                                        MinPrice = g.Min(m => m.pDetail.Price),
+                                        MaxPrice = g.Max(m => m.pDetail.Price),
+                                        Picture = g.FirstOrDefault().pDetail.Picture,
+                                        Color = g.FirstOrDefault().pDetail.Color
+                                    }).ToList(); 
+
+            int pageSize = 16;
+            int pageNumber = (page ?? 1);
+
+            return View(prs.ToPagedList(pageNumber, pageSize));
+        }
+
         public ActionResult ProductDetail(int id)
         {
             DBModelContainer db = new DBModelContainer();

@@ -12,6 +12,15 @@ body {
     border-top: 1px solid #e6e7e8
 }
 
+.ProductTile-content {
+    width: 90%;
+    height: 60px;
+    padding-top: 8px;
+    margin-top: 16px;
+    margin-left: 10px;
+    border-top: 1px solid #e6e7e8
+}
+
 
 .Rectangle {
     width: 220px;

@@ -1,5 +1,10 @@
-﻿@model PagedList.IPagedList<HHMarketWebApp.Models.Category>
+﻿@model PagedList.IPagedList<HHMarketWebApp.Models.Production>
 @using PagedList.Mvc;
+
+@{ 
+    var listItem = Model;
+}
+
 
 <div style="width: 100%; margin-top:60px">
 </div>
@@ -49,11 +54,12 @@
         @foreach (var item in Model)
         {
             <div class="col-sm-3" style="background-color:white;">
-                <a href="ProductDetail.chtml">
+                <a href="../Production/ProductDetail?id=@item.ProductId">
                     <div class="Rectangle">
-                        <img src="~/assets/@Html.DisplayFor(model =>item.Picture)" style="padding-top:10px; padding-bottom:10px" class="product_img" alt="No Image" />
-                        <div class="TempoCategoryTile-content">
-                            <p class="product_lb">@Html.DisplayFor(modelItem => item.Name)</p>
+                        <img id="@item.ProductId" src="" style="padding-top:10px; padding-bottom:10px" class="product_img" alt="No Image" />
+                        <div class="ProductTile-content">
+                            <p class="product_lb">@Html.DisplayFor(modelItem => item.ProductionName)</p>
+                            <p class="product_lb">@Html.DisplayFor(modelItem => item.MinPrice) - @Html.DisplayFor(modelItem => item.MaxPrice)</p>
                         </div>
 
                     </div>
@@ -62,8 +68,31 @@
         }
     </div>
     <div class="row text-center">
-P
         @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
     </div>
 </div>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+   
+
+    $(document).ready(function () {
+        var pros = @Html.Raw(Json.Encode(listItem));
+
+        for (var r = 0; r < pros.length; r++) 
+        {
+            //alert(pros[r].Picture);
+            setUpImage(pros[r]);
+        }       
+    });
+
+    function setUpImage(product) {
+        var imageList = product.Picture.split(',');
+        //alert(product.ProductId);
+        var Img = document.getElementById(product.ProductId);
+        Img.src = '/assets/production/' + product.ProductId + '/' + product.Color + '/' + imageList[0];
+        //alert(Img.src);
+    }
+</script>
 
