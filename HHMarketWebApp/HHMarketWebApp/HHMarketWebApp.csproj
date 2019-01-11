@@ -175,7 +175,9 @@
     <Compile Include="Models\Production.cs" />
     <Compile Include="Models\ProductionDetail.cs" />
     <Compile Include="Models\ProductDetail.cs" />
+    <Compile Include="Models\Rating.cs" />
     <Compile Include="Models\Review.cs" />
+    <Compile Include="Models\ReviewDetails.cs" />
     <Compile Include="Models\ReviewProduction.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -200,7 +202,7 @@
     <Content Include="Content\myCss.css" />
     <Content Include="Content\PagedList.css" />
     <Content Include="Content\productDetail.css" />
-    <Content Include="Content\review.css" />
+    <Content Include="Content\product.review.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />

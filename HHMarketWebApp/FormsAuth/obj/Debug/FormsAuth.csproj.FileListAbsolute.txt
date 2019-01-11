@@ -5,3 +5,4 @@ C:\Users\them\Documents\GitHub\hungngo78\master\HHMarket\HHMarketWebApp\FormsAut
 C:\Users\them\Documents\GitHub\hungngo78\master\HHMarket\HHMarketWebApp\FormsAuth\obj\Debug\FormsAuth.csproj.CoreCompileInputs.cache
 C:\Users\them\Documents\GitHub\hungngo78\master\HHMarket\HHMarketWebApp\FormsAuth\obj\Debug\FormsAuth.dll
 C:\Users\them\Documents\GitHub\hungngo78\master\HHMarket\HHMarketWebApp\FormsAuth\obj\Debug\FormsAuth.pdb
+C:\Users\them\Documents\GitHub\hungngo78\master\HHMarket\HHMarketWebApp\FormsAuth\obj\Debug\FormsAuth.csprojAssemblyReference.cache
