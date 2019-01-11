@@ -45,16 +45,14 @@
                                 <td style="padding-right:10px;">by</td>
                                 <td style="color:blue;"> Samsung</td>
                             </tr>
-                            <tr>
+                            <tr onclick="DoNav('../Production/ReviewProduction?id=2')" style="cursor:pointer"> 
                                 <td style="padding-top: 10px;">
                                     <table>
-                                        <tr id="starReiewID">
-                                        </tr>
+                                        <tr id="starReiewID"></tr>
                                     </table>
-
                                 </td>
-                               <td id="reviewCountID" style="color:blue; padding-top: 10px; padding-left: 10px;">
-                                     </td>
+                                <td id="reviewCountID" style="color:blue; padding-top: 10px; padding-left: 10px; text-decoration: underline">
+                                </td>
                             </tr>
 
                             <tr>
@@ -146,6 +144,10 @@
 
         displayReviewStar();
     });
+
+    function DoNav(url) {
+        document.location.href = url;
+    }
 
     function setUpImageTable(modelPro) {
         var imageList = modelPro.Picture.split(',');
@@ -248,7 +250,7 @@
         if (modelReview != null && modelReview != "undefined") {
             var count = 0;
             for (var i = 0; i < modelReview.length; i++) {
-                alert(modelReview[i].Title);
+                //alert(modelReview[i].Title);
                 count += modelReview[i].OverallRating;
             }
             var generalRating = Math.round(count / modelReview.length);

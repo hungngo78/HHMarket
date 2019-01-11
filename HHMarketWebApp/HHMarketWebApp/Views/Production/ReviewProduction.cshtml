@@ -1,28 +1,37 @@
-﻿
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model HHMarketWebApp.Models.ReviewDetails
+
+@{
+    var mProduct = Model.product;
+    var mReviewList = Model.reviewList;
+    var mRating = Model.rating;
+}
 
 <style type="text/css"></style>
 
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
 <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
-<link href="~/Content/review.css" rel="stylesheet" type="text/css">
+<link href="~/Content/product.review.css" rel="stylesheet" type="text/css">
 <link rel="stylesheet" type="text/css" href="~/Content/hhstyle.css">
 
 <div class="container" style="margin-top: 50px;">
     <table width="100%">
         <tbody>
             <tr style="margin: 10px;">
-                <td width="20%"><img src="~/assets/aa1.jpg" width="180" height="180" alt="" /></td>
+                <td width="20%"><img id="productImg" src="~/assets/aa1.jpg" width="180" height="180" alt="" /></td>
                 <td width="30%">
                     <table>
                         <tr>
                             <td>
-                                <span style="font-size: 16px; width: 100%; ">Title of production </span>
+                                <span style="font-size: 16px; width: 100%; ">@Html.DisplayFor(modelItem => mProduct.ProductionName)</span>
                             </td>
                         </tr>
                         <tr>
                             <td>
-                                <span style="font-size: 18px ">28.0$</span>
+                                <span style="font-size: 18px ">@Html.DisplayFor(modelItem => mProduct.MinPrice)$ - @Html.DisplayFor(modelItem => mProduct.MaxPrice)$</span>
                             </td>
                         </tr>
                         <tr>
@@ -37,103 +46,85 @@
                         <div class="Grid-col valign-middle u-size-1-3-m u-size-1-4-l">
                             <div class="Grid-col valign-middle product-review-star-ratings">
                                 <div class="stars stars-large">
-                                    <span class="stars-container" alt="Average rating: 4.6 out of 5 stars, based on 32 reviews. " tabindex="" aria-label="Average rating: 4.6 out of 5 stars, based on 32 reviews. " role="text">
-                                        <span class="star display-inline-block star-rated" data-automation-id="stars-star-0" alt="rating star"></span>
-                                        <span class="star display-inline-block star-rated" data-automation-id="stars-star-1" alt="rating star"></span>
-                                        <span class="star display-inline-block star-rated" data-automation-id="stars-star-2" alt="rating star"></span>
-                                        <span class="star display-inline-block star-rated" data-automation-id="stars-star-3" alt="rating star"></span>
-                                        <span class="star display-inline-block star-partial" data-automation-id="stars-star-4" alt="rating star"></span>
+                                    <span id="starsContainer" class="stars-container" alt="Average rating: 4.6 out of 5 stars, based on 32 reviews. "
+                                          tabindex="" aria-label="Average rating: 4.6 out of 5 stars, based on 32 reviews. " role="text">
+                                        <span id="star1" class="star display-inline-block" data-automation-id="stars-star-0" alt="rating star"></span>
+                                        <span id="star2" class="star display-inline-block" data-automation-id="stars-star-1" alt="rating star"></span>
+                                        <span id="star3" class="star display-inline-block" data-automation-id="stars-star-2" alt="rating star"></span>
+                                        <span id="star4" class="star display-inline-block" data-automation-id="stars-star-3" alt="rating star"></span>
+                                        <span id="star5" class="star display-inline-block" data-automation-id="stars-star-4" alt="rating star"></span>
                                     </span>
-                                    <div class="product-review-ratings" aria-hidden="true" style="margin-top: 10px;"><span class="font-bold">3.8</span> out of 5 Stars</div>
+                                    <div class="product-review-ratings" aria-hidden="true" style="margin-top: 10px;">
+                                        <span class="font-bold">@mRating.overrallRating</span> out of 5 Stars
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         <div class="ReviewHistogram product-review-histogram">
                             <div tabindex="0" role="button" class="RatingFilter active" aria-label="11 5-star reviews, currently selected" aria-disabled="true">
                                 <div class="MeterInline">5 stars</div>
-                                <div class="Meter Histogram"><span class="MeterBar" style="width: 47.8261%;"></span></div>
-                                <span class="font-normal">11</span>
+                                <div class="Meter Histogram"><span class="MeterBar" style="width: @mRating.fiveStarReviewPercent%;"></span></div>
+                                <span class="font-normal">@Html.DisplayFor(model => mRating.fiveStarReviewNumber)</span>
                             </div>
                             <div tabindex="0" role="button" class="RatingFilter" aria-label="4 4-star reviews,         select to filter by 4 star reviews">
                                 <div class="MeterInline">4 stars</div>
-                                <div class="Meter Histogram"><span class="MeterBar" style="width: 17.3913%;"></span></div>
-                                <span class="font-normal">4</span>
+                                <div class="Meter Histogram"><span class="MeterBar" style="width: @mRating.fourStarReviewPercent%;"></span></div>
+                                <span class="font-normal">@Html.DisplayFor(model => mRating.fourStarReviewNumber)</span>
                             </div>
                             <div tabindex="0" role="button" class="RatingFilter" aria-label="3 3-star reviews,         select to filter by 3 star reviews">
                                 <div class="MeterInline">3 stars</div>
-                                <div class="Meter Histogram"><span class="MeterBar" style="width: 13.0435%;"></span></div>
-                                <span class="font-normal">3</span>
+                                <div class="Meter Histogram"><span class="MeterBar" style="width: @mRating.threeStarReviewPercent%;"></span></div>
+                                <span class="font-normal">@Html.DisplayFor(model => mRating.threeStarReviewNumber)</span>
                             </div>
                             <div tabindex="0" role="button" class="RatingFilter" aria-label="3 2-star reviews,         select to filter by 2 star reviews">
                                 <div class="MeterInline">2 stars</div>
-                                <div class="Meter Histogram"><span class="MeterBar" style="width: 13.0435%;"></span></div>
-                                <span class="font-normal">3</span>
+                                <div class="Meter Histogram"><span class="MeterBar" style="width: @mRating.twoStarReviewPercent%;"></span></div>
+                                <span class="font-normal">@Html.DisplayFor(model => mRating.twoStarReviewNumber)</span>
                             </div>
                             <div tabindex="0" role="button" class="RatingFilter" aria-label="2 1-star reviews,         select to filter by 1 star reviews">
                                 <div class="MeterInline">1 stars</div>
-                                <div class="Meter Histogram"><span class="MeterBar" style="width: 8.69565%;"></span></div>
-                                <span class="font-normal">2</span>
+                                <div class="Meter Histogram"><span class="MeterBar" style="width: @mRating.oneStarReviewPercent%;"></span></div>
+                                <span class="font-normal">@Html.DisplayFor(model => mRating.oneStarReviewNumber)</span>
                             </div>
                         </div>
                     </div>
                 </td>
             </tr>
+            
+            @foreach (var review in mReviewList) {
             <tr>
                 <td colspan="3">
-                    <div style="width: 100%; height: 0.5px; background-color: lightgray; margin-top: 10px;"></div>
+                    <div class="review-pad"></div>
                     <div style="margin-left: 15px">
-                        <div class="review-header" style="margin-top: 50px">
+                        <div class="review-header" style="margin-top: 5px">
                             <div class="Grid review-heading">
                                 <div class="Grid-col u-size-12-12-xs font-normal">
-                                    <h2 itemprop="name" class="review-title">True workhorse!!</h2>
+                                    <h2 itemprop="name" class="review-title">@Html.DisplayFor(model => review.Title)</h2>
                                 </div>
                                 <div class="review-star-rating">
                                     <div class="stars stars-small">
-                                        <span class="stars-container" alt="Average rating: 4 out of 5 stars, based on 23 reviews. " tabindex="" aria-label="Average rating: 4 out of 5 stars, based on 23 reviews. " role="text">
-                                            <span alt="rating star" class="star display-inline-block star-rated" data-automation-id="stars-star-0">
-                                            </span>
-                                            <span alt="rating star" class="star display-inline-block star-rated" data-automation-id="stars-star-1">
-                                            </span>
-                                            <span alt="rating star" class="star display-inline-block star-rated" data-automation-id="stars-star-2">
-                                            </span>
-                                            <span alt="rating star" class="star display-inline-block star-rated" data-automation-id="stars-star-3">
-                                            </span>
-                                            <span alt="rating star" class="star display-inline-block star-empty" data-automation-id="stars-star-4">
-                                            </span>
-                                        </span>
-                                        <span aria-hidden="true" class="hiddenStarLabel" data-automation-id="stars-avg-rating">
-                                            Average rating:
-                                            <span class="seo-avg-rating">
-                                                4
-                                            </span>out of
-                                            <span class="seo-best-rating">
-                                                5
-                                            </span>stars, based on
-                                            <span class="seo-review-count">
-                                                23
-                                            </span>reviews
-                                        </span>
-                                        <span class="stars-reviews font-normal" tabindex="-1" aria-hidden="true" data-automation-id="stars-reviews">
-                                            <span class="stars-reviews-count">
-                                                <span>23</span>
-                                                <span class="visuallyhidden">ratings</span>
-                                            </span>
+                                        <span id="smallStarContainer/@review.ReviewId" class="stars-container" alt="Average rating: 4 out of 5 stars, based on 23 reviews. " tabindex="" aria-label="Average rating: 4 out of 5 stars, based on 23 reviews. " role="text">
+                                            <span alt="rating star" class="star display-inline-block" data-automation-id="stars-star-0"></span>
+                                            <span alt="rating star" class="star display-inline-block" data-automation-id="stars-star-1"></span>
+                                            <span alt="rating star" class="star display-inline-block" data-automation-id="stars-star-2"></span>
+                                            <span alt="rating star" class="star display-inline-block" data-automation-id="stars-star-3"></span>
+                                            <span alt="rating star" class="star display-inline-block" data-automation-id="stars-star-4"></span>
                                         </span>
                                     </div>
                                 </div>
                             </div>
-                            <div itemprop="reviewRating" itemscope="" itemtype="//schema.org/Rating">
+                            <!--div itemprop="reviewRating" itemscope="" itemtype="//schema.org/Rating">
                                 <meta itemprop="worstRating" content="1">
                                 <meta itemprop="ratingValue" content="4">
                                 <meta itemprop="bestRating" content="5">
-                            </div>
+                            </div-->
                         </div>
                         <div class="Grid review-body">
                             <div itemprop="reviewBody" class="Grid-col review-description">
                                 <div>
                                     <div class="review-body-text" id="Collapsable-1547053967697" style="min-height: 62px;">
                                         <div>
-                                            <div style="margin-top: 10px;">Strong and sturdy. Slight problem steering the big wheels. But can be worked with.</div>
+                                            <div style="margin-top: 10px;">@review.Content</div>
                                             <div style="position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px; overflow: hidden; z-index: -1; visibility: hidden; pointer-events: none;">
                                                 <div style="position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px; overflow: hidden; z-index: -1; visibility: hidden; pointer-events: none;">
                                                     <div style="position: absolute; left: 0px; top: 0px; transition: all 0s ease 0s; width: 100000px; height: 100000px;"></div>
@@ -148,13 +139,117 @@
                             </div>
                         </div>
                         <div class="review-footer">
-                            <div class="display-inline-block" aria-label="Reviewed by Griff
-                              on October 23, 2018"><span itemprop="author" class="review-footer-userNickname">Griff, </span><span itemprop="datePublished" content="October 23, 2018" class="review-footer-submissionTime">October 23, 2018</span></div>
+                            <div class="display-inline-block" aria-label="Reviewed by Griff on October 23, 2018">
+                                <span itemprop="author" class="review-footer-userNickname">@review.UserName, </span>
+                                <span itemprop="datePublished" content="October 23, 2018" class="review-footer-submissionTime">@review.ReviewDate</span>
+                            </div>
                             <div style="width: 100%; height: 0.5px; background-color: lightgray; margin-top: 10px;"></div>
                         </div>
                     </div>
                 </td>
             </tr>
+            }
         </tbody>
     </table>
 </div>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+    var product;
+    var reviewList;
+    var reviewNumber;
+    var overrallRating;
+
+    $(document).ready(function () {
+        product = @Html.Raw(Json.Encode(mProduct));
+        reviewList = @Html.Raw(Json.Encode(mReviewList));
+        overrallRating = @Html.Raw(Json.Encode(mRating.overrallRating));
+
+        setUpImage(product);
+
+        var bigStarContainner = document.getElementById("starsContainer");
+        setUpRatingStars(bigStarContainner, overrallRating);
+
+        //alert(reviewList.length);
+        for (var i = 0; i < reviewList.length; i++) {
+            //alert("smallStarContainer/" + reviewList[i].ReviewId);
+            var smallStarContainner = document.getElementById("smallStarContainer/" + reviewList[i].ReviewId);
+            var rating = reviewList[i].OverallRating;
+            //alert(overrallRating);
+            setUpRatingStars(smallStarContainner, rating);
+        }
+    });
+
+    function setUpImage(product) {
+        var imageList = product.Picture.split(',');
+
+        document.getElementById("productImg").src =
+            '/assets/production/' + product.ProductId + '/' + product.Color + '/' + imageList[0];
+    }
+
+    function setUpRatingStars(starContainner, overrallRating) {
+        function setUpRatedStar(endIndex) {
+            if (starContainner.hasChildNodes()) {
+                var children = starContainner.children;
+                for (var i = 0; i < endIndex; i++) {
+                    children[i].classList.add("star-rated");
+                }
+            }
+        }
+        function setUpPartialStar(index) {
+            if (starContainner.hasChildNodes()) {
+                var children = starContainner.children;
+                children[index-1].classList.add("star-partial");
+            }
+        }
+        function setUpEmtyStars(startIndex) {
+            if (starContainner.hasChildNodes()) {
+                var children = starContainner.children;
+                for (var i = (startIndex - 1); i < starContainner.children.length; i++) {
+                    children[i].classList.add("star-empty");
+                }
+            }
+        }
+
+        if (overrallRating == 1) {
+            setUpRatedStar(1);
+            setUpEmtyStars(starContainner, 2);
+        }
+        else if (overrallRating > 1 && overrallRating < 2) {
+            setUpRatedStar(1);
+            setUpPartialStar(2);
+            setUpEmtyStars(3);
+        }
+        else if (overrallRating == 2) {
+            setUpRatedStar(2);
+            setUpEmtyStars(3);
+        }
+        else if (overrallRating > 2 && overrallRating < 3) {
+            setUpRatedStar(2);
+            setUpPartialStar(3);
+            setUpEmtyStars(4);
+        }
+        else if (overrallRating == 3) {
+            setUpRatedStar(3);
+            setUpEmtyStars(4);
+        }
+        else if (overrallRating > 3 && overrallRating < 4) {
+            setUpRatedStar(3);
+            setUpPartialStar(4);
+            setUpEmtyStars(5);
+        }
+        else if (overrallRating == 4) {
+            setUpRatedStar(4);
+            setUpEmtyStars(5);
+        }
+        else if (overrallRating > 4 && overrallRating < 5) {
+            setUpRatedStar(4);
+            setUpPartialStar(5);
+        }
+        else if (overrallRating == 5) {
+            setUpRatedStar(5);
+        }
+    }
+
+</script>

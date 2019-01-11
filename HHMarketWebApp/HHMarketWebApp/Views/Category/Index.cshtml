@@ -48,16 +48,17 @@
     <div class="row">
         @foreach (var item in Model)
         {
-            <div class="col-sm-3" style="background-color:white;">
-                <a href="../Production/Index?categoryId=@item.CategoryId&page=1">
-                    <div class="Rectangle">
-                        <img src="~/assets/@Html.DisplayFor(model =>item.Picture)" style="padding-top:10px; padding-bottom:10px" class="product_img" alt="No Image" />
-                        <div class="TempoCategoryTile-content">
-                            <p class="product_lb">@Html.DisplayFor(modelItem => item.Name)</p>
-                        </div>
+        <div class="col-sm-3" style="background-color:white;">
+            <a href="../Production/Index?categoryId=@item.CategoryId&page=1">
+            <!--a href="../Production/ReviewProduction?id=2"-->
+                <div class="Rectangle">
+                    <img src="~/assets/@Html.DisplayFor(model =>item.Picture)" style="padding-top:10px; padding-bottom:10px" class="product_img" alt="No Image" />
+                    <div class="TempoCategoryTile-content">
+                        <p class="product_lb">@Html.DisplayFor(modelItem => item.Name)</p>
                     </div>
-                </a>
-            </div>
+                </div>
+            </a>
+        </div>
         }
     </div>
     <div class="row text-center">
