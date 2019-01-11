@@ -4,6 +4,9 @@
 	box-sizing: border-box
 }
 
+body{
+    font-size:18px;
+}
 .product-review-header {
 	margin-top:16px;
 }

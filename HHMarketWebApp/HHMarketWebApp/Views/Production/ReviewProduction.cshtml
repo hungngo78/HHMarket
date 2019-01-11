@@ -88,13 +88,19 @@
                             </div>
                         </div>
                     </div>
+
+                </td>
+
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <div class="review-pad"></div>
                 </td>
             </tr>
             
             @foreach (var review in mReviewList) {
             <tr>
                 <td colspan="3">
-                    <div class="review-pad"></div>
                     <div style="margin-left: 15px">
                         <div class="review-header" style="margin-top: 5px">
                             <div class="Grid review-heading">
@@ -143,7 +149,7 @@
                                 <span itemprop="author" class="review-footer-userNickname">@review.UserName, </span>
                                 <span itemprop="datePublished" content="October 23, 2018" class="review-footer-submissionTime">@review.ReviewDate</span>
                             </div>
-                            <div style="width: 100%; height: 0.5px; background-color: lightgray; margin-top: 10px;"></div>
+                            <div style="width: 60%; height: 0.5px; background-color: lightgray; margin-top: 10px;"></div>
                         </div>
                     </div>
                 </td>
