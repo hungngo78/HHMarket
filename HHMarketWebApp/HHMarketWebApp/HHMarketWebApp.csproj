@@ -158,12 +158,15 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\CategoryController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ShoppingCart.cs" />
     <Compile Include="Controllers\ProductionController.cs" />
     <Compile Include="Controllers\RegistrationController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\CartDetailItem.cs" />
+    <Compile Include="Models\ShoppingCart.cs" />
     <Compile Include="Models\Cart.cs" />
     <Compile Include="Models\CartDetail.cs" />
     <Compile Include="Models\Category.cs" />
@@ -203,6 +206,7 @@
     <Content Include="Content\PagedList.css" />
     <Content Include="Content\productDetail.css" />
     <Content Include="Content\product.review.css" />
+    <Content Include="Content\shoppingCart.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -252,6 +256,8 @@
     <Content Include="Views\Production\Index.cshtml" />
     <Content Include="Views\Production\ProductDetail.cshtml" />
     <Content Include="Views\Production\ReviewProduction.cshtml" />
+    <Content Include="Views\Index.cshtml" />
+    <Content Include="Views\ShoppingCart\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
