@@ -32,6 +32,8 @@ namespace HHMarketWebApp.Models
 
         public string Color { get; set; }
 
+        public int UserId { get; set; }
+
         public int TotalAmountProduction { get; set; }
 
     }

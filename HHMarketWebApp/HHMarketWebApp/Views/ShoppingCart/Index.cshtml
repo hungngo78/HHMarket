@@ -3,10 +3,13 @@
 }
 @model HHMarketWebApp.Models.ShoppingCart
 
-    @{
-        var listItem = Model.listItemCart;
-    }
-
+@{
+    var listItem = Model.listItemCart;
+}
+@using (Ajax.BeginForm("Order", "ShoppingCart",
+    new AjaxOptions { HttpMethod = "POST", OnSuccess = "onAjaxRequestSuccess" },
+    new { @id = "AjaxformId", @class = "form-horizontal", role = "form" }))
+{
     <style type="text/css"></style>
 
     <!-- Optional JavaScript -->
@@ -19,107 +22,110 @@
         <div>
             <h2 id="quantity"> Your cart:  @Model.listItemCart.Sum(item => item.Amount) items </h2>
             <table width="96%" style="margin: 20px;">
-                @{  var i = -1;
-                    foreach (var item in Model.listItemCart) {
+                @{ var i = -1;
+                    foreach (var item in Model.listItemCart)
+                    {
                         i++;
-                <tr >
-                    <td width="70%" style="vertical-align:top">
-                        <table cellspacing="10px" id="tableItem/@item.CartDetailsId">
-                            <tr id="item/@item.CartDetailsId" style="height:0px;">
-                                <td width="15%">
-                                    <img id="image/@item.ProductDetailsId"  src="https://i5.wal.co/asr/08072fb5-1a2d-473d-8060-863b07ccfa7b_2.c3429619370adb136931c9673eed592c.jpeg?odnHeight=100&amp;odnWidth=100&amp;odnBg=FFFFFF" alt="Mainstays Faux Leather Bucket Accent Chair" width="100">
-                                </td>
-                                <td width="50%" style="vertical-align:top">
-                                    <span class="title-production" id="TitleProduction">
-                                        @Html.DisplayFor(model => item.ProductName)
-                                    </span>
-                                    <span class="customer-info">Sold by HHMarket</span>
-                                </td>
+                        <tr>
+                            <td width="70%" style="vertical-align:top">
+                                <table cellspacing="10px" id="tableItem/@item.CartDetailsId">
+                                    <tr id="item/@item.CartDetailsId" style="height:0px;">
+                                        <td width="15%">
+                                            <img id="image/@item.ProductDetailsId" src="https://i5.wal.co/asr/08072fb5-1a2d-473d-8060-863b07ccfa7b_2.c3429619370adb136931c9673eed592c.jpeg?odnHeight=100&amp;odnWidth=100&amp;odnBg=FFFFFF" alt="Mainstays Faux Leather Bucket Accent Chair" width="100">
+                                        </td>
+                                        <td width="50%" style="vertical-align:top">
+                                            <span class="title-production" id="TitleProduction">
+                                                @Html.DisplayFor(model => item.ProductName)
+                                            </span>
+                                            <span class="customer-info">Sold by HHMarket</span>
+                                        </td>
 
-                                <td width="20%" style="vertical-align:top; padding-left:10px;">
-                                    <span class="customer-info"> Qty:</span>
-                                    <div id="quantityUI/@item.ProductDetailsId">
-                                        <select id="quantity/@item.ProductDetailsId"></select>
-                                    </div>
-                                </td>
+                                        <td width="20%" style="vertical-align:top; padding-left:10px;">
+                                            <span class="customer-info"> Qty:</span>
+                                            <div id="quantityUI/@item.ProductDetailsId">
+                                                <select id="quantity/@item.ProductDetailsId"></select>
+                                            </div>
+                                        </td>
 
-                                <td style="text-align:right; padding-right: 10px;">
-                                    <span class="customer-info" id="priceForEachID">
-                                        $ @Html.DisplayFor(model => item.Price) ea
-                                    </span>
-                                    <span class="production-price" id="productionTotalPrice/@item.ProductDetailsId"></span>
-                                    <span class="customer-info"><button id="btnRemove/@item.CartDetailsId" class="btn" value="@item.CartDetailsId" onclick="removeItem(@item.CartDetailsId)" >Remove</button></span>
-                                </td>
+                                        <td style="text-align:right; padding-right: 10px;">
+                                            <span class="customer-info" id="priceForEachID">
+                                                $ @Html.DisplayFor(model => item.Price) ea
+                                            </span>
+                                            <span class="production-price" id="productionTotalPrice/@item.ProductDetailsId"></span>
+                                            <span class="customer-info"><button id="btnRemove/@item.CartDetailsId" class="btn" value="@item.CartDetailsId" onclick="removeItem(@item.CartDetailsId)">Remove</button></span>
+                                        </td>
 
 
-                            </tr>
-                            <tr>
-                                <td colspan="4">
-                                    <div style="width: 100%; height: 0.5px; background-color: lightgray; margin-top: 10px; margin-bottom:10px;"></div>
-                                </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="4">
+                                            <div style="width: 100%; height: 0.5px; background-color: lightgray; margin-top: 10px; margin-bottom:10px;"></div>
+                                        </td>
 
-                            </tr>
-                        </table>
-                    </td>
+                                    </tr>
+                                </table>
+                            </td>
 
-                    <td style="width:30%; vertical-align:top; ">
-                        @if (i == 0)
-                        {
-                        <table width="89%" cellspacing="10" style="background-color: #F5F5F5;  padding-right: 10px;">
-                            <tr>
-                                <td style="text-align:left" id="subTotal">
-                                    Subtotal( @Model.listItemCart.Sum(model => model.Amount) items)
-                                </td>
+                            <td style="width:30%; vertical-align:top; ">
+                                @if (i == 0)
+                                {
+                                    <table width="89%" cellspacing="10" style="background-color: #F5F5F5;  padding-right: 10px;">
+                                        <tr>
+                                            <td style="text-align:left" id="subTotal">
+                                                Subtotal( @Model.listItemCart.Sum(model => model.Amount) items)
+                                            </td>
 
-                                <td style="text-align:right">
-                                    <span id="Subtotalprice"> free </span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="text-align:left">
-                                    <span>Shipping</span>
-                                </td>
+                                            <td style="text-align:right">
+                                                <span id="Subtotalprice"> free </span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align:left">
+                                                <span>Shipping</span>
+                                            </td>
 
-                                <td style="text-align:right">
-                                    <span> free </span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="2">
-                                    <div style="width: 100%; height: 0.5px; background-color: lightgray; margin-top: 10px; margin-bottom:10px;"></div>
-                                </td>
+                                            <td style="text-align:right">
+                                                <span> free </span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">
+                                                <div style="width: 100%; height: 0.5px; background-color: lightgray; margin-top: 10px; margin-bottom:10px;"></div>
+                                            </td>
 
-                            </tr>
-                            <tr>
-                                <td style="text-align:left">
-                                    <span>Estimated Total</span>
-                                </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align:left">
+                                                <span>Estimated Total</span>
+                                            </td>
 
-                                <td style="text-align:right">
-                                    <span id="EstimatedPrice"> $431.74 </span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="2" style="text-align:center">
-                                    <button class="btn" onclick="alert('Thank you for your order!');">Check out</button>
+                                            <td style="text-align:right">
+                                                <span id="EstimatedPrice"> $431.74 </span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2" style="text-align:center">
+                                                <button class="btn" onclick="submitOrder()">Check out</button>
 
-                                </td>
-                            </tr>
+                                            </td>
+                                        </tr>
 
-                        </table>
-                        }
-                    </td>
-                </tr>
-                        }
+                                    </table>
+                                }
+                            </td>
+                        </tr>
                     }
+                }
 
             </table>
         </div>
     </div>
+                    }
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript">
         var shoppingCart;
+
         $(document).ready(function () {
             shoppingCart = @Html.Raw(Json.Encode(Model.listItemCart));
             setupQuantityUI();
@@ -127,6 +133,45 @@
             showImage();
 
         });
+
+        function submitOrder() {
+            // Let's edit the description!
+            if (shoppingCart != null && shoppingCart != "undefined") {
+                if (shoppingCart.length == 0) {
+                    return;
+                }
+                var action = $("#AjaxformId").attr("action");
+              
+                var uID = shoppingCart[0].UserId;
+                var cID = shoppingCart[0].CartId;
+                alert("UiD = " + uID + " cID = " + cID);
+                var postData = {
+                    "UserId": uID,
+                    "CartId": cID,
+                };
+               
+                $.ajax({
+                    type: "POST",
+                    url: action, // the method we are calling
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify({ model: shoppingCart[0]}),
+                    dataType: "json",
+                    success: function (result) {
+                        onAjaxRequestSuccess();
+
+                    },
+                    error: function (result) {
+                        alert('You vave error when submit order. Could you please try again!');
+                    }
+
+                });
+
+                var onAjaxRequestSuccess = function (result) {
+                    alert('Thank you for your order!');
+                }
+            }
+
+        }
         function removeItem(id) {
 
             var retValue = confirm("Do you want to remove?");

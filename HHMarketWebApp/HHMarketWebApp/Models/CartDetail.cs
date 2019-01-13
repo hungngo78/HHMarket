@@ -21,8 +21,6 @@ namespace HHMarketWebApp.Models
 
         public int CartId { get; set; }
 
-        public string Username { get; set; }
-
         public virtual Cart Cart { get; set; }
 
         public virtual ProductDetail ProductDetail { get; set; }

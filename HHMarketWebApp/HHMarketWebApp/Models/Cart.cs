@@ -19,7 +19,7 @@ namespace HHMarketWebApp.Models
 
         public DateTime DateOpen { get; set; }
 
-        public int? UserId { get; set; }
+        public int UserId { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CartDetail> CartDetails { get; set; }

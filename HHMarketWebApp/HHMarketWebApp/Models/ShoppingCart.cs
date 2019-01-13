@@ -9,7 +9,7 @@ namespace HHMarketWebApp.Models
 
         public int CartId { get; set; }
         public DateTime DateOpen { get; set; }
-        public int? UserId { get; set; }
+        public int UserId { get; set; }
         public string CustomerName { get; set; }
         
         
