@@ -86,6 +86,7 @@ namespace HHMarketWebApp.Controllers
 
                 await db.SaveChangesAsync();
                 // delete cart and cartDetail
+               
 
                 ModelState.Clear();
 
