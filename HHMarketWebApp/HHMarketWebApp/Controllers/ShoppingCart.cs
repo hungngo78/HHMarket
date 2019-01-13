@@ -23,11 +23,14 @@ namespace HHMarketWebApp.Controllers
                                              Amount = cdetail.Amount,
                                              CartId = cdetail.CartId,
                                              Type = cdetail.Type,
+                                             CartDetailsId = cdetail.CartDetailsId,
                                              ExtendedPrice = cdetail.ExtendedPrice,
                                              ProductDetailsId = cdetail.ProductDetailsId,
                                              Price = pdetail.Price,
                                              Picture = pdetail.Picture,
                                              ProductName = p.Name,
+                                             ProductID = pdetail.ProductId,
+                                             Color = pdetail.Color,
                                              TotalAmountProduction = pdetail.Amount
                                          }).ToList();
 

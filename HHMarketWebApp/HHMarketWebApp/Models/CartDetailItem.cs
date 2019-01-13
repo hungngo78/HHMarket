@@ -26,7 +26,11 @@ namespace HHMarketWebApp.Models
 
         public string ProductName { get; set; }
 
+        public int ProductID { get; set; }
+
         public string CustomerName { get; set; }
+
+        public string Color { get; set; }
 
         public int TotalAmountProduction { get; set; }
 

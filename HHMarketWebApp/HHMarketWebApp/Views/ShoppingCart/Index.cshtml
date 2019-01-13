@@ -22,12 +22,12 @@
                 @{  var i = -1;
                     foreach (var item in Model.listItemCart) {
                         i++;
-                <tr>
+                <tr >
                     <td width="70%" style="vertical-align:top">
-                        <table cellspacing="10px">
-                            <tr>
+                        <table cellspacing="10px" id="tableItem/@item.CartDetailsId">
+                            <tr id="item/@item.CartDetailsId" style="height:0px;">
                                 <td width="15%">
-                                    <img src="https://i5.wal.co/asr/08072fb5-1a2d-473d-8060-863b07ccfa7b_2.c3429619370adb136931c9673eed592c.jpeg?odnHeight=100&amp;odnWidth=100&amp;odnBg=FFFFFF" alt="Mainstays Faux Leather Bucket Accent Chair" width="100">
+                                    <img id="image/@item.ProductDetailsId"  src="https://i5.wal.co/asr/08072fb5-1a2d-473d-8060-863b07ccfa7b_2.c3429619370adb136931c9673eed592c.jpeg?odnHeight=100&amp;odnWidth=100&amp;odnBg=FFFFFF" alt="Mainstays Faux Leather Bucket Accent Chair" width="100">
                                 </td>
                                 <td width="50%" style="vertical-align:top">
                                     <span class="title-production" id="TitleProduction">
@@ -38,8 +38,8 @@
 
                                 <td width="20%" style="vertical-align:top; padding-left:10px;">
                                     <span class="customer-info"> Qty:</span>
-                                    <div id=@item.ProductDetailsId>
-                
+                                    <div id="quantityUI/@item.ProductDetailsId">
+                                        <select id="quantity/@item.ProductDetailsId"></select>
                                     </div>
                                 </td>
 
@@ -47,8 +47,8 @@
                                     <span class="customer-info" id="priceForEachID">
                                         $ @Html.DisplayFor(model => item.Price) ea
                                     </span>
-                                    <span class="production-price" id="productionTotalPrice">$ @Html.DisplayFor(model => item.Price)</span>
-                                    <span class="customer-info"><button class="btn">Remove</button></span>
+                                    <span class="production-price" id="productionTotalPrice/@item.ProductDetailsId"></span>
+                                    <span class="customer-info"><button id="btnRemove/@item.CartDetailsId" class="btn" value="@item.CartDetailsId" onclick="removeItem(@item.CartDetailsId)" >Remove</button></span>
                                 </td>
 
 
@@ -67,12 +67,12 @@
                         {
                         <table width="89%" cellspacing="10" style="background-color: #F5F5F5;  padding-right: 10px;">
                             <tr>
-                                <td style="text-align:left">
-                                    Subtotal( @Model.listItemCart.Sum(model => item.Amount) items)
+                                <td style="text-align:left" id="subTotal">
+                                    Subtotal( @Model.listItemCart.Sum(model => model.Amount) items)
                                 </td>
 
                                 <td style="text-align:right">
-                                    $397.00
+                                    <span id="Subtotalprice"> free </span>
                                 </td>
                             </tr>
                             <tr>
@@ -96,12 +96,12 @@
                                 </td>
 
                                 <td style="text-align:right">
-                                    <span> $431.74 </span>
+                                    <span id="EstimatedPrice"> $431.74 </span>
                                 </td>
                             </tr>
                             <tr>
                                 <td colspan="2" style="text-align:center">
-                                    <button class="btn">Check out</button>
+                                    <button class="btn" onclick="alert('Thank you for your order!');">Check out</button>
 
                                 </td>
                             </tr>
@@ -123,59 +123,104 @@
         $(document).ready(function () {
             shoppingCart = @Html.Raw(Json.Encode(Model.listItemCart));
             setupQuantityUI();
+            calTotalBill();
+            showImage();
 
         });
+        function removeItem(id) {
+
+            var retValue = confirm("Do you want to remove?");
+            if (retValue == true) {
+                var rowItem = document.getElementById("item/" + id);
+                // var tableItem = document.getElementById("tableItem/" + id);
+                rowItem.setAttribute("style", "height: 0px");
+                rowItem.parentNode.removeChild(rowItem);
+
+                for (var i = 0; i < shoppingCart.length; i++) {
+                    if (shoppingCart[i].CartDetailsId == id) {
+                        var q = document.getElementById("quantity");
+                        shoppingCart.splice(i, 1);
+                        calTotalBill();
+                        //remove item on server
+                        break;
+                    }
+                }
+            }
+
+        }
+        function showImage() {
+            if (shoppingCart != null && shoppingCart != "undefined") {
+                for (var i = 0; i < shoppingCart.length; i++) {
+                    var image = document.getElementById("image/" + shoppingCart[i].ProductDetailsId);
+                    var pict = shoppingCart[i].Picture.split(',');
+                    if (pict != null && pict != "undefined" && pict.length > 0) {
+                        image.setAttribute("src", '/assets/production/' + shoppingCart[i].ProductID + '/' + shoppingCart[i].Color + '/' + pict[0]);
+                    }
+                }
+            }
+
+        }
+        function calTotalBill() {
+            if (shoppingCart != null && shoppingCart != "undefined") {
+                var total = 0;
+                var shippingFee = 0; // we not set shipping Fee now
+                var subTotal = 0;
+                for (var i = 0; i < shoppingCart.length; i++) {
+                    var productionQuantity = document.getElementById("quantity/" + shoppingCart[i].ProductDetailsId).options.item(document.getElementById("quantity/" + shoppingCart[i].ProductDetailsId).selectedIndex).value;
+                    total += shoppingCart[i].Price * productionQuantity;
+                    subTotal += shoppingCart[i].Amount;
+                }
+                // update price total
+                var Subtotalprice = document.getElementById("Subtotalprice");
+                Subtotalprice.innerHTML = "$" + total;
+                document.getElementById("EstimatedPrice").innerHTML = "$" + (total + shippingFee);
+                document.getElementById("subTotal").textContent = " Subtotal( " + subTotal + " items)";
+                document.getElementById("quantity").textContent = " Your cart:  " + subTotal + " items";
+            }
+        }
 
         function updateTotalPricePro(prodItem) {
-
-            var productionTotalPrice = document.getElementById("productionTotalPrice");
+             var productionTotalPrice = document.getElementById("productionTotalPrice/" + prodItem.ProductDetailsId);
             //get quantity
-            var productionTotalPrice = document.getElementById(prodItem.ProductDetailsId).querySelector('select').text;
-           // if (productionTotalPrice != "+10")
-                productionTotalPrice.innerHTML = prodItem.Price * productionTotalPrice;
+            var productionQuantity = document.getElementById("quantity/" + prodItem.ProductDetailsId).options.item(document.getElementById("quantity/" + prodItem.ProductDetailsId).selectedIndex).value;
+
+            // if (productionTotalPrice != "+10")
+            productionTotalPrice.innerHTML = "$" + prodItem.Price * productionQuantity;
+
+
+
         }
-       function setupQuantityUI() {
-         
+        function setupQuantityUI() {
 
-           
-           if (shoppingCart != null && shoppingCart != "undefined") {
-               // var quantitySelect = document.getElementById(shoppingCart[i].ProductDetailsId);
-               
-              // var quantitySelect = document.getElementById("quantityUI");
-               // quantitySelect.innerHTML = " ";
+            if (shoppingCart != null && shoppingCart != "undefined") {
                for (var i = 0; i < shoppingCart.length; i++) {
-                   alert("shoppingCart[i].ProductDetailsId " + shoppingCart[i].ProductDetailsId);
-                   var quantitySelect = document.createElement("select");
-                   quantitySelect.style = "width:60px;"
 
-                   var option = document.createElement("option");
-                   var quantityUI = document.getElementById(""+shoppingCart.ProductDetailsId);
-                   quantitySelect.id = "quantity_" + shoppingCart.ProductDetailsId;
-                   alert("shoppingCart[i].TotalAmountProduction " + shoppingCart[i].TotalAmountProduction);
+                   var quantitySelect = document.getElementById("quantity/"+shoppingCart[i].ProductDetailsId);
+                    quantitySelect.style = "width:60px;"
                    if (shoppingCart[i].TotalAmountProduction > 10) {
                        for (var j = 1; j <= 10; j++) {
+                           var option = document.createElement("option");
                            option.text = "" + j;
-                           quantitySelect.appendChild(option);
+                           option.value = j;
+                           quantitySelect.add(option);
                        }
+                       var option = document.createElement("option");
                        option.text = "10+";
                        quantitySelect.add(option);
-
                    } else {
                        for (var k = 1; k <= shoppingCart[i].TotalAmountProduction; k++) {
-                           option.text = "" + k;
-                           option.value = "" + k;
-                           quantitySelect.appendChild(option);
-                           alert(" k = " + k);
+                           var option = document.createElement("option");
+                           option.text =  k;
+                           option.value = k;
+                           quantitySelect.add(option);
                        }
                    }
-                   //  quantitySelect.selectedIndex = shoppingCart[i].Amount;
-                   alert("quantityUI " + quantityUI);
-                   quantityUI.innerHTML = quantitySelect;
-                   alert(" shoppingCart[i].Amount = " + shoppingCart[i].Amount);
+                   quantitySelect.selectedIndex = shoppingCart[i].Amount-1;
+
                    // add totalPrice each Production
                    updateTotalPricePro(shoppingCart[i])
                }
-              
+
            }
        }
     </script>
