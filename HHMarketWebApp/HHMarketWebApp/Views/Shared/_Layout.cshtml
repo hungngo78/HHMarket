@@ -21,7 +21,7 @@
                         <span class="icon-bar"></span>
                     </button>
                 </div>
-                @if (ViewBag.IsAuthenticated == 1)
+                @if (HttpContext.Current.User.Identity.IsAuthenticated)
                 {
                     <div class="collapse navbar-collapse" id="myNavbar">
                         <ul class="nav navbar-nav navbar-right">

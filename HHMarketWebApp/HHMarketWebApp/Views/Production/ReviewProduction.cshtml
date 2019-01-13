@@ -16,10 +16,11 @@
 <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
 <link href="~/Content/product.review.css" rel="stylesheet" type="text/css">
 <link rel="stylesheet" type="text/css" href="~/Content/hhstyle.css">
+<link rel="stylesheet" type="text/css" href="~/Content/writereview.css">
 
 <div class="container" style="margin-top: 50px;">
-    <table width="100%">
-        <tbody>
+    <table width="100%" >
+        <tbody id="reviewListID">
             <tr style="margin: 10px;">
                 <td width="20%"><img id="productImg" src="~/assets/aa1.jpg" width="180" height="180" alt="" /></td>
                 <td width="30%">
@@ -36,7 +37,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <button class="btn-review">Write to Review</button>
+                                <button class="btn-review" data-toggle="modal" data-target="#addReviewModal">Write a Review</button>
                             </td>
                         </tr>
                     </table>
@@ -88,10 +89,9 @@
                             </div>
                         </div>
                     </div>
-
                 </td>
-
             </tr>
+
             <tr>
                 <td colspan="3">
                     <div class="review-pad"></div>
@@ -101,7 +101,7 @@
             @foreach (var review in mReviewList) {
             <tr>
                 <td colspan="3">
-                    <div style="margin-left: 15px">
+					<div style="margin-left: 15px">
                         <div class="review-header" style="margin-top: 5px">
                             <div class="Grid review-heading">
                                 <div class="Grid-col u-size-12-12-xs font-normal">
@@ -119,11 +119,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <!--div itemprop="reviewRating" itemscope="" itemtype="//schema.org/Rating">
-                                <meta itemprop="worstRating" content="1">
-                                <meta itemprop="ratingValue" content="4">
-                                <meta itemprop="bestRating" content="5">
-                            </div-->
                         </div>
                         <div class="Grid review-body">
                             <div itemprop="reviewBody" class="Grid-col review-description">
@@ -159,6 +154,127 @@
     </table>
 </div>
 
+<div class="modal fade" id="addReviewModal" tabindex="-1" role="dialog" aria-labelledby="addReviewModalTitle" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog" role="document">
+        @using (Ajax.BeginForm("AddNew", "ReviewProduction",
+            new AjaxOptions { HttpMethod = "POST", OnSuccess = "onAjaxRequestSuccess" },
+            new { @id = "AjaxformId", @class = "form-horizontal", role = "form" }))
+        {
+            @Html.AntiForgeryToken()
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addReviewModalTitle">Add new Review</h5>
+                    <button  onclick="closeModal()" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="a-section a-padding-medium ryp__review-form">
+                        <form class="ryp__review-form__form">
+
+                            <!-- Product overview ;  Overall rating -->
+                            <h2 data-hook="ryp-product-header" class="a-spacing-micro"><span><span>Create Review</span></span></h2>
+                            <div class="a-section a-spacing-mini ryp__card-group">
+                                <div class="a-section a-spacing-medium ryp__card  ryp__card--full-width">
+                                    <div class="a-section a-spacing-none ryp__card__horizontal-padding-container" style="background-color: white;">
+                                        <div class="a-section ryp__card__vertical-padding-container">
+                                            <div class="a-section ryp__product-star-rating">
+                                                <!--Product overview-->
+                                                <table>
+                                                    <tr>
+                                                        <td width="116" height="108"> 
+                                                            <img id="productReviewImg" src="" alt="" width="129" height="93">
+                                                        </td>
+                                                        <td width="336">
+                                                            <div class="a-section a-spacing-medium ryp__product-title ryp__util__padding-small-side">
+                                                                <span data-hook="ryp-product-title" class="a-size-base ryp__product-title-text">@Html.DisplayFor(modelItem => mProduct.ProductionName)</span>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+
+                                                <!--Overall rating-->
+                                                <hr class="a-spacing-large a-divider-normal" />
+                                                <div id="btnContainersID" data-hook="ryp-review-stars" class="a-section ryp__review-stars">
+                                                    <h3 class="a-spacing-micro"><span><span>Overall rating</span></span>
+                                                    </h3>
+                                                    <button id="ratingStar1" onclick="rating(this)" type="button" class="ryp__star__button" data-hook="ryp-star">
+                                                        <img alt="select to rate item one star." 
+                                                             src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB3aWR0aD0iMzgiIGhlaWdodD0iMzUiPjxkZWZzPjxwYXRoIGlkPSJhIiBkPSJNMTkgMGwtNS44NyAxMS41MkwwIDEzLjM3bDkuNSA4Ljk3TDcuMjYgMzUgMTkgMjkuMDIgMzAuNzUgMzVsLTIuMjQtMTIuNjYgOS41LTguOTctMTMuMTMtMS44NXoiLz48L2RlZnM+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj48dXNlIGZpbGw9IiNGRkYiIHhsaW5rOmhyZWY9IiNhIi8+PHBhdGggc3Ryb2tlPSIjQTI2QTAwIiBzdHJva2Utb3BhY2l0eT0iLjc1IiBkPSJNMTkgMS4xbC01LjU0IDEwLjg4TDEuMSAxMy43Mmw4Ljk0IDguNDRMNy45MiAzNC4xIDE5IDI4LjQ2bDExLjA4IDUuNjQtMi4xMS0xMS45NCA4Ljk0LTguNDQtMTIuMzYtMS43NEwxOSAxLjF6Ii8+PC9nPjwvc3ZnPg==" 
+                                                             class="ryp__review-stars__star ryp__star ryp__star--large">
+                                                    </button>
+                                                    <button id="ratingStar2" onclick="rating(this)" type="button" class="ryp__star__button" data-hook="ryp-star">
+                                                        <img alt="select to rate item two star." 
+                                                             src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB3aWR0aD0iMzgiIGhlaWdodD0iMzUiPjxkZWZzPjxwYXRoIGlkPSJhIiBkPSJNMTkgMGwtNS44NyAxMS41MkwwIDEzLjM3bDkuNSA4Ljk3TDcuMjYgMzUgMTkgMjkuMDIgMzAuNzUgMzVsLTIuMjQtMTIuNjYgOS41LTguOTctMTMuMTMtMS44NXoiLz48L2RlZnM+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj48dXNlIGZpbGw9IiNGRkYiIHhsaW5rOmhyZWY9IiNhIi8+PHBhdGggc3Ryb2tlPSIjQTI2QTAwIiBzdHJva2Utb3BhY2l0eT0iLjc1IiBkPSJNMTkgMS4xbC01LjU0IDEwLjg4TDEuMSAxMy43Mmw4Ljk0IDguNDRMNy45MiAzNC4xIDE5IDI4LjQ2bDExLjA4IDUuNjQtMi4xMS0xMS45NCA4Ljk0LTguNDQtMTIuMzYtMS43NEwxOSAxLjF6Ii8+PC9nPjwvc3ZnPg==" class="ryp__review-stars__star ryp__star ryp__star--large">
+                                                    </button>
+                                                    <button id="ratingStar3" onclick="rating(this)" type="button" class="ryp__star__button" data-hook="ryp-star">
+                                                        <img alt="select to rate item three star." 
+                                                             src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB3aWR0aD0iMzgiIGhlaWdodD0iMzUiPjxkZWZzPjxwYXRoIGlkPSJhIiBkPSJNMTkgMGwtNS44NyAxMS41MkwwIDEzLjM3bDkuNSA4Ljk3TDcuMjYgMzUgMTkgMjkuMDIgMzAuNzUgMzVsLTIuMjQtMTIuNjYgOS41LTguOTctMTMuMTMtMS44NXoiLz48L2RlZnM+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj48dXNlIGZpbGw9IiNGRkYiIHhsaW5rOmhyZWY9IiNhIi8+PHBhdGggc3Ryb2tlPSIjQTI2QTAwIiBzdHJva2Utb3BhY2l0eT0iLjc1IiBkPSJNMTkgMS4xbC01LjU0IDEwLjg4TDEuMSAxMy43Mmw4Ljk0IDguNDRMNy45MiAzNC4xIDE5IDI4LjQ2bDExLjA4IDUuNjQtMi4xMS0xMS45NCA4Ljk0LTguNDQtMTIuMzYtMS43NEwxOSAxLjF6Ii8+PC9nPjwvc3ZnPg==" class="ryp__review-stars__star ryp__star ryp__star--large">
+                                                    </button>
+                                                    <button id="ratingStar4" onclick="rating(this)" type="button" class="ryp__star__button" data-hook="ryp-star">
+                                                        <img alt="select to rate item four star." 
+                                                             src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB3aWR0aD0iMzgiIGhlaWdodD0iMzUiPjxkZWZzPjxwYXRoIGlkPSJhIiBkPSJNMTkgMGwtNS44NyAxMS41MkwwIDEzLjM3bDkuNSA4Ljk3TDcuMjYgMzUgMTkgMjkuMDIgMzAuNzUgMzVsLTIuMjQtMTIuNjYgOS41LTguOTctMTMuMTMtMS44NXoiLz48L2RlZnM+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj48dXNlIGZpbGw9IiNGRkYiIHhsaW5rOmhyZWY9IiNhIi8+PHBhdGggc3Ryb2tlPSIjQTI2QTAwIiBzdHJva2Utb3BhY2l0eT0iLjc1IiBkPSJNMTkgMS4xbC01LjU0IDEwLjg4TDEuMSAxMy43Mmw4Ljk0IDguNDRMNy45MiAzNC4xIDE5IDI4LjQ2bDExLjA4IDUuNjQtMi4xMS0xMS45NCA4Ljk0LTguNDQtMTIuMzYtMS43NEwxOSAxLjF6Ii8+PC9nPjwvc3ZnPg==" class="ryp__review-stars__star ryp__star ryp__star--large">
+                                                    </button>
+                                                    <button id="ratingStar5" onclick="rating(this)" type="button" class="ryp__star__button" data-hook="ryp-star">
+                                                        <img alt="select to rate item five star." 
+                                                             src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB3aWR0aD0iMzgiIGhlaWdodD0iMzUiPjxkZWZzPjxwYXRoIGlkPSJhIiBkPSJNMTkgMGwtNS44NyAxMS41MkwwIDEzLjM3bDkuNSA4Ljk3TDcuMjYgMzUgMTkgMjkuMDIgMzAuNzUgMzVsLTIuMjQtMTIuNjYgOS41LTguOTctMTMuMTMtMS44NXoiLz48L2RlZnM+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj48dXNlIGZpbGw9IiNGRkYiIHhsaW5rOmhyZWY9IiNhIi8+PHBhdGggc3Ryb2tlPSIjQTI2QTAwIiBzdHJva2Utb3BhY2l0eT0iLjc1IiBkPSJNMTkgMS4xbC01LjU0IDEwLjg4TDEuMSAxMy43Mmw4Ljk0IDguNDRMNy45MiAzNC4xIDE5IDI4LjQ2bDExLjA4IDUuNjQtMi4xMS0xMS45NCA4Ljk0LTguNDQtMTIuMzYtMS43NEwxOSAxLjF6Ii8+PC9nPjwvc3ZnPg==" class="ryp__review-stars__star ryp__star ryp__star--large">
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Title ;  Review content -->
+                            <hr class="a-spacing-large a-divider-normal">
+                            <div class="a-section a-spacing-none ryp__card">
+                                <div class="a-section a-spacing-none ryp__card__horizontal-padding-container" style="background-color: white;">
+                                    <div class="a-section ryp__card__vertical-padding-container">
+                                        <label data-hook="ryp-review-title-label" for="ryp-review-title" class="a-form-label a-text-normal">
+                                            <h3><span><span>Add a headline</span></span></h3>
+                                        </label>
+                                        <div class="a-section a-spacing-medium a-spacing-top-small ryp__review-title">
+                                            <input type="text" data-hook="ryp-review-title-input" id="ryp-review-title" placeholder="What's most important to know?" class="a-input-text a-form-error" value="">
+                                            <div class="a-section a-spacing-top-small">
+                                                <div data-hook="ryp-review-title-validation-error" class="a-box a-alert-inline a-alert-inline-error" aria-live="assertive" role="alert">
+                                                    <div class="a-box-inner a-alert-container">
+                                                        <i class="a-icon a-icon-alert"></i>
+                                                        <div class="a-alert-content">Please enter your headline.</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <h3><span><span>Write your review</span></span></h3>
+                                        <div data-hook="ryp-review-text" class="a-section a-spacing-medium a-spacing-top-small ryp__review-text">
+                                            <div data-hook="ryp-review-text-input" class="a-input-text-wrapper">
+                                                <textarea placeholder="What did you like or dislike? What did you use this product for?" id="ryp-review-text" style="height: 100px; z-index: auto; position: relative; line-height: 19px; font-size: 13px; transition: none 0s ease 0s; background: transparent !important; width: 400px" data-gramm="true" data-txt_gramm_id="a5205aab-5187-0eb2-b4a0-1760ff1da95f" data-gramm_id="a5205aab-5187-0eb2-b4a0-1760ff1da95f" spellcheck="false" data-gramm_editor="true" class="a-form-error"></textarea>
+
+                                            </div>
+                                            <div class="a-section a-spacing-top-small">
+                                                <div data-hook="ryp-review-text-validation-error" class="a-box a-alert-inline a-alert-inline-error" aria-live="assertive" role="alert">
+                                                    <div class="a-box-inner a-alert-container">
+                                                        <div class="a-alert-content">Please enter your review.</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button onclick="closeModal()" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Send your review</button>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script type="text/javascript">
@@ -185,14 +301,98 @@
             //alert(overrallRating);
             setUpRatingStars(smallStarContainner, rating);
         }
+
+		$("#AjaxformId").submit(function (event) {
+	        event.preventDefault();
+	        event.stopImmediatePropagation();  
+	
+	        // count rated stars
+	        var count = 0;
+	        btnContainers = document.getElementById("btnContainersID").children;
+	        for (var i = 1; i < btnContainers.length; i++) {
+	            btnContainer = btnContainers[i];
+	            if (btnContainer.classList.contains("rated")) {
+	                count = count + 1;
+	            }
+	        }
+	
+	        var action = $("#AjaxformId").attr("action");  
+	        var postData = {
+	            "OverallRating": count,
+	            "Title": document.getElementById("ryp-review-title").value,
+	            "Content": document.getElementById("ryp-review-text").value,
+	            "ProductId": product.ProductId,
+	        };
+	        $.ajax({
+	            type: "POST",
+	            url: action,
+	            dataType: "json",
+	            contentType: "application/json; charset=utf-8",
+	            data: JSON.stringify({ model: postData }), 
+	            success: function (result) {
+	                // Result.  
+	                onAjaxRequestSuccess(result);
+	            },
+	            error: function (jqXHR, textStatus, errorThrown) {
+	                //do your own thing  
+	                alert("fail");
+	            }
+	        });  
+	    });
+	
+	    var onAjaxRequestSuccess = function (result) {
+	        if (result.EnableError) {
+	            // Setting.  
+	            alert(result.ErrorMsg);
+	        } else if (result.EnableSuccess) {
+	            $('#addReviewModal').modal('hide');
+	            $('body').removeClass('modal-open');
+	            $('.modal-backdrop').remove();
+	
+	            // Setting.  
+	            alert(result.SuccessMsg);
+	            // Resetting form.  
+	            //$('#AjaxformId').get(0).reset();
+	        }
+	    }
     });
-
-    function setUpImage(product) {
-        var imageList = product.Picture.split(',');
-
-        document.getElementById("productImg").src =
-            '/assets/production/' + product.ProductId + '/' + product.Color + '/' + imageList[0];
+function closeModal() {
+    btnContainers = document.getElementById("btnContainersID").children;
+    for (var i = 1; i < btnContainers.length; i++) {
+        btnContainer = btnContainers[i];
+        btnContainer.classList.remove("rated");
+        btnContainer.children[0].src = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB3aWR0aD0iMzgiIGhlaWdodD0iMzUiPjxkZWZzPjxwYXRoIGlkPSJhIiBkPSJNMTkgMGwtNS44NyAxMS41MkwwIDEzLjM3bDkuNSA4Ljk3TDcuMjYgMzUgMTkgMjkuMDIgMzAuNzUgMzVsLTIuMjQtMTIuNjYgOS41LTguOTctMTMuMTMtMS44NXoiLz48L2RlZnM+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj48dXNlIGZpbGw9IiNGRkYiIHhsaW5rOmhyZWY9IiNhIi8+PHBhdGggc3Ryb2tlPSIjQTI2QTAwIiBzdHJva2Utb3BhY2l0eT0iLjc1IiBkPSJNMTkgMS4xbC01LjU0IDEwLjg4TDEuMSAxMy43Mmw4Ljk0IDguNDRMNy45MiAzNC4xIDE5IDI4LjQ2bDExLjA4IDUuNjQtMi4xMS0xMS45NCA4Ljk0LTguNDQtMTIuMzYtMS43NEwxOSAxLjF6Ii8+PC9nPjwvc3ZnPg==";
     }
+}
+
+function rating(currentBtnContainer) {
+    //alert(ob.id);
+    var reviewStarsGroup = currentBtnContainer.parentElement;
+    var btnContainers = reviewStarsGroup.children;
+    var index = Array.prototype.indexOf.call(btnContainers, currentBtnContainer);
+    //alert(index);
+    for (var i = index; i < btnContainers.length; i++) {
+        btnContainer = btnContainers[i];
+        btnContainer.classList.remove("rated");
+        btnContainer.children[0].src = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB3aWR0aD0iMzgiIGhlaWdodD0iMzUiPjxkZWZzPjxwYXRoIGlkPSJhIiBkPSJNMTkgMGwtNS44NyAxMS41MkwwIDEzLjM3bDkuNSA4Ljk3TDcuMjYgMzUgMTkgMjkuMDIgMzAuNzUgMzVsLTIuMjQtMTIuNjYgOS41LTguOTctMTMuMTMtMS44NXoiLz48L2RlZnM+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj48dXNlIGZpbGw9IiNGRkYiIHhsaW5rOmhyZWY9IiNhIi8+PHBhdGggc3Ryb2tlPSIjQTI2QTAwIiBzdHJva2Utb3BhY2l0eT0iLjc1IiBkPSJNMTkgMS4xbC01LjU0IDEwLjg4TDEuMSAxMy43Mmw4Ljk0IDguNDRMNy45MiAzNC4xIDE5IDI4LjQ2bDExLjA4IDUuNjQtMi4xMS0xMS45NCA4Ljk0LTguNDQtMTIuMzYtMS43NEwxOSAxLjF6Ii8+PC9nPjwvc3ZnPg==";
+    }
+
+    for (var i = 1; i <= index; i++) {
+        btnContainer = btnContainers[i];
+        btnContainer.classList.add("rated");
+        btnContainer.children[0].src = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB3aWR0aD0iMzgiIGhlaWdodD0iMzUiPjxkZWZzPjxsaW5lYXJHcmFkaWVudCBpZD0iYSIgeDE9IjUwJSIgeDI9IjUwJSIgeTE9IjI3LjY1JSIgeTI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNGRkNFMDAiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNGRkE3MDAiLz48L2xpbmVhckdyYWRpZW50PjxwYXRoIGlkPSJiIiBkPSJNMTkgMGwtNS44NyAxMS41MkwwIDEzLjM3bDkuNSA4Ljk3TDcuMjYgMzUgMTkgMjkuMDIgMzAuNzUgMzVsLTIuMjQtMTIuNjYgOS41LTguOTctMTMuMTMtMS44NXoiLz48L2RlZnM+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj48dXNlIGZpbGw9InVybCgjYSkiIHhsaW5rOmhyZWY9IiNiIi8+PHBhdGggc3Ryb2tlPSIjQTI2QTAwIiBzdHJva2Utb3BhY2l0eT0iLjc1IiBkPSJNMTkgMS4xbC01LjU0IDEwLjg4TDEuMSAxMy43Mmw4Ljk0IDguNDRMNy45MiAzNC4xIDE5IDI4LjQ2bDExLjA4IDUuNjQtMi4xMS0xMS45NCA4Ljk0LTguNDQtMTIuMzYtMS43NEwxOSAxLjF6Ii8+PC9nPjwvc3ZnPg==";
+    }
+}
+
+function setUpImage(product) {
+    var imageList = product.Picture.split(',');
+
+    document.getElementById("productImg").src =
+        '/assets/production/' + product.ProductId + '/' + product.Color + '/' + imageList[0];
+
+	document.getElementById("productReviewImg").src =
+    	'/assets/production/' + product.ProductId + '/' + product.Color + '/' + imageList[0];
+}
 
     function setUpRatingStars(starContainner, overrallRating) {
         function setUpRatedStar(endIndex) {

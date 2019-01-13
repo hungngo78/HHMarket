@@ -20,7 +20,7 @@ namespace HHMarketWebApp.Controllers
             DBModelContainer db = new DBModelContainer();
 
             List<Production> prs = (from p in db.Products
-                                    join pDetail in db.ProductDetails on  p.ProductId equals pDetail.ProductId 
+                                    join pDetail in db.ProductDetails on p.ProductId equals pDetail.ProductId
                                     where p.CategoryId == categoryId
                                     select new
                                     {
@@ -38,7 +38,7 @@ namespace HHMarketWebApp.Controllers
                                         MaxPrice = g.Max(m => m.pDetail.Price),
                                         Picture = g.FirstOrDefault().pDetail.Picture,
                                         Color = g.FirstOrDefault().pDetail.Color
-                                    }).ToList(); 
+                                    }).ToList();
 
             int pageSize = 16;
             int pageNumber = (page ?? 1);
@@ -75,17 +75,17 @@ namespace HHMarketWebApp.Controllers
             reviewDetails.product = production;
 
             List<ReviewProduction> reviewList = (from r in db.Reviews
-                                    join u in db.Users on r.UserId equals u.UserId
-                                    where r.ProductId == id
-                                    select new ReviewProduction
-                                    {
-                                        ReviewId = r.ReviewId,
-                                        Title = r.Title,
-                                        Content = r.Content,
-                                        OverallRating = r.OverallRating,
-                                        UserName = u.UserName,
-                                        ReviewDate = r.ReviewDate,
-                                    }).ToList();
+                                                 join u in db.Users on r.UserId equals u.UserId
+                                                 where r.ProductId == id
+                                                 select new ReviewProduction
+                                                 {
+                                                     ReviewId = r.ReviewId,
+                                                     Title = r.Title,
+                                                     Content = r.Content,
+                                                     OverallRating = r.OverallRating,
+                                                     UserName = u.UserName,
+                                                     ReviewDate = r.ReviewDate,
+                                                 }).ToList();
             reviewDetails.reviewList = reviewList;
 
             var reviewNumbers = (from r in reviewList
@@ -99,7 +99,8 @@ namespace HHMarketWebApp.Controllers
             Rating rating = new Rating();
 
             // calculate number and percent of each rate
-            foreach (var reviewNumber in reviewNumbers) { 
+            foreach (var reviewNumber in reviewNumbers)
+            {
                 if (reviewNumber.OverrallRating == 1)
                     rating.oneStarReviewNumber = reviewNumber.Count;
                 else if (reviewNumber.OverrallRating == 2)
@@ -111,11 +112,11 @@ namespace HHMarketWebApp.Controllers
                 else if (reviewNumber.OverrallRating == 5)
                     rating.fiveStarReviewNumber = reviewNumber.Count;
             }
-            rating.oneStarReviewPercent = Convert.ToDecimal(String.Format("{0:0.0000}", rating.oneStarReviewNumber*100/ reviewList.Count()));
-            rating.twoStarReviewPercent = Convert.ToDecimal(String.Format("{0:0.0000}", rating.twoStarReviewNumber*100/ reviewList.Count()));
-            rating.threeStarReviewPercent = Convert.ToDecimal(String.Format("{0:0.0000}", rating.threeStarReviewNumber*100/ reviewList.Count()));
-            rating.fourStarReviewPercent = Convert.ToDecimal(String.Format("{0:0.0000}", rating.fourStarReviewNumber*100/ reviewList.Count()));
-            rating.fiveStarReviewPercent = Convert.ToDecimal(String.Format("{0:0.0000}", rating.fiveStarReviewNumber*100/ reviewList.Count()));
+            rating.oneStarReviewPercent = Convert.ToDecimal(String.Format("{0:0.0000}", rating.oneStarReviewNumber * 100 / reviewList.Count()));
+            rating.twoStarReviewPercent = Convert.ToDecimal(String.Format("{0:0.0000}", rating.twoStarReviewNumber * 100 / reviewList.Count()));
+            rating.threeStarReviewPercent = Convert.ToDecimal(String.Format("{0:0.0000}", rating.threeStarReviewNumber * 100 / reviewList.Count()));
+            rating.fourStarReviewPercent = Convert.ToDecimal(String.Format("{0:0.0000}", rating.fourStarReviewNumber * 100 / reviewList.Count()));
+            rating.fiveStarReviewPercent = Convert.ToDecimal(String.Format("{0:0.0000}", rating.fiveStarReviewNumber * 100 / reviewList.Count()));
 
             // calculate average overral rating
             decimal overrall = 0;
@@ -137,13 +138,22 @@ namespace HHMarketWebApp.Controllers
         {
             DBModelContainer db = new DBModelContainer();
             ProductionDetail pr = new ProductionDetail();
+            pr.ProductId = id;
             pr.listdata = (from p in db.ProductDetails
-                                   join production in db.Products on p.ProductId equals production.ProductId
-                                   where p.ProductId == id 
-                                   select new ProductionDetail(){ Color =p.Color, Description= production.Description,
-                                   Price =p.Price, Size = p.Size, Amount = p.Amount, Picture= p.Picture,
-                                       ProductDetailsId =p.ProductDetailsId, ProductId = p.ProductId,
-                                   ProductionName = production.Name}).ToList();
+                           join production in db.Products on p.ProductId equals production.ProductId
+                           where p.ProductId == id
+                           select new ProductionDetail()
+                           {
+                               Color = p.Color,
+                               Description = production.Description,
+                               Price = p.Price,
+                               Size = p.Size,
+                               Amount = p.Amount,
+                               Picture = p.Picture,
+                               ProductDetailsId = p.ProductDetailsId,
+                               ProductId = p.ProductId,
+                               ProductionName = production.Name
+                           }).ToList();
 
             // return View(productionDetail.FirstOrDefault());
             pr.reviewListData = (from r in db.Reviews
@@ -157,14 +167,53 @@ namespace HHMarketWebApp.Controllers
                                      Title = r.Title,
                                      Content = r.Content,
                                      OverallRating = r.OverallRating,
-                                     
+
                                      ReviewId = r.ReviewId,
                                      UserId = r.UserId,
                                      UserName = u.UserName,
                                      ReviewDate = r.ReviewDate
-                                 }).ToList(); 
-                                 
+                                 }).ToList();
+
             return View(pr);
+        }
+
+        [HttpPost]
+        //public ActionResult AddNew([Bind(Include = "OverallRating,Title,Content")] ReviewProduction1 model)
+        public async Task<ActionResult> AddNew(ReviewProduction model)
+        {
+            if (ModelState.IsValid)
+            {
+                // save to DB
+                DBModelContainer db = new DBModelContainer();
+                if (ModelState.IsValid)
+                {
+                    Review review = new Review();
+                    review.UserId = UserManager.User.Id;
+                    review.ProductId = model.ProductId;
+                    review.ReviewDate = DateTime.Now;
+                    review.Title = model.Title;
+                    review.Content = model.Content;
+                    review.OverallRating = model.OverallRating;
+
+                    db.Reviews.Add(review);
+                    await db.SaveChangesAsync();
+                }
+
+                // Info.  
+                return this.Json(new
+                {
+                    EnableSuccess = true,
+                    SuccessTitle = "Success",
+                    SuccessMsg = "Add new review sucessfully"
+                });
+            }
+
+            return this.Json(new
+            {
+                EnableError = true,
+                ErrorTitle = "Error",
+                ErrorMsg = "Something goes wrong, please try again later"
+            });
         }
     }
 }
