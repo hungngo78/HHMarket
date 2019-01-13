@@ -185,29 +185,43 @@ namespace HHMarketWebApp.Controllers
             {
                 // save to DB
                 DBModelContainer db = new DBModelContainer();
-                if (ModelState.IsValid)
-                {
-                    Review review = new Review();
-                    review.UserId = UserManager.User.Id;
-                    review.ProductId = model.ProductId;
-                    review.ReviewDate = DateTime.Now;
-                    review.Title = model.Title;
-                    review.Content = model.Content;
-                    review.OverallRating = model.OverallRating;
+                
+                Review review = new Review();
+                review.UserId = UserManager.User.Id;
+                review.ProductId = model.ProductId;
+                review.ReviewDate = DateTime.Now;
+                review.Title = model.Title;
+                review.Content = model.Content;
+                review.OverallRating = model.OverallRating;
 
-                    db.Reviews.Add(review);
-                    await db.SaveChangesAsync();
-                }
+                db.Reviews.Add(review);
+                await db.SaveChangesAsync();
+                
 
                 // Info.  
+                /*
                 return this.Json(new
                 {
                     EnableSuccess = true,
                     SuccessTitle = "Success",
                     SuccessMsg = "Add new review sucessfully"
-                });
+                });*/
+                
+                List<ReviewProduction> reviewList = (from r in db.Reviews
+                                                     join u in db.Users on r.UserId equals u.UserId
+                                                     where r.ProductId == model.ProductId
+                                                     select new ReviewProduction
+                                                     {
+                                                         ReviewId = r.ReviewId,
+                                                         Title = r.Title,
+                                                         Content = r.Content,
+                                                         OverallRating = r.OverallRating,
+                                                         UserName = u.UserName,
+                                                         ReviewDate = r.ReviewDate,
+                                                     }).ToList();
+                return PartialView("_PartialPage_ReviewList", reviewList);
             }
-
+            
             return this.Json(new
             {
                 EnableError = true,

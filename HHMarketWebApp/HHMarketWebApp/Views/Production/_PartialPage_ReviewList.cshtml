@@ -1,0 +1,73 @@
+﻿
+@model List<HHMarketWebApp.Models.ReviewProduction>
+
+@foreach (var review in Model)
+{
+    <tr>
+        <td colspan="3">
+            <div style="margin-left: 15px">
+                <div class="review-header" style="margin-top: 5px">
+                    <div class="Grid review-heading">
+                        <div class="Grid-col u-size-12-12-xs font-normal">
+                            <h2 itemprop="name" class="review-title">@Html.DisplayFor(model => review.Title)</h2>
+                        </div>
+                        <div class="review-star-rating">
+                            <div class="stars stars-small">
+                                <span id="smallStarContainer/@review.ReviewId" class="stars-container" alt="Average rating: 4 out of 5 stars, based on 23 reviews. " tabindex="" aria-label="Average rating: 4 out of 5 stars, based on 23 reviews. " role="text">
+                                    <span alt="rating star" class="star display-inline-block" data-automation-id="stars-star-0"></span>
+                                    <span alt="rating star" class="star display-inline-block" data-automation-id="stars-star-1"></span>
+                                    <span alt="rating star" class="star display-inline-block" data-automation-id="stars-star-2"></span>
+                                    <span alt="rating star" class="star display-inline-block" data-automation-id="stars-star-3"></span>
+                                    <span alt="rating star" class="star display-inline-block" data-automation-id="stars-star-4"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="Grid review-body">
+                    <div itemprop="reviewBody" class="Grid-col review-description">
+                        <div>
+                            <div class="review-body-text" id="Collapsable-1547053967697" style="min-height: 62px;">
+                                <div>
+                                    <div style="margin-top: 10px;">@review.Content</div>
+                                    <div style="position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px; overflow: hidden; z-index: -1; visibility: hidden; pointer-events: none;">
+                                        <div style="position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px; overflow: hidden; z-index: -1; visibility: hidden; pointer-events: none;">
+                                            <div style="position: absolute; left: 0px; top: 0px; transition: all 0s ease 0s; width: 100000px; height: 100000px;"></div>
+                                        </div>
+                                        <div style="position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px; overflow: hidden; z-index: -1; visibility: hidden; pointer-events: none;">
+                                            <div style="position: absolute; left: 0px; top: 0px; transition: all 0s ease 0s; width: 200%; height: 200%;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="review-footer">
+                    <div class="display-inline-block" aria-label="Reviewed by Griff on October 23, 2018">
+                        <span itemprop="author" class="review-footer-userNickname">@review.UserName, </span>
+                        <span itemprop="datePublished" content="October 23, 2018" class="review-footer-submissionTime">@review.ReviewDate</span>
+                    </div>
+                    <div style="width: 60%; height: 0.5px; background-color: lightgray; margin-top: 10px;"></div>
+                </div>
+            </div>
+        </td>
+    </tr>
+}
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        var reviewList = @Html.Raw(Json.Encode(Model));
+
+        for (var i = 0; i < reviewList.length; i++) {
+            //alert("smallStarContainer/" + reviewList[i].ReviewId);
+            var smallStarContainner = document.getElementById("smallStarContainer/" + reviewList[i].ReviewId);
+            var rating = reviewList[i].OverallRating;
+            //alert(overrallRating);
+            setUpRatingStars(smallStarContainner, rating);
+        }
+    });
+</script>

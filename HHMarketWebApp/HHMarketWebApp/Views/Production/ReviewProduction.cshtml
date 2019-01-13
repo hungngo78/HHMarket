@@ -97,59 +97,16 @@
                     <div class="review-pad"></div>
                 </td>
             </tr>
-            
-            @foreach (var review in mReviewList) {
+
             <tr>
                 <td colspan="3">
-					<div style="margin-left: 15px">
-                        <div class="review-header" style="margin-top: 5px">
-                            <div class="Grid review-heading">
-                                <div class="Grid-col u-size-12-12-xs font-normal">
-                                    <h2 itemprop="name" class="review-title">@Html.DisplayFor(model => review.Title)</h2>
-                                </div>
-                                <div class="review-star-rating">
-                                    <div class="stars stars-small">
-                                        <span id="smallStarContainer/@review.ReviewId" class="stars-container" alt="Average rating: 4 out of 5 stars, based on 23 reviews. " tabindex="" aria-label="Average rating: 4 out of 5 stars, based on 23 reviews. " role="text">
-                                            <span alt="rating star" class="star display-inline-block" data-automation-id="stars-star-0"></span>
-                                            <span alt="rating star" class="star display-inline-block" data-automation-id="stars-star-1"></span>
-                                            <span alt="rating star" class="star display-inline-block" data-automation-id="stars-star-2"></span>
-                                            <span alt="rating star" class="star display-inline-block" data-automation-id="stars-star-3"></span>
-                                            <span alt="rating star" class="star display-inline-block" data-automation-id="stars-star-4"></span>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="Grid review-body">
-                            <div itemprop="reviewBody" class="Grid-col review-description">
-                                <div>
-                                    <div class="review-body-text" id="Collapsable-1547053967697" style="min-height: 62px;">
-                                        <div>
-                                            <div style="margin-top: 10px;">@review.Content</div>
-                                            <div style="position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px; overflow: hidden; z-index: -1; visibility: hidden; pointer-events: none;">
-                                                <div style="position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px; overflow: hidden; z-index: -1; visibility: hidden; pointer-events: none;">
-                                                    <div style="position: absolute; left: 0px; top: 0px; transition: all 0s ease 0s; width: 100000px; height: 100000px;"></div>
-                                                </div>
-                                                <div style="position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px; overflow: hidden; z-index: -1; visibility: hidden; pointer-events: none;">
-                                                    <div style="position: absolute; left: 0px; top: 0px; transition: all 0s ease 0s; width: 200%; height: 200%;"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="review-footer">
-                            <div class="display-inline-block" aria-label="Reviewed by Griff on October 23, 2018">
-                                <span itemprop="author" class="review-footer-userNickname">@review.UserName, </span>
-                                <span itemprop="datePublished" content="October 23, 2018" class="review-footer-submissionTime">@review.ReviewDate</span>
-                            </div>
-                            <div style="width: 60%; height: 0.5px; background-color: lightgray; margin-top: 10px;"></div>
-                        </div>
-                    </div>
+                    <table id="reviewListAjax">
+                        @{
+                            Html.RenderPartial("_PartialPage_ReviewList", mReviewList);
+                        }
+                    </table>
                 </td>
             </tr>
-            }
         </tbody>
     </table>
 </div>
@@ -267,7 +224,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button onclick="closeModal()" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button id="modelDismiss" onclick="closeModal()" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary">Send your review</button>
                 </div>
             </div>
@@ -279,29 +236,18 @@
 <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script type="text/javascript">
     var product;
-    var reviewList;
     var reviewNumber;
     var overrallRating;
 
     $(document).ready(function () {
         product = @Html.Raw(Json.Encode(mProduct));
-        reviewList = @Html.Raw(Json.Encode(mReviewList));
         overrallRating = @Html.Raw(Json.Encode(mRating.overrallRating));
 
         setUpImage(product);
 
         var bigStarContainner = document.getElementById("starsContainer");
         setUpRatingStars(bigStarContainner, overrallRating);
-
-        //alert(reviewList.length);
-        for (var i = 0; i < reviewList.length; i++) {
-            //alert("smallStarContainer/" + reviewList[i].ReviewId);
-            var smallStarContainner = document.getElementById("smallStarContainer/" + reviewList[i].ReviewId);
-            var rating = reviewList[i].OverallRating;
-            //alert(overrallRating);
-            setUpRatingStars(smallStarContainner, rating);
-        }
-
+     
 		$("#AjaxformId").submit(function (event) {
 	        event.preventDefault();
 	        event.stopImmediatePropagation();  
@@ -326,73 +272,74 @@
 	        $.ajax({
 	            type: "POST",
 	            url: action,
-	            dataType: "json",
+	            //dataType: "json",
+                datatype: "text/plain",
+                cache: false,
 	            contentType: "application/json; charset=utf-8",
 	            data: JSON.stringify({ model: postData }), 
-	            success: function (result) {
-	                // Result.  
-	                onAjaxRequestSuccess(result);
+                success: function (result) {
+                    //alert("success11");
+                    // Result.  
+	                //onAjaxRequestSuccess(result);
+
+                    var dismiss = document.getElementById('modelDismiss');
+                    dismiss.click();
+
+                    $("#reviewListAjax").html(result);      
 	            },
 	            error: function (jqXHR, textStatus, errorThrown) {
 	                //do your own thing  
-	                alert("fail");
+                    alert("fail11");
 	            }
 	        });  
 	    });
 	
-	    var onAjaxRequestSuccess = function (result) {
-	        if (result.EnableError) {
-	            // Setting.  
-	            alert(result.ErrorMsg);
-	        } else if (result.EnableSuccess) {
-	            $('#addReviewModal').modal('hide');
-	            $('body').removeClass('modal-open');
-	            $('.modal-backdrop').remove();
-	
-	            // Setting.  
-	            alert(result.SuccessMsg);
-	            // Resetting form.  
-	            //$('#AjaxformId').get(0).reset();
-	        }
-	    }
+	    //var onAjaxRequestSuccess = function (result) {	       
+	    //}
     });
-function closeModal() {
-    btnContainers = document.getElementById("btnContainersID").children;
-    for (var i = 1; i < btnContainers.length; i++) {
-        btnContainer = btnContainers[i];
-        btnContainer.classList.remove("rated");
-        btnContainer.children[0].src = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB3aWR0aD0iMzgiIGhlaWdodD0iMzUiPjxkZWZzPjxwYXRoIGlkPSJhIiBkPSJNMTkgMGwtNS44NyAxMS41MkwwIDEzLjM3bDkuNSA4Ljk3TDcuMjYgMzUgMTkgMjkuMDIgMzAuNzUgMzVsLTIuMjQtMTIuNjYgOS41LTguOTctMTMuMTMtMS44NXoiLz48L2RlZnM+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj48dXNlIGZpbGw9IiNGRkYiIHhsaW5rOmhyZWY9IiNhIi8+PHBhdGggc3Ryb2tlPSIjQTI2QTAwIiBzdHJva2Utb3BhY2l0eT0iLjc1IiBkPSJNMTkgMS4xbC01LjU0IDEwLjg4TDEuMSAxMy43Mmw4Ljk0IDguNDRMNy45MiAzNC4xIDE5IDI4LjQ2bDExLjA4IDUuNjQtMi4xMS0xMS45NCA4Ljk0LTguNDQtMTIuMzYtMS43NEwxOSAxLjF6Ii8+PC9nPjwvc3ZnPg==";
-    }
-}
 
-function rating(currentBtnContainer) {
-    //alert(ob.id);
-    var reviewStarsGroup = currentBtnContainer.parentElement;
-    var btnContainers = reviewStarsGroup.children;
-    var index = Array.prototype.indexOf.call(btnContainers, currentBtnContainer);
-    //alert(index);
-    for (var i = index; i < btnContainers.length; i++) {
-        btnContainer = btnContainers[i];
-        btnContainer.classList.remove("rated");
-        btnContainer.children[0].src = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB3aWR0aD0iMzgiIGhlaWdodD0iMzUiPjxkZWZzPjxwYXRoIGlkPSJhIiBkPSJNMTkgMGwtNS44NyAxMS41MkwwIDEzLjM3bDkuNSA4Ljk3TDcuMjYgMzUgMTkgMjkuMDIgMzAuNzUgMzVsLTIuMjQtMTIuNjYgOS41LTguOTctMTMuMTMtMS44NXoiLz48L2RlZnM+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj48dXNlIGZpbGw9IiNGRkYiIHhsaW5rOmhyZWY9IiNhIi8+PHBhdGggc3Ryb2tlPSIjQTI2QTAwIiBzdHJva2Utb3BhY2l0eT0iLjc1IiBkPSJNMTkgMS4xbC01LjU0IDEwLjg4TDEuMSAxMy43Mmw4Ljk0IDguNDRMNy45MiAzNC4xIDE5IDI4LjQ2bDExLjA4IDUuNjQtMi4xMS0xMS45NCA4Ljk0LTguNDQtMTIuMzYtMS43NEwxOSAxLjF6Ii8+PC9nPjwvc3ZnPg==";
+    function closeModal() {
+        btnContainers = document.getElementById("btnContainersID").children;
+        for (var i = 1; i < btnContainers.length; i++) {
+            btnContainer = btnContainers[i];
+            btnContainer.classList.remove("rated");
+            btnContainer.children[0].src = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB3aWR0aD0iMzgiIGhlaWdodD0iMzUiPjxkZWZzPjxwYXRoIGlkPSJhIiBkPSJNMTkgMGwtNS44NyAxMS41MkwwIDEzLjM3bDkuNSA4Ljk3TDcuMjYgMzUgMTkgMjkuMDIgMzAuNzUgMzVsLTIuMjQtMTIuNjYgOS41LTguOTctMTMuMTMtMS44NXoiLz48L2RlZnM+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj48dXNlIGZpbGw9IiNGRkYiIHhsaW5rOmhyZWY9IiNhIi8+PHBhdGggc3Ryb2tlPSIjQTI2QTAwIiBzdHJva2Utb3BhY2l0eT0iLjc1IiBkPSJNMTkgMS4xbC01LjU0IDEwLjg4TDEuMSAxMy43Mmw4Ljk0IDguNDRMNy45MiAzNC4xIDE5IDI4LjQ2bDExLjA4IDUuNjQtMi4xMS0xMS45NCA4Ljk0LTguNDQtMTIuMzYtMS43NEwxOSAxLjF6Ii8+PC9nPjwvc3ZnPg==";
+        }
+
+        var reviewTitleInput = document.getElementById("ryp-review-title");
+        reviewTitleInput.value = '';
+        var reviewContentInput = document.getElementById("ryp-review-text");
+        reviewContentInput.value = '';
     }
 
-    for (var i = 1; i <= index; i++) {
-        btnContainer = btnContainers[i];
-        btnContainer.classList.add("rated");
-        btnContainer.children[0].src = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB3aWR0aD0iMzgiIGhlaWdodD0iMzUiPjxkZWZzPjxsaW5lYXJHcmFkaWVudCBpZD0iYSIgeDE9IjUwJSIgeDI9IjUwJSIgeTE9IjI3LjY1JSIgeTI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNGRkNFMDAiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNGRkE3MDAiLz48L2xpbmVhckdyYWRpZW50PjxwYXRoIGlkPSJiIiBkPSJNMTkgMGwtNS44NyAxMS41MkwwIDEzLjM3bDkuNSA4Ljk3TDcuMjYgMzUgMTkgMjkuMDIgMzAuNzUgMzVsLTIuMjQtMTIuNjYgOS41LTguOTctMTMuMTMtMS44NXoiLz48L2RlZnM+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj48dXNlIGZpbGw9InVybCgjYSkiIHhsaW5rOmhyZWY9IiNiIi8+PHBhdGggc3Ryb2tlPSIjQTI2QTAwIiBzdHJva2Utb3BhY2l0eT0iLjc1IiBkPSJNMTkgMS4xbC01LjU0IDEwLjg4TDEuMSAxMy43Mmw4Ljk0IDguNDRMNy45MiAzNC4xIDE5IDI4LjQ2bDExLjA4IDUuNjQtMi4xMS0xMS45NCA4Ljk0LTguNDQtMTIuMzYtMS43NEwxOSAxLjF6Ii8+PC9nPjwvc3ZnPg==";
+    function rating(currentBtnContainer) {
+        //alert(ob.id);
+        var reviewStarsGroup = currentBtnContainer.parentElement;
+        var btnContainers = reviewStarsGroup.children;
+        var index = Array.prototype.indexOf.call(btnContainers, currentBtnContainer);
+        //alert(index);
+        for (var i = index; i < btnContainers.length; i++) {
+            btnContainer = btnContainers[i];
+            btnContainer.classList.remove("rated");
+            btnContainer.children[0].src = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB3aWR0aD0iMzgiIGhlaWdodD0iMzUiPjxkZWZzPjxwYXRoIGlkPSJhIiBkPSJNMTkgMGwtNS44NyAxMS41MkwwIDEzLjM3bDkuNSA4Ljk3TDcuMjYgMzUgMTkgMjkuMDIgMzAuNzUgMzVsLTIuMjQtMTIuNjYgOS41LTguOTctMTMuMTMtMS44NXoiLz48L2RlZnM+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj48dXNlIGZpbGw9IiNGRkYiIHhsaW5rOmhyZWY9IiNhIi8+PHBhdGggc3Ryb2tlPSIjQTI2QTAwIiBzdHJva2Utb3BhY2l0eT0iLjc1IiBkPSJNMTkgMS4xbC01LjU0IDEwLjg4TDEuMSAxMy43Mmw4Ljk0IDguNDRMNy45MiAzNC4xIDE5IDI4LjQ2bDExLjA4IDUuNjQtMi4xMS0xMS45NCA4Ljk0LTguNDQtMTIuMzYtMS43NEwxOSAxLjF6Ii8+PC9nPjwvc3ZnPg==";
+        }
+
+        for (var i = 1; i <= index; i++) {
+            btnContainer = btnContainers[i];
+            btnContainer.classList.add("rated");
+            btnContainer.children[0].src = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB3aWR0aD0iMzgiIGhlaWdodD0iMzUiPjxkZWZzPjxsaW5lYXJHcmFkaWVudCBpZD0iYSIgeDE9IjUwJSIgeDI9IjUwJSIgeTE9IjI3LjY1JSIgeTI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNGRkNFMDAiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNGRkE3MDAiLz48L2xpbmVhckdyYWRpZW50PjxwYXRoIGlkPSJiIiBkPSJNMTkgMGwtNS44NyAxMS41MkwwIDEzLjM3bDkuNSA4Ljk3TDcuMjYgMzUgMTkgMjkuMDIgMzAuNzUgMzVsLTIuMjQtMTIuNjYgOS41LTguOTctMTMuMTMtMS44NXoiLz48L2RlZnM+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj48dXNlIGZpbGw9InVybCgjYSkiIHhsaW5rOmhyZWY9IiNiIi8+PHBhdGggc3Ryb2tlPSIjQTI2QTAwIiBzdHJva2Utb3BhY2l0eT0iLjc1IiBkPSJNMTkgMS4xbC01LjU0IDEwLjg4TDEuMSAxMy43Mmw4Ljk0IDguNDRMNy45MiAzNC4xIDE5IDI4LjQ2bDExLjA4IDUuNjQtMi4xMS0xMS45NCA4Ljk0LTguNDQtMTIuMzYtMS43NEwxOSAxLjF6Ii8+PC9nPjwvc3ZnPg==";
+        }
     }
-}
 
-function setUpImage(product) {
-    var imageList = product.Picture.split(',');
+    function setUpImage(product) {
+        var imageList = product.Picture.split(',');
 
-    document.getElementById("productImg").src =
-        '/assets/production/' + product.ProductId + '/' + product.Color + '/' + imageList[0];
+        document.getElementById("productImg").src =
+            '/assets/production/' + product.ProductId + '/' + product.Color + '/' + imageList[0];
 
-	document.getElementById("productReviewImg").src =
-    	'/assets/production/' + product.ProductId + '/' + product.Color + '/' + imageList[0];
-}
+	    document.getElementById("productReviewImg").src =
+    	    '/assets/production/' + product.ProductId + '/' + product.Color + '/' + imageList[0];
+    }
 
     function setUpRatingStars(starContainner, overrallRating) {
         function setUpRatedStar(endIndex) {
