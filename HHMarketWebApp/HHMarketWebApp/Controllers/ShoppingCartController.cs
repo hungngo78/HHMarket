@@ -50,7 +50,8 @@ namespace HHMarketWebApp.Controllers
                 order.Note = "Note of user";
                 order.UserId = model.UserId;
                 db.Orders.Add(order);
-                await db.SaveChangesAsync();
+                //await db.SaveChangesAsync();
+
                 System.Collections.Generic.List<CartDetailItem> list = new System.Collections.Generic.List<CartDetailItem>();
                 list = (from c in db.CartDetails
                         where c.CartId == model.CartId
@@ -71,24 +72,29 @@ namespace HHMarketWebApp.Controllers
                     orderDetail.ProductDetailsId = list[i].ProductDetailsId;
                     orderDetail.OrderId = order.OrderId;
                     db.OrderDetails.Add(orderDetail);
-                    var id = list[i].ProductDetailsId;
+                    
+                    //var id = list[i].ProductDetailsId;
                     // var productionDetail = db.ProductDetails.Single(item => item.ProductDetailsId == id);
                     // reduce count in ProductDetail
-                    ProductDetail productionDetail = db.ProductDetails.FirstOrDefault(item => item.ProductDetailsId == id);
-                   
-                    productionDetail.Amount = (short)(productionDetail.Amount - list[i].Amount);
-                   
+                    //ProductDetail productionDetail = db.ProductDetails.FirstOrDefault(item => item.ProductDetailsId == id);
+                    //productionDetail.Amount = (short)(productionDetail.Amount - list[i].Amount);
                 }
-                var x = db.CartDetails.Where(item => item.CartId == model.CartId);
-                db.CartDetails.RemoveRange(x);
-                var x1 = db.Carts.FirstOrDefault(item => item.CartId == model.CartId);
-                db.Carts.Remove(x1);
+                //await db.SaveChangesAsync();
 
-                await db.SaveChangesAsync();
                 // delete cart and cartDetail
-               
+                //var x = db.CartDetails.Where(item => item.CartId == model.CartId);
+                //db.CartDetails.RemoveRange(db.CartDetails.Where(c => c.CartId == model.CartId));
+                db.CartDetails.Where(p => p.CartId == model.CartId)
+                        .ToList().ForEach(p => db.CartDetails.Remove(p));
 
+                //var x1 = db.Carts.FirstOrDefault(item => item.CartId == model.CartId);
+                //db.Carts.Remove(x1);
+                db.Carts.Where(p => p.CartId == model.CartId)
+                        .ToList().ForEach(p => db.Carts.Remove(p));
+                await db.SaveChangesAsync();
+                
                 ModelState.Clear();
+
                 return this.Json(new
                 {
                     EnableSuccess = true,
