@@ -89,10 +89,21 @@ namespace HHMarketWebApp.Controllers
                
 
                 ModelState.Clear();
+                return this.Json(new
+                {
+                    EnableSuccess = true,
+                    SuccessTitle = "Successful!",
+                    SuccessMsg = "Thank you so much for your order!"
+                });
 
             }
 
-            return RedirectToAction("Index", "Category");
+            return this.Json(new
+            {
+                EnableError = true,
+                ErrorTitle = "Error",
+                ErrorMsg = "Something goes wrong, please try again later"
+            });
 
         }
 

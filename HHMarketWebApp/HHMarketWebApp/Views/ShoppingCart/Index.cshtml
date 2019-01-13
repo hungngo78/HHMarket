@@ -141,14 +141,6 @@
                     return;
                 }
                 var action = $("#AjaxformId").attr("action");
-              
-                var uID = shoppingCart[0].UserId;
-                var cID = shoppingCart[0].CartId;
-                alert("UiD = " + uID + " cID = " + cID);
-                var postData = {
-                    "UserId": uID,
-                    "CartId": cID,
-                };
                
                 $.ajax({
                     type: "POST",
@@ -168,6 +160,7 @@
 
                 var onAjaxRequestSuccess = function (result) {
                     alert('Thank you for your order!');
+                    document.location.href = "../Category/Index";
                 }
             }
 
