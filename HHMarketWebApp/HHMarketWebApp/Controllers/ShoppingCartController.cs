@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using FormsAuth;
 using HHMarketWebApp.Models;
 using PagedList;
 
@@ -144,6 +145,44 @@ namespace HHMarketWebApp.Controllers
 
         }
 
+        [HttpPost]
+        public async Task<ActionResult> AddToCart(CartItem item)
+        {
+            if (ModelState.IsValid)
+            {
+                // save Cart
+                Cart cart = new Cart();
+                cart.DateOpen = System.DateTime.Now;
+                cart.UserId = UserManager.User.Id;
+                db.Carts.Add(cart);
+
+                // save CartDetails
+                CartDetail detail = new CartDetail();
+                detail.Amount = 1;
+                detail.ExtendedPrice = item.Price;
+                detail.ProductDetailsId = item.ProductDetailsId;
+                detail.CartId = cart.CartId;
+                db.CartDetails.Add(detail);
+
+                await db.SaveChangesAsync();
+
+                ModelState.Clear();
+                return this.Json(new
+                {
+                    EnableSuccess = true,
+                    SuccessTitle = "Successful!",
+                    SuccessMsg = "Add cart successfully order!"
+                });
+
+            }
+
+            return this.Json(new
+            {
+                EnableError = true,
+                ErrorTitle = "Error",
+                ErrorMsg = "Something goes wrong, please try again later"
+            });
+        }
     }
 }
 

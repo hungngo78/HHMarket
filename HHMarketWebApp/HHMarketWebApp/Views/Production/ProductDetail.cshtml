@@ -1,4 +1,4 @@
-﻿@{
+@{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @model HHMarketWebApp.Models.ProductionDetail
@@ -45,14 +45,13 @@
                                 <td style="padding-right:10px;">by</td>
                                 <td style="color:blue;"> Samsung</td>
                             </tr>
-                            <tr onclick="DoNav('../Production/ReviewProduction?id=@Model.ProductId')" style="cursor:pointer"> 
+                            <tr onclick="DoNav('../Production/ReviewProduction?id=@Model.ProductId')" style="cursor:pointer">
                                 <td style="padding-top: 10px;">
                                     <table>
                                         <tr id="starReiewID"></tr>
                                     </table>
                                 </td>
-                                <td id="reviewCountID" style="color:blue; padding-top: 10px; padding-left: 10px; text-decoration: underline">
-                                </td>
+                                <td id="reviewCountID" style="color:blue; padding-top: 10px; padding-left: 10px; text-decoration: underline"></td>
                             </tr>
 
                             <tr>
@@ -88,14 +87,14 @@
                                     Size:
                                 </td>
                                 <td style="padding-top:10px;">
-                                  
+
                                     <select name="size" id="sizeID" size="4" style="min-width:100px;">
                                         @foreach (var itemPro in Model.listdata.GroupBy(item => item.Size))
                                         {
-                                            <option onclick="changeSize(this)" value=@itemPro.Key  style="min-height:25px;">@itemPro.Key</option>
+                                            <option onclick="changeSize(this)" value=@itemPro.Key style="min-height:25px;">@itemPro.Key</option>
                                         }
                                     </select>
-                                      
+
                                 </td>
                             </tr>
 
@@ -120,6 +119,9 @@
             <span data-token="copyRightPhraseDJ">HHMarket Inc. All rights reserved.</span>
         </div>
     </div>
+
+    <input type="hidden" id="CartItem_Price" name="AAA" value="2">
+    <input type="hidden" id="CartItem_ProductDetailID" name="BBB" value="2">
 </div>
 
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
@@ -127,28 +129,51 @@
 <script type="text/javascript">
     var modelPro;
     var modelReview;
-
     $(document).ready(function () {
         @{  var serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
         //  var json = serializer.Serialize(Model.listdata);
         }
-
         modelPro = @Html.Raw(Json.Encode(listItem));
         modelReview =  @Html.Raw(Json.Encode(Model.reviewListData));
-
         if (modelPro != null && modelPro != "undefined") {
             setUpImageTable(modelPro[0]);
             document.getElementById("colorID").selectedIndex = 0;
             changeColor(modelPro[0].Color);
         }
-
         displayReviewStar();
+    });
+
+    $("#addToCartID").click(function (event) {
+	    event.preventDefault();
+
+	    var action = '@Url.Action("AddToCart", "ShoppingCart")';
+	    var jsonObject = {
+            "Price": document.getElementById("CartItem_Price").value,
+            "ProductDetailsId": document.getElementById("CartItem_ProductDetailID").value,
+        };
+
+	    $.ajax({
+            url: "../ShoppingCart/AddToCart",
+		    type: "POST",
+            data: JSON.stringify({ item: jsonObject }),
+		    dataType: "json",
+		    contentType: "application/json; charset=utf-8",
+
+		    success: function (response) {
+			    //alert(response);
+                alert('add shopping cart successfully');
+                document.location.href = '../ShoppingCart/Index';
+		    },
+		    error: function (response) {
+			    //alert(response.responseText);
+			    alert('fail');
+		    }
+	    });
     });
 
     function DoNav(url) {
         document.location.href = url;
     }
-
     function setUpImageTable(modelPro) {
         var imageList = modelPro.Picture.split(',');
          
@@ -162,7 +187,6 @@
                 //var largeImage = $("#largeImageId");
                 //largeImage.src = '/assets/production/' + modelPro.ProductId + '/' + modelPro.Color + '/' + imageList[r];
             }
-
             var row = table.insertRow(r);
             row.setAttribute("class", "productdetail_image_rectangle");
             row.setAttribute("align", "center");
@@ -170,12 +194,10 @@
             row.insertCell(0).innerHTML = '<img align="middle" class="productdetail_image" src="/assets/production/' + modelPro.ProductId + '/' + modelPro.Color + '/' + imageList[r] + '" onmouseover="prev(\'' + imageList[r] + '\',\'' + modelPro.ProductId + '\',\'' + modelPro.Color + '\')" >';
         }
     }
-
     function prev(image, productId, color) {
         // sai: $("#largeImageId").src = '/assets/production/' + productId + '/' + color + '/' + image;
         $("#largeImageId").attr("src", '/assets/production/' + productId + '/' + color + '/' + image);
     }
-
     function displaySize(color) {
         var sizeList = document.getElementById("sizeID").options;  
         var sizeText = "undefined";
@@ -203,12 +225,10 @@
                 }
             }
         }
-
         if (chooseItem == false) {
             document.getElementById("sizeID").selectedIndex = -1;
         }
     }
-
     function displayColor(size) {
         var colorList = document.getElementById("colorID").options;
         var colorText = "undefined";
@@ -219,7 +239,6 @@
             colorList.item(a).setAttribute("style", "color:gray; min-height:25px;");
         }
         for (var i = 0; i < modelPro.length; i++) {
-
             if (size == modelPro[i].Size) {
                 for (var s = 0; s < colorList.length; s++) {
                     if (colorList.item(s).text == modelPro[i].Color && modelPro[i].Amount > 0) {
@@ -241,9 +260,7 @@
             document.getElementById("colorID").selectedIndex = -1;
         }
     }
-
     function displayReviewStar() {
-
         var reviewRow = document.getElementById("starReiewID");
         reviewRow.innerHTML = ' ';
         // add start
@@ -263,7 +280,6 @@
             }
         }
     }
-
     function changeColor(color) {
         displaySize(color);
         var size = $("#sizeID option:selected").val();
@@ -274,17 +290,22 @@
             $("#addToCartID").show();
         }
         */
-        if (modelPro != null && modelPro != "undefined")
+        if (modelPro != null && modelPro != "undefined") {
             for (var i = 0; i < modelPro.length; i++) {
                 if (color == modelPro[i].Color && size == modelPro[i].Size) {
-                document.getElementById("priceID").innerText = modelPro[i].Price + "$";
-                setUpImageTable(modelPro[i]);
-                document.getElementById("descriptionID").innerText = modelPro[i].Description;
-                break;
+                    document.getElementById("priceID").innerText = modelPro[i].Price + "$";
+                    setUpImageTable(modelPro[i]);
+                    document.getElementById("descriptionID").innerText = modelPro[i].Description;
+
+                    //alert(modelPro[i].ProductDetailsId);
+                    document.getElementById("CartItem_Price").value = modelPro[i].Price;
+                    document.getElementById("CartItem_ProductDetailID").value = modelPro[i].ProductDetailsId;
+
+                    break;
+                }
             }
         }
     }
-
     function changeSize(ob) {
         var size = ob.value;
         displayColor(size);
@@ -304,11 +325,6 @@
                     break;
                 }
             }
-
         }
-
     }
-
 </script>
-
-
