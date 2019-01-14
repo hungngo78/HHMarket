@@ -6,10 +6,7 @@
 @{
     var listItem = Model.listItemCart;
 }
-@using (Ajax.BeginForm("Order", "ShoppingCart",
-    new AjaxOptions { HttpMethod = "POST", OnSuccess = "onAjaxRequestSuccess" },
-    new { @id = "AjaxformId", @class = "form-horizontal", role = "form" }))
-{
+
     <style type="text/css"></style>
 
     <!-- Optional JavaScript -->
@@ -67,52 +64,57 @@
                             </td>
 
                             <td style="width:30%; vertical-align:top; ">
-                                @if (i == 0)
+                                @using (Ajax.BeginForm("Order", "ShoppingCart",
+                                new AjaxOptions { HttpMethod = "POST", OnSuccess = "onAjaxRequestSuccess" },
+                                new { @id = "AjaxformId", @class = "form-horizontal", role = "form" }))
                                 {
-                                    <table width="89%" cellspacing="10" style="background-color: #F5F5F5;  padding-right: 10px;">
-                                        <tr>
-                                            <td style="text-align:left" id="subTotal">
-                                                Subtotal( @Model.listItemCart.Sum(model => model.Amount) items)
-                                            </td>
+                                    if (i == 0)
+                                    {
+                                        <table width="89%" cellspacing="10" style="background-color: #F5F5F5;  padding-right: 10px;">
+                                            <tr>
+                                                <td style="text-align:left" id="subTotal">
+                                                    Subtotal( @Model.listItemCart.Sum(model => model.Amount) items)
+                                                </td>
 
-                                            <td style="text-align:right">
-                                                <span id="Subtotalprice"> free </span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td style="text-align:left">
-                                                <span>Shipping</span>
-                                            </td>
+                                                <td style="text-align:right">
+                                                    <span id="Subtotalprice"> free </span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="text-align:left">
+                                                    <span>Shipping</span>
+                                                </td>
 
-                                            <td style="text-align:right">
-                                                <span> free </span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="2">
-                                                <div style="width: 100%; height: 0.5px; background-color: lightgray; margin-top: 10px; margin-bottom:10px;"></div>
-                                            </td>
+                                                <td style="text-align:right">
+                                                    <span> free </span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2">
+                                                    <div style="width: 100%; height: 0.5px; background-color: lightgray; margin-top: 10px; margin-bottom:10px;"></div>
+                                                </td>
 
-                                        </tr>
-                                        <tr>
-                                            <td style="text-align:left">
-                                                <span>Estimated Total</span>
-                                            </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="text-align:left">
+                                                    <span>Estimated Total</span>
+                                                </td>
 
-                                            <td style="text-align:right">
-                                                <span id="EstimatedPrice"> $431.74 </span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="2" style="text-align:center">
-                                                <button class="btn" onclick="submitOrder()">Check out</button>
+                                                <td style="text-align:right">
+                                                    <span id="EstimatedPrice"> $431.74 </span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2" style="text-align:center">
+                                                    <!--button class="btn" onclick="submitOrder()">Check out</!--button-->
+                                                    <button type="submit" class="btn">Check out</button>
+                                                </td>
+                                            </tr>
 
-                                            </td>
-                                        </tr>
-
-                                    </table>
+                                        </table>
+                                    }
                                 }
-                            </td>
+                               	</td>
                         </tr>
                     }
                 }
@@ -120,7 +122,7 @@
             </table>
         </div>
     </div>
-                    }
+
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript">
@@ -134,16 +136,19 @@
 
         });
 
-        function submitOrder() {
+        //function submitOrder() {
+        $("#AjaxformId").submit(function (event) {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+			
+			alert('submitOrder');
 
-            alert("Submit order");
-            
             if (shoppingCart != null && shoppingCart != "undefined") {
                 if (shoppingCart.length == 0) {
                     return;
                 }
                 var action = $("#AjaxformId").attr("action");
-               
+
                 $.ajax({
                     type: "POST",
                     url: action, // the method we are calling
@@ -165,7 +170,8 @@
                 }
             }
             return false;
-        }
+        });
+
         function changeQuantity(id) {
             if (id != null && id != "undefined") {
                 var k = -1;
