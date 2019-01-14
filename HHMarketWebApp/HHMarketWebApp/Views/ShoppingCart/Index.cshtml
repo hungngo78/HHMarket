@@ -43,7 +43,7 @@
                                         <td width="20%" style="vertical-align:top; padding-left:10px;">
                                             <span class="customer-info"> Qty:</span>
                                             <div id="quantityUI/@item.ProductDetailsId">
-                                                <select id="quantity/@item.ProductDetailsId"></select>
+                                                <select id="quantity/@item.ProductDetailsId" onchange="changeQuantity(@item.ProductDetailsId)"></select>
                                             </div>
                                         </td>
 
@@ -135,7 +135,7 @@
         });
 
         function submitOrder() {
-            // Let's edit the description!
+            
             if (shoppingCart != null && shoppingCart != "undefined") {
                 if (shoppingCart.length == 0) {
                     return;
@@ -155,13 +155,52 @@
                     error: function (result) {
                         alert('You vave error when submit order. Could you please try again!');
                     }
-
                 });
 
                 var onAjaxRequestSuccess = function (result) {
                     alert('Thank you for your order!');
                     document.location.href = "../Category/Index";
                 }
+            }
+
+        }
+        function changeQuantity(id) {
+            if (id != null && id != "undefined") {
+                var k = -1;
+                
+                if (shoppingCart != null && shoppingCart != "undefined") {
+
+                    for (var i = 0; i < shoppingCart.length; i++) {
+                        if (shoppingCart[i].ProductDetailsId == id) {
+                            k = i;
+                            break;
+                        }
+                    }
+                } else return;
+                var amount = document.getElementById("quantity/" + shoppingCart[k].ProductDetailsId).options.item(document.getElementById("quantity/" + shoppingCart[k].ProductDetailsId).selectedIndex).value;
+                var data = {
+                    "Amount": amount,
+                    "ProductDetailsId": id,
+                };
+
+                $.ajax({
+                    type: "POST",
+                    url: "UpdateQuantity", // the method we are calling
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify({ model: data }),
+                    dataType: "json",
+                    success: function (result) {
+                         alert('Thank you for your order!');
+                        shoppingCart[k].Amount = amount;
+                         calTotalBill();
+                       
+                    },
+                    error: function (result) {
+                        alert('You have error when submit quantity. Could you please try again!');
+                        document.getElementById("quantity/" + shoppingCart[k].ProductDetailsId).selectedIndex = shoppingCart[k].Amount - 1;
+                    }
+
+                });
             }
 
         }
@@ -173,10 +212,8 @@
                 // var tableItem = document.getElementById("tableItem/" + id);
                 rowItem.setAttribute("style", "height: 0px");
                 rowItem.parentNode.removeChild(rowItem);
-
                 for (var i = 0; i < shoppingCart.length; i++) {
                     if (shoppingCart[i].CartDetailsId == id) {
-                        var q = document.getElementById("quantity");
                         shoppingCart.splice(i, 1);
                         calTotalBill();
                         //remove item on server
@@ -206,14 +243,14 @@
                 for (var i = 0; i < shoppingCart.length; i++) {
                     var productionQuantity = document.getElementById("quantity/" + shoppingCart[i].ProductDetailsId).options.item(document.getElementById("quantity/" + shoppingCart[i].ProductDetailsId).selectedIndex).value;
                     total += shoppingCart[i].Price * productionQuantity;
-                    subTotal += shoppingCart[i].Amount;
+                    subTotal +=  parseInt(shoppingCart[i].Amount);
                 }
                 // update price total
                 var Subtotalprice = document.getElementById("Subtotalprice");
                 Subtotalprice.innerHTML = "$" + total;
                 document.getElementById("EstimatedPrice").innerHTML = "$" + (total + shippingFee);
                 document.getElementById("subTotal").textContent = " Subtotal( " + subTotal + " items)";
-                document.getElementById("quantity").textContent = " Your cart:  " + subTotal + " items";
+                document.getElementById("quantity").innerHTML = " Your cart:  " + subTotal + " items";
             }
         }
 

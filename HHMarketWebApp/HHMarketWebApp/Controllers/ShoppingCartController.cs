@@ -38,7 +38,38 @@ namespace HHMarketWebApp.Controllers
 
             return View(shoppingCart);
         }
+
         [HttpPost]
+        public async Task<ActionResult> UpdateQuantity(CartDetailItem model)
+        {
+            if (ModelState.IsValid)
+            {
+                // update amount to cart detail table'
+                CartDetail cartDetail = db.CartDetails.FirstOrDefault(item => item.ProductDetailsId == model.ProductDetailsId);
+                cartDetail.Amount = (short)(model.Amount);
+                await db.SaveChangesAsync();
+
+                ModelState.Clear();
+
+                return this.Json(new
+                {
+                    EnableSuccess = true,
+                    SuccessTitle = "Successful!",
+                    SuccessMsg = "Thank you so much for your order!"
+                });
+
+            }
+
+            return this.Json(new
+            {
+                EnableError = true,
+                ErrorTitle = "Error",
+                ErrorMsg = "Something goes wrong, please try again later"
+            });
+           
+        }
+
+      [HttpPost]
         public async Task<ActionResult> Order(CartDetailItem model)
         {
             if (ModelState.IsValid)
@@ -76,8 +107,8 @@ namespace HHMarketWebApp.Controllers
                     //var id = list[i].ProductDetailsId;
                     // var productionDetail = db.ProductDetails.Single(item => item.ProductDetailsId == id);
                     // reduce count in ProductDetail
-                    //ProductDetail productionDetail = db.ProductDetails.FirstOrDefault(item => item.ProductDetailsId == id);
-                    //productionDetail.Amount = (short)(productionDetail.Amount - list[i].Amount);
+                    ProductDetail productionDetail = db.ProductDetails.FirstOrDefault(item => item.ProductDetailsId == model.ProductDetailsId);
+                    productionDetail.Amount = (short)(productionDetail.Amount - list[i].Amount);
                 }
                 //await db.SaveChangesAsync();
 
