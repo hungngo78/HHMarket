@@ -11,35 +11,7 @@ namespace HHMarketWebApp.Controllers
     public class ShoppingCartController : Controller
     {
         DBModelContainer db = new DBModelContainer();
-        public ActionResult Index(int userId)
-        {
-            
-            ShoppingCart shoppingCart = new ShoppingCart();
-            shoppingCart.listItemCart = (from c in db.Carts
-                                         join cdetail in db.CartDetails on c.CartId equals cdetail.CartId
-                                         join pdetail in db.ProductDetails on cdetail.ProductDetailsId equals pdetail.ProductDetailsId
-                                         join p in db.Products on pdetail.ProductId equals p.ProductId
-                                         where c.UserId == userId && cdetail.Type == 0
-                                         select new CartDetailItem()
-                                         {
-                                             Amount = cdetail.Amount,
-                                             CartId = cdetail.CartId,
-                                             Type = cdetail.Type,
-                                             CartDetailsId = cdetail.CartDetailsId,
-                                             ExtendedPrice = cdetail.ExtendedPrice,
-                                             ProductDetailsId = cdetail.ProductDetailsId,
-                                             Price = pdetail.Price,
-                                             Picture = pdetail.Picture,
-                                             ProductName = p.Name,
-                                             ProductID = pdetail.ProductId,
-                                             Color = pdetail.Color,
-                                             UserId = c.UserId,
-                                             TotalAmountProduction = pdetail.Amount
-                                         }).ToList();
-
-            return View(shoppingCart);
-        }
-
+  
         [HttpPost]
         public async Task<ActionResult> UpdateQuantity(CartDetailItem model)
         {
@@ -172,6 +144,70 @@ namespace HHMarketWebApp.Controllers
                     EnableSuccess = true,
                     SuccessTitle = "Successful!",
                     SuccessMsg = "Add cart successfully order!"
+                });
+
+            }
+
+            return this.Json(new
+            {
+                EnableError = true,
+                ErrorTitle = "Error",
+                ErrorMsg = "Something goes wrong, please try again later"
+            });
+        }
+        public ActionResult Index()
+        {
+
+            var userId = FormsAuth.UserManager.User.Id;
+            ShoppingCart shoppingCart = new ShoppingCart();
+            shoppingCart.listItemCart = (from c in db.Carts
+                                         join cdetail in db.CartDetails on c.CartId equals cdetail.CartId
+                                         join pdetail in db.ProductDetails on cdetail.ProductDetailsId equals pdetail.ProductDetailsId
+                                         join p in db.Products on pdetail.ProductId equals p.ProductId
+                                         where c.UserId == userId && cdetail.Type == 0
+                                         select new CartDetailItem()
+                                         {
+                                             Amount = cdetail.Amount,
+                                             CartId = cdetail.CartId,
+                                             Type = cdetail.Type,
+                                             CartDetailsId = cdetail.CartDetailsId,
+                                             ExtendedPrice = cdetail.ExtendedPrice,
+                                             ProductDetailsId = cdetail.ProductDetailsId,
+                                             Price = pdetail.Price,
+                                             Picture = pdetail.Picture,
+                                             ProductName = p.Name,
+                                             ProductID = pdetail.ProductId,
+                                             Color = pdetail.Color,
+                                             UserId = c.UserId,
+                                             TotalAmountProduction = pdetail.Amount
+                                         }).ToList();
+
+            return View(shoppingCart);
+        }
+
+
+        [HttpPost]
+        public async Task<ActionResult> RemoveCartItem(CartDetailItem model)
+        {
+            if (ModelState.IsValid)
+            {
+                // update amount to cart detail table'
+                 db.CartDetails.Where(p => p.CartDetailsId == model.CartDetailsId)
+                         .ToList().ForEach(p => db.CartDetails.Remove(p));
+                 var list = db.CartDetails.Where(p => p.CartId == model.CartId).ToList();
+                 if (list.Count() <= 0)
+                 {
+                     db.Carts.Where(p => p.CartId == model.CartId)
+                       .ToList().ForEach(p => db.Carts.Remove(p));
+                 }
+                 await db.SaveChangesAsync();
+                 
+                ModelState.Clear();
+                return this.Json(new
+                {
+                    EnableSuccess = true,
+                    SuccessTitle = "Successful!",
+                    SuccessMsg = "Thank you so much for your order!"
                 });
 
             }

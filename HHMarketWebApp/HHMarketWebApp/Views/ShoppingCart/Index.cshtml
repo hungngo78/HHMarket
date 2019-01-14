@@ -177,6 +177,8 @@
                         }
                     }
                 } else return;
+                if (k == -1) return;
+
                 var amount = document.getElementById("quantity/" + shoppingCart[k].ProductDetailsId).options.item(document.getElementById("quantity/" + shoppingCart[k].ProductDetailsId).selectedIndex).value;
                 var data = {
                     "Amount": amount,
@@ -208,18 +210,71 @@
 
             var retValue = confirm("Do you want to remove?");
             if (retValue == true) {
-                var rowItem = document.getElementById("item/" + id);
-                // var tableItem = document.getElementById("tableItem/" + id);
-                rowItem.setAttribute("style", "height: 0px");
-                rowItem.parentNode.removeChild(rowItem);
-                for (var i = 0; i < shoppingCart.length; i++) {
-                    if (shoppingCart[i].CartDetailsId == id) {
-                        shoppingCart.splice(i, 1);
-                        calTotalBill();
-                        //remove item on server
-                        break;
+                // remove item from server
+                if (id != null && id != "undefined") {
+                    var k = -1;
+                    alert(" id = " + id);
+                    if (shoppingCart != null && shoppingCart != "undefined") {
+                        for (var i = 0; i < shoppingCart.length; i++) {
+                            if (shoppingCart[i].CartDetailsId == id) {
+                                k = shoppingCart[i].CartId;
+                                break;
+                            }
+                        }
+                    } else return;
+                    if (k == -1) return;
+
+                    alert(" k = " + k);
+
+                    var data = {
+                        "CartDetailsId": k};
+
+                    $.ajax({
+                        type: "POST",
+                        url: "RemoveCartItem", // the method we are calling
+                        contentType: "application/json; charset=utf-8",
+                        data: JSON.stringify({ model: data }),
+                        dataType: "json",
+                        success: function (result) {
+                            alert('Thank you for your order!');
+                            var rowItem = document.getElementById("item/" + id);
+                            // var tableItem = document.getElementById("tableItem/" + id);
+                            rowItem.setAttribute("style", "height: 0px");
+                            rowItem.parentNode.removeChild(rowItem);
+                            for (var i = 0; i < shoppingCart.length; i++) {
+                                if (shoppingCart[i].CartDetailsId == id) {
+                                    shoppingCart.splice(i, 1);
+                                    calTotalBill();
+                                    //remove item on server
+                                    break;
+                                }
+                            }
+
+                        },
+                        error: function (result) {
+                            alert('You have error when submit quantity. Could you please try again!');
+                          }
+
+                    });
+                }
+
+                /*
+                var updateUI = function (id) {
+                    var rowItem = document.getElementById("item/" + id);
+                    // var tableItem = document.getElementById("tableItem/" + id);
+                    rowItem.setAttribute("style", "height: 0px");
+                    rowItem.parentNode.removeChild(rowItem);
+                    for (var i = 0; i < shoppingCart.length; i++) {
+                        if (shoppingCart[i].CartDetailsId == id) {
+                            shoppingCart.splice(i, 1);
+                            calTotalBill();
+                            //remove item on server
+                            break;
+                        }
                     }
                 }
+                */
+              
             }
 
         }
