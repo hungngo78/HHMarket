@@ -135,6 +135,8 @@
         });
 
         function submitOrder() {
+
+            alert("Submit order");
             
             if (shoppingCart != null && shoppingCart != "undefined") {
                 if (shoppingCart.length == 0) {
@@ -162,7 +164,7 @@
                     document.location.href = "../Category/Index";
                 }
             }
-
+            return false;
         }
         function changeQuantity(id) {
             if (id != null && id != "undefined") {
@@ -204,10 +206,10 @@
 
                 });
             }
-
+            return false;
         }
         function removeItem(id) {
-
+            alert("removeItem");
             var retValue = confirm("Do you want to remove?");
             if (retValue == true) {
                 // remove item from server
@@ -227,7 +229,8 @@
                     alert(" k = " + k);
 
                     var data = {
-                        "CartDetailsId": k};
+                        "CartDetailsId": id,
+                        "CartId":k};
 
                     $.ajax({
                         type: "POST",
@@ -256,6 +259,7 @@
                           }
 
                     });
+                    return false;
                 }
 
                 /*

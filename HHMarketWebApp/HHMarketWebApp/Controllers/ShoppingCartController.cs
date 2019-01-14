@@ -194,7 +194,9 @@ namespace HHMarketWebApp.Controllers
                 // update amount to cart detail table'
                  db.CartDetails.Where(p => p.CartDetailsId == model.CartDetailsId)
                          .ToList().ForEach(p => db.CartDetails.Remove(p));
-                 var list = db.CartDetails.Where(p => p.CartId == model.CartId).ToList();
+                await db.SaveChangesAsync();
+
+                var list = db.CartDetails.Where(p => p.CartId == model.CartId).ToList();
                  if (list.Count() <= 0)
                  {
                      db.Carts.Where(p => p.CartId == model.CartId)
