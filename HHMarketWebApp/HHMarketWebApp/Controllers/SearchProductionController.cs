@@ -36,7 +36,7 @@ select xx
 
             searchList.searchProductionList = (from p in db.Products
                                                join category in db.Categories on p.CategoryId equals category.CategoryId
-                                              // join pdetail in db.ProductDetails on p.ProductId equals pdetail.ProductId
+                                               join pdetail in db.ProductDetails on p.ProductId equals pdetail.ProductId
                                               //where (p.Name.Contains(searchText) || p.Description.Contains(searchText) || category.Name.Contains(searchText) || category.Description.Contains(searchText))
                                               // where (searchArr.Contains(p.Name) || searchArr.Contains(p.Description) || searchArr.Contains(category.Name) || searchArr.Contains(category.Description))
 
@@ -47,15 +47,20 @@ select xx
                                                    Name = p.Name, Description = p.Description,
                                                    CategoryName = category.Name,
                                                    ProductId = p.ProductId,
-                                                   Picture = "",
+                                                   Picture = pdetail.Picture,
                                                    CategoryDescription = category.Description }).ToList();
             //    searchList.searchProductionList = searchList.searchProductionList.GroupBy(c => c.ProductId);
 
             var s =  searchList.searchProductionList.Where(t => searchArr.Any(w => t.Description.ToLower().Contains(w)|| t.Name.ToLower().Contains(w) || t.CategoryName.ToLower().Contains(w) || t.CategoryName.ToLower().Contains(w))).ToList() ;
             searchList.searchProductionList = s;
-           // var s1 = searchList.searchProductionList.GroupBy(item => item.ProductId).ToList();
-            //searchList.searchProductionList = s1;
-            return View(searchList);
+            var s1 = searchList.searchProductionList.GroupBy(item => item.ProductId).Select(g => new SearchProduction()
+            {
+                ProductId = g.Key,
+                searchProductionList = g.ToList()
+           }).ToList();
+            List<SearchProduction> list = s1;
+
+            return View(list);
         }
 
 
