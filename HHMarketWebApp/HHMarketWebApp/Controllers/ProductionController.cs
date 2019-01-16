@@ -229,5 +229,37 @@ namespace HHMarketWebApp.Controllers
                 ErrorMsg = "Something goes wrong, please try again later"
             });
         }
+
+        [HttpPost]
+        public ActionResult Search(SearchModel model)
+        {
+            DBModelContainer db = new DBModelContainer();
+
+            List<Production> prs =  (from p in db.Products
+                                    join pDetail in db.ProductDetails on p.ProductId equals pDetail.ProductId
+                                    where p.CategoryId == model.CategoryId
+                                    select new
+                                    {
+                                        p,
+                                        pDetail
+                                    } into t1
+
+                                    group t1 by t1.p.ProductId into g
+                                    select new Production()
+                                    {
+                                        ProductId = g.Key,
+                                        ProductionName = g.FirstOrDefault().p.Name,
+                                        Description = g.FirstOrDefault().p.Description,
+                                        MinPrice = g.Min(m => m.pDetail.Price),
+                                        MaxPrice = g.Max(m => m.pDetail.Price),
+                                        Picture = g.FirstOrDefault().pDetail.Picture,
+                                        Color = g.FirstOrDefault().pDetail.Color
+                                    }).ToList();
+
+            int pageSize = 16;
+            int pageNumber =  1;
+
+            return PartialView("Index", prs.ToPagedList(pageNumber, pageSize));
+        }
     }
 }
