@@ -22,7 +22,9 @@ namespace HHMarketWebApp.Models
 
         public string CategoryDescription { get; set; }
 
-        public virtual Category Category { get; set; }
+        public string Color { get; set; }
+
+        public decimal Price { get; set; }
 
         public System.Collections.Generic.List<SearchProduction> searchProductionList { get; set; }
        
