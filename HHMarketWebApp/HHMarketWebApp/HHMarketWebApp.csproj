@@ -168,6 +168,7 @@
     </Compile>
     <Compile Include="Models\CartDetailItem.cs" />
     <Compile Include="Models\CartItem.cs" />
+    <Compile Include="Models\SearchModel.cs" />
     <Compile Include="Models\SearchProduction.cs" />
     <Compile Include="Models\ShoppingCart.cs" />
     <Compile Include="Models\Cart.cs" />
@@ -259,7 +260,7 @@
     <Content Include="Views\Production\Index.cshtml" />
     <Content Include="Views\Production\ProductDetail.cshtml" />
     <Content Include="Views\Production\ReviewProduction.cshtml" />
-    <Content Include="Views\Index.cshtml" />
+    <Content Include="Views\MyLayoutPage\Index.cshtml" />
     <Content Include="Views\ShoppingCart\Index.cshtml" />
     <Content Include="Views\SearchProduction\Index.cshtml" />
   </ItemGroup>
