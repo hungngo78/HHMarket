@@ -1,8 +1,5 @@
 namespace HHMarketWebApp.Models
 {
-    using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-
 
     public  class SearchProduction
     {
@@ -29,7 +26,7 @@ namespace HHMarketWebApp.Models
         public short OverallRating { get; set; }
 
         public int Count { get; set; }
-        public System.Collections.Generic.List<SearchProduction> searchProductionList { get; set; }
+      
        
     }
 }

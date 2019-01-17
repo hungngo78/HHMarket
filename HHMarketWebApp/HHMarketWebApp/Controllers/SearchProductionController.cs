@@ -23,8 +23,8 @@ namespace HHMarketWebApp.Controllers
                 searchArr = searchText.Split(' ');
             }
 
-            
-            searchList.searchProductionList = (from p in db.Products
+
+            System.Collections.Generic.List<SearchProduction> searchProductionList = (from p in db.Products
                                                join category in db.Categories on p.CategoryId equals category.CategoryId
                                                join pdetail in db.ProductDetails on p.ProductId equals pdetail.ProductId
                                                where searchArr.Any(w => p.Description.ToLower().Contains(w) || p.Name.ToLower().Contains(w) || category.Name.ToLower().Contains(w) || category.Description.ToLower().Contains(w))
@@ -50,7 +50,7 @@ namespace HHMarketWebApp.Controllers
                                                    Color = g.FirstOrDefault().Color,
                                                    Price = g.FirstOrDefault().Price,
                                                    CategoryDescription = g.FirstOrDefault().CategoryDescription
-                                               } ).ToList();
+                                               } ).ToList<SearchProduction>();
     
             /* searchList.searchProductionList = (from p in db.Products
                                                join category in db.Categories on p.CategoryId equals category.CategoryId
@@ -139,7 +139,7 @@ namespace HHMarketWebApp.Controllers
                  Count = x.re.Count
              }).ToList(); ;
               */
-            var s = searchList.searchProductionList.GroupJoin(ReviewList,
+            var s = searchProductionList.GroupJoin(ReviewList,
                      p => p.ProductId,
                      re => re.ProductId,
 
@@ -160,12 +160,12 @@ namespace HHMarketWebApp.Controllers
             //    searchList.searchProductionList = searchList.searchProductionList.GroupBy(c => c.ProductId);
 
             // var s =  searchList.searchProductionList.Where(t => searchArr.Any(w => t.Description.ToLower().Contains(w)|| t.Name.ToLower().Contains(w) || t.CategoryName.ToLower().Contains(w) || t.CategoryName.ToLower().Contains(w))).ToList() ;
-            searchList.searchProductionList = s;
+            searchProductionList = s;
             int pageSize = 16;
             int pageNumber = 1;
 
             //return PartialView("Index", searchList.searchProductionList.ToPagedList(pageNumber, pageSize));
-            return View("Index", searchList.searchProductionList.ToPagedList(pageNumber, pageSize));
+            return View("Index", searchProductionList.ToPagedList(pageNumber, pageSize));
         }
 
 
