@@ -32,7 +32,7 @@ namespace HHMarketWebApp.Controllers
                                                //         where (from item in searchArr
                                                //               select item).Contains(p.Description.ToLower())//, p.Description)
                                                where searchArr.Any(w => p.Description.ToLower().Contains(w) || p.Name.ToLower().Contains(w) || category.Name.ToLower().Contains(w) || category.Description.ToLower().Contains(w))
-                                               select new 
+                                               select new
                                                {
                                                    Name = p.Name,
                                                    Description = p.Description,
@@ -56,6 +56,61 @@ namespace HHMarketWebApp.Controllers
                                                    CategoryDescription = g.FirstOrDefault().CategoryDescription
                                                }).ToList();
 
+            /* searchList.searchProductionList = (from p in db.Products
+                                               join category in db.Categories on p.CategoryId equals category.CategoryId
+                                               join pdetail in db.ProductDetails on p.ProductId equals pdetail.ProductId
+                                               //where (p.Name.Contains(searchText) || p.Description.Contains(searchText) || category.Name.Contains(searchText) || category.Description.Contains(searchText))
+                                               // where (searchArr.Contains(p.Name) || searchArr.Contains(p.Description) || searchArr.Contains(category.Name) || searchArr.Contains(category.Description))
+
+                                               //         where (from item in searchArr
+                                               //               select item).Contains(p.Description.ToLower())//, p.Description)
+                                               where searchArr.Any(w => p.Description.ToLower().Contains(w) || p.Name.ToLower().Contains(w) || category.Name.ToLower().Contains(w) || category.Description.ToLower().Contains(w))
+                                               select new 
+                                               {
+                                                   Name = p.Name,
+                                                   Description = p.Description,
+                                                   CategoryName = category.Name,
+                                                   ProductId = p.ProductId,
+                                                   Picture = pdetail.Picture,
+                                                   Color = pdetail.Color,
+                                                   Price = pdetail.Price,
+                                                   CategoryDescription = category.Description
+                                               } into t1
+                                               group t1 by t1.ProductId into g
+                                               select new SearchProduction()
+                                               {
+                                                   Name = g.FirstOrDefault().Name,
+                                                   Description = g.FirstOrDefault().Description,
+                                                   CategoryName = g.FirstOrDefault().CategoryName,
+                                                   ProductId = g.FirstOrDefault().ProductId,
+                                                   Picture = g.FirstOrDefault().Picture,
+                                                   Color = g.FirstOrDefault().Color,
+                                                   Price = g.FirstOrDefault().Price,
+                                                   CategoryDescription = g.FirstOrDefault().CategoryDescription
+                                               } into p
+                                               join review in (from re in db.Reviews
+                                                               group re by re.ProductId into g
+                                                               select new ReviewProduction()
+                                                               {
+                                                                   ProductId = g.Key,
+                                                                   OverallRating = (short)(g.Sum(item => item.OverallRating) / g.Count()),
+                                                                   Count = g.Count()
+                                                               }).ToList()  
+                                                               on p.ProductId equals review.ProductId
+                                               select new SearchProduction()
+                                               {
+                                                   Name = p.Name,
+                                                   Description = p.Description,
+                                                   CategoryName = p.Name,
+                                                   ProductId = p.ProductId,
+                                                   Picture =  p.Picture,
+                                                   Color =  p.Color,
+                                                   Price = p.Price,
+                                                   CategoryDescription = p.CategoryDescription,
+                                                   OverallRating = review.OverallRating,
+                                                   Count = review.Count
+                                               }).ToList();
+*/
             var ReviewList = (from re in db.Reviews
                               group re by re.ProductId into g
                               select new ReviewProduction()
