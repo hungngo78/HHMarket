@@ -26,6 +26,9 @@ namespace HHMarketWebApp.Models
 
         public decimal Price { get; set; }
 
+        public short OverallRating { get; set; }
+
+        public int Count { get; set; }
         public System.Collections.Generic.List<SearchProduction> searchProductionList { get; set; }
        
     }

@@ -15,7 +15,7 @@ namespace HHMarketWebApp.Models
         public string Content { get; set; }
         public short OverallRating { get; set; }
         public DateTime ReviewDate { get; set; }
-
+        public int Count { get; set; }
         public string UserName { get; set; }
     }
 }

@@ -1,28 +1,29 @@
-﻿@model List<HHMarketWebApp.Models.SearchProduction>
+﻿@model PagedList.IPagedList<HHMarketWebApp.Models.SearchProduction>
+@using PagedList.Mvc;
 
 <div style="width: 100%; margin-top:60px">
 </div>
-    <div style="margin-top: 50px;">
-        <div class="row">
-            @foreach (var productionGroup in Model)
-            {
-                var item = productionGroup.searchProductionList[0];
-               
+<div style="margin-top: 50px;">
+    <div class="row">
+        @foreach (var item in Model)
+        {
+         //   var item = productionGroup.searchProductionList[0];
+
             <table width="100%" style="margin: 20px;">
                 <tr>
                     <td width="100%" style="vertical-align:top">
                         <table cellspacing="10px" id="tableItem/@item.ProductId">
                             <tr id="item/@item.ProductId" style="height:0px;">
-                                <td width="20%"  style="vertical-align:top; " >
+                                <td width="20%" style="vertical-align:top; ">
                                     <img id="image/@item.ProductId" src="~/assets/production/@item.ProductId/@item.Color/@item.Picture.Split(',')[0]" alt="No Image" width="150">
                                 </td>
                                 <td width="70%" style="vertical-align:top;">
-                                    <div style="display:block; vertical-align:top; " >
-                                    <span class="title-production" id="TitleProduction" style="display:block" >
-                                        @Html.DisplayFor(model => item.Name)
-                                    </span>
-                                    <span class="customer-info"  style="display:block"> @Html.DisplayFor(model => item.Description)</span>
-                                    <span class="customer-info"  style="display:block">Sold by HHMarket</span>
+                                    <div style="display:block; vertical-align:top; ">
+                                        <span class="title-production" id="TitleProduction" style="display:block">
+                                            @Html.DisplayFor(model => item.Name)
+                                        </span>
+                                        <span class="customer-info" style="display:block"> @Html.DisplayFor(model => item.Description)</span>
+                                        <span class="customer-info" style="display:block">Sold by HHMarket</span>
                                     </div>
                                 </td>
 
@@ -38,17 +39,17 @@
                     </td>
                 </tr>
                 <tr>
-                    <td  width="100%" colspan="3">
+                    <td width="100%" colspan="3">
                         <div style="width: 100%; height: 0.5px; background-color: lightgray; margin-top: 10px; margin-bottom:10px;"></div>
                     </td>
 
                 </tr>
 
             </table>
-            }
-        </div>
-        <div class="row text-center">
-
-        </div>
+        }
     </div>
+    <div class="row text-center">
+        @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
+    </div>
+</div>
 
