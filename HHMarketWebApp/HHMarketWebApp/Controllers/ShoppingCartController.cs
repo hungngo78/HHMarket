@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using System.Web.Script.Serialization;
 using FormsAuth;
 using HHMarketWebApp.Models;
+using HHMarketWebApp.ViewModels;
 using PagedList;
 
 namespace HHMarketWebApp.Controllers

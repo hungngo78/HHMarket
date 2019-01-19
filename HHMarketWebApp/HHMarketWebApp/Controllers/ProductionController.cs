@@ -10,6 +10,7 @@ using System.Web.Mvc;
 using HHMarketWebApp.Models;
 using FormsAuth;
 using PagedList;
+using HHMarketWebApp.ViewModels;
 
 namespace HHMarketWebApp.Controllers
 {

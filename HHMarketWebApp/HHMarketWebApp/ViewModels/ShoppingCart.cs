@@ -1,4 +1,4 @@
-namespace HHMarketWebApp.Models
+namespace HHMarketWebApp.ViewModels
 {
     using System;
     public partial class ShoppingCart

@@ -6,3 +6,10 @@ C:\Users\them\Documents\GitHub\hungngo78\master\HHMarket\HHMarketWebApp\FormsAut
 C:\Users\them\Documents\GitHub\hungngo78\master\HHMarket\HHMarketWebApp\FormsAuth\obj\Debug\FormsAuth.dll
 C:\Users\them\Documents\GitHub\hungngo78\master\HHMarket\HHMarketWebApp\FormsAuth\obj\Debug\FormsAuth.pdb
 C:\Users\them\Documents\GitHub\hungngo78\master\HHMarket\HHMarketWebApp\FormsAuth\obj\Debug\FormsAuth.csprojAssemblyReference.cache
+C:\Users\them\Documents\GitHub\hungngo78\Master3\HHMarket\HHMarketWebApp\FormsAuth\bin\Debug\FormsAuth.dll
+C:\Users\them\Documents\GitHub\hungngo78\Master3\HHMarket\HHMarketWebApp\FormsAuth\bin\Debug\FormsAuth.pdb
+C:\Users\them\Documents\GitHub\hungngo78\Master3\HHMarket\HHMarketWebApp\FormsAuth\obj\Debug\FormsAuth.Properties.Resources.resources
+C:\Users\them\Documents\GitHub\hungngo78\Master3\HHMarket\HHMarketWebApp\FormsAuth\obj\Debug\FormsAuth.csproj.GenerateResource.cache
+C:\Users\them\Documents\GitHub\hungngo78\Master3\HHMarket\HHMarketWebApp\FormsAuth\obj\Debug\FormsAuth.csproj.CoreCompileInputs.cache
+C:\Users\them\Documents\GitHub\hungngo78\Master3\HHMarket\HHMarketWebApp\FormsAuth\obj\Debug\FormsAuth.dll
+C:\Users\them\Documents\GitHub\hungngo78\Master3\HHMarket\HHMarketWebApp\FormsAuth\obj\Debug\FormsAuth.pdb

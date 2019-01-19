@@ -1,6 +1,6 @@
 using System.Collections;
 
-namespace HHMarketWebApp.Models
+namespace HHMarketWebApp.ViewModels
 {
 
 

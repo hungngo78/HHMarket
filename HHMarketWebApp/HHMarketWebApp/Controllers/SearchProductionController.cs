@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Web.Mvc;
 using HHMarketWebApp.Models;
+using HHMarketWebApp.ViewModels;
 using PagedList;
 
 namespace HHMarketWebApp.Controllers

@@ -1,4 +1,4 @@
-namespace HHMarketWebApp.Models
+namespace HHMarketWebApp.ViewModels
 {
 
     public class SearchProduction

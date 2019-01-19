@@ -18,7 +18,8 @@
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
-    <Use64BitIISExpress>true</Use64BitIISExpress>
+    <Use64BitIISExpress>
+    </Use64BitIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -168,11 +169,11 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\CartDetailItem.cs" />
+    <Compile Include="ViewModels\CartDetailItem.cs" />
     <Compile Include="Models\CartItem.cs" />
-    <Compile Include="Models\SearchModel.cs" />
-    <Compile Include="Models\SearchProduction.cs" />
-    <Compile Include="Models\ShoppingCart.cs" />
+    <Compile Include="ViewModels\SearchModel.cs" />
+    <Compile Include="ViewModels\SearchProduction.cs" />
+    <Compile Include="ViewModels\ShoppingCart.cs" />
     <Compile Include="Models\Cart.cs" />
     <Compile Include="Models\CartDetail.cs" />
     <Compile Include="Models\Category.cs" />
@@ -181,13 +182,13 @@
     <Compile Include="Models\Order.cs" />
     <Compile Include="Models\OrderDetail.cs" />
     <Compile Include="Models\Product.cs" />
-    <Compile Include="Models\Production.cs" />
-    <Compile Include="Models\ProductionDetail.cs" />
+    <Compile Include="ViewModels\Production.cs" />
+    <Compile Include="ViewModels\ProductionDetail.cs" />
     <Compile Include="Models\ProductDetail.cs" />
-    <Compile Include="Models\Rating.cs" />
+    <Compile Include="ViewModels\Rating.cs" />
     <Compile Include="Models\Review.cs" />
-    <Compile Include="Models\ReviewDetails.cs" />
-    <Compile Include="Models\ReviewProduction.cs" />
+    <Compile Include="ViewModels\ReviewDetails.cs" />
+    <Compile Include="ViewModels\ReviewProduction.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Provider\MyMembershipProvider.cs" />
