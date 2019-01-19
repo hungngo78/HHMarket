@@ -9,6 +9,7 @@ using System.Web;
 using System.Web.Mvc;
 using HHMarketWebApp.Models;
 using FormsAuth;
+using System.Web.Script.Serialization;
 
 namespace HHMarketWebApp.Controllers
 {
@@ -25,13 +26,93 @@ namespace HHMarketWebApp.Controllers
         // POST 
         [HttpPost]
         //public ActionResult Login(String username, String password)
-        public ActionResult Login([Bind(Include = "Username,Password")]Logon logon)
+        public async Task<ActionResult> Login([Bind(Include = "Username,Password")]Logon logon)
         {
             if (ModelState.IsValid)
             {
                 // Authenticate the user.
                 if (UserManager.ValidateUser(logon, Response))
                 {
+                    /* move temporary shopping cart to DB */
+                    string dateOfOpen = string.Empty;
+
+                    // get tmp Cart in cookie
+                    HttpCookie reqCartInfoCookies = HttpContext.Request.Cookies["CartInfo"];
+                    if (reqCartInfoCookies != null)  // there is a temporary Cart in cookies 
+                    {
+                        dateOfOpen = reqCartInfoCookies["DateOfOpen"].ToString();
+
+                        Cart cart = null;
+                        // get existing Cart
+                        cart = (from c in db.Carts
+                                where c.UserId == UserManager.User.Id
+                                select c).FirstOrDefault();
+
+                        // there is no existing Shopping Cart for this user -> create new Shopping Cart
+                        if (cart == null)
+                        {
+                            cart = new Cart();
+                            cart.UserId = UserManager.User.Id;
+                            cart.DateOpen = DateTime.Parse(dateOfOpen);
+                            db.Carts.Add(cart);
+                        }
+
+                        HttpCookie reqIDListCookies = Request.Cookies["ProductDetailIDlist"];
+                        if (reqIDListCookies != null)
+                        {
+                            string dataAsString = reqIDListCookies.Value;
+                            if (!dataAsString.Equals(string.Empty))
+                            {
+                                List<int> listdata = new List<int>();
+                                //List<CartItem> listCartItem = new List<CartItem>();
+                                listdata = dataAsString.Split(',').Select(x => Int32.Parse(x)).ToList();
+                                for (int i = 0; i < listdata.Count(); i++)
+                                {
+                                    HttpCookie reqCartItemCookies = Request.Cookies["CartItems[" + listdata[i].ToString() + "]"];
+                                    if (reqCartItemCookies != null)
+                                    {
+                                        CartItem cookiesItem = new JavaScriptSerializer().Deserialize<CartItem>(reqCartItemCookies.Value);
+
+                                        // get Cart Item for this ProductDetailId in DB
+                                        CartDetail detail;
+                                        int productDetailId = listdata[i];
+                                        detail = (from cd in db.CartDetails
+                                                  where cd.CartId == cart.CartId && cd.ProductDetailsId == productDetailId
+                                                  select cd).FirstOrDefault();
+                                        if (detail == null)
+                                        {
+                                            detail = new CartDetail();
+                                            detail.Amount = (short)cookiesItem.Amount;
+                                            detail.ExtendedPrice = cookiesItem.Price;
+                                            detail.Type = 0;
+                                            detail.ProductDetailsId = listdata[i];
+                                            detail.CartId = cart.CartId;
+                                            db.CartDetails.Add(detail);
+                                        }
+                                        else
+                                        {
+                                            detail.Amount += (short)cookiesItem.Amount;
+                                        }
+
+                                        await db.SaveChangesAsync();
+
+                                        /* remove cart item of this ProductDetailId in cookies */                                        
+                                        var respCartItemscookies = new HttpCookie("CartItems[" + listdata[i].ToString() + "]");
+                                        respCartItemscookies.Expires = DateTime.Now.AddDays(-1D);
+                                        Response.Cookies.Add(respCartItemscookies);
+                                    }
+                                }
+
+                                /* update productDetailID list in cookies */
+                                HttpCookie respIDListCookies = new HttpCookie("ProductDetailIDlist", "")
+                                {
+                                    Expires = DateTime.Now.AddDays(1)
+                                };
+                                HttpContext.Response.Cookies.Add(respIDListCookies);
+                            }
+                        }
+                    }
+
                     // Redirect to the secure area.
                     return RedirectToAction("Index", "Category");
                 }

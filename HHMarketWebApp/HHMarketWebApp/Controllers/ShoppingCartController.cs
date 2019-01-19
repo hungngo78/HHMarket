@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -129,14 +127,15 @@ namespace HHMarketWebApp.Controllers
                     if (cart == null)
                     {
                         // create new Shopping Cart
-                        Cart newCart = new Cart();
-                        newCart.DateOpen = System.DateTime.Now;
-                        newCart.UserId = UserManager.User.Id;
-                        db.Carts.Add(newCart);
+                        cart = new Cart();
+                        cart.DateOpen = System.DateTime.Now;
+                        cart.UserId = UserManager.User.Id;
+                        db.Carts.Add(cart);
 
                         // save Cart Item
                         detail = new CartDetail();
-                        detail.Amount = 1;
+                        detail.Amount = item.Amount;
+                        db.CartDetails.Add(detail);
                     }
                     else  // there is already an existing Shopping Cart for this user
                     {
@@ -147,12 +146,12 @@ namespace HHMarketWebApp.Controllers
                         if (detail == null)
                         {
                             detail = new CartDetail();
-                            detail.Amount = 1;
+                            detail.Amount = item.Amount;
                             db.CartDetails.Add(detail);
                         }
                         else
                         {
-                            detail.Amount = (short)(detail.Amount + 1);
+                            detail.Amount = (short)(detail.Amount + item.Amount);
                         }
                     }
 
@@ -178,7 +177,7 @@ namespace HHMarketWebApp.Controllers
                         if (reqCartItemCookies != null)
                         {
                             CartItem mItem = new JavaScriptSerializer().Deserialize<CartItem>(reqCartItemCookies.Value);
-                            mItem.Amount = mItem.Amount + 1;
+                            mItem.Amount = (short)(mItem.Amount + item.Amount);
                             string myObjectJson = new JavaScriptSerializer().Serialize(mItem);
                             respCartItemCookie = new HttpCookie("CartItems[" + item.ProductDetailsId.ToString() + "]", myObjectJson)
                             {
@@ -238,7 +237,7 @@ namespace HHMarketWebApp.Controllers
                         // create new Shopping Cart in Cookie                   
                         HttpCookie cartCookie = new HttpCookie("CartInfo")
                         {
-                            Expires = DateTime.Now.AddDays(1)
+                            Expires = DateTime.Now.AddYears(1)
                         };
                         cartCookie["DateOfOpen"] = DateTime.Now.ToString();
                         HttpContext.Response.Cookies.Add(cartCookie);
@@ -339,7 +338,9 @@ namespace HHMarketWebApp.Controllers
                     HttpCookie reqCartItemCookies = Request.Cookies["CartItems[" + model.ProductDetailsId.ToString() + "]"]; 
                     if (reqCartItemCookies != null)
                     {
-                        reqCartItemCookies.Expires = DateTime.Now.AddDays(-1D);
+                        var c = new HttpCookie("CartItems[" + model.ProductDetailsId.ToString() + "]");
+                        c.Expires = DateTime.Now.AddDays(-1D);
+                        Response.Cookies.Add(c);     
                     }
 
                     /* update productDetailID list in cookies */

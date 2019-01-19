@@ -135,9 +135,10 @@
 	    event.preventDefault();
 
 	    var action = '@Url.Action("AddToCart", "ShoppingCart")';
-	    var jsonObject = {
-            "Price": document.getElementById("CartItem_Price").value,
+        var jsonObject = {
             "ProductDetailsId": document.getElementById("CartItem_ProductDetailID").value,
+            "Price": document.getElementById("CartItem_Price").value,
+            "Amount" : "1"
         };
 
 	    $.ajax({
