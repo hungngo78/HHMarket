@@ -323,13 +323,13 @@ namespace HHMarketWebApp.Controllers
                          .ToList().ForEach(p => db.CartDetails.Remove(p));
                     await db.SaveChangesAsync();
 
-                    /*
+                    
                     var list = db.CartDetails.Where(p => p.CartId == model.CartId).ToList();
                     if (list.Count() <= 0)
                     {
                         db.Carts.Where(p => p.CartId == model.CartId)
                           .ToList().ForEach(p => db.Carts.Remove(p));
-                    }*/
+                    }
 
                     await db.SaveChangesAsync();
                 }
