@@ -34,7 +34,14 @@
                         <li><a href="../Category/Index">HOME</a></li>
                         <li>
                             <div class="dropdown">
-                                <button onclick="myFunction()" class="dropbtn">Account</button>
+                                @if (HttpContext.Current.User.Identity.IsAuthenticated)
+                                {
+                                    <button onclick="myFunction()" class="dropbtn">@HttpContext.Current.User.Identity.Name.ToUpper()</button>
+                                }
+                                else
+                                {
+                                    <button onclick="myFunction()" class="dropbtn">Account</button>
+                                }
                                 <div id="myDropdown" class="dropdown-content">
                                     @if (HttpContext.Current.User.Identity.IsAuthenticated)
                                     {
@@ -58,11 +65,7 @@
                             </ul>
                         </li-->
                         
-                        <li class="dropdown">
-                            <a href="../ShoppingCart/Index">
-                                <span class="glyphicon glyphicon-shopping-cart">Cart</span>
-                            </a>
-                        </li>
+                        @{ Html.RenderAction("CartIcon", "MyLayoutPage"); }
                     </ul>                        
                 </div>
             </div>
