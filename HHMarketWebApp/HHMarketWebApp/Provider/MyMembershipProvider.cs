@@ -183,8 +183,7 @@ namespace HHMarketWebApp.Provider
                 // Store the user temporarily in the context for this request.
                 FormsAuth.Models.User user = new FormsAuth.Models.User {
                             Id = userEntity.UserId,
-                            Username = userEntity.UserName,
-                            FirstName = userEntity.FirstName
+                            Username = userEntity.UserName
                 };
                 HttpContext.Current.Items.Add("User", user);
 
