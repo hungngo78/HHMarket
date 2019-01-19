@@ -21,7 +21,7 @@ namespace HHMarketWebApp.Models
 
         public string CategoryDescription { get; set; }
 
-        public short OverallRating { get; set; }
+        public decimal OverallRating { get; set; }
 
         public int Count { get; set; }
     }

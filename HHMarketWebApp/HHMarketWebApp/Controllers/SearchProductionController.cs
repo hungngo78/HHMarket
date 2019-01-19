@@ -102,7 +102,7 @@ namespace HHMarketWebApp.Controllers
                                         Price = g.FirstOrDefault().Price,
                                         CategoryName = g.FirstOrDefault().CategoryName,
                                         CategoryDescription = g.FirstOrDefault().CategoryDescription,
-                                        OverallRating = (short)(g.Sum(item => item.OverallRating) / g.Count()),
+                                        OverallRating = ((decimal)g.Sum(item => item.OverallRating)) / g.Count(),
                                         Count = ((short)(g.Sum(item => item.OverallRating) / g.Count())) == 0 ? 0 : g.Count()
                                     }).ToList();
             int pageSize = 16;
