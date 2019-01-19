@@ -11,11 +11,10 @@ namespace HHMarketWebApp.Controllers
     public class SearchProductionController : Controller
     {
 
-        //public ActionResult Index(string searchText)
+        [HttpPost]
         public ActionResult Index(SearchModel model)
         {
             DBModelContainer db = new DBModelContainer();
-            //SearchProduction searchList = new SearchProduction();
 
             string searchText = model.Criteria;
             string[] searchArr = new string[] { " " };
