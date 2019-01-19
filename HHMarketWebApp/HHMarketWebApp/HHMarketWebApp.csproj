@@ -212,6 +212,7 @@
     <Content Include="Content\productDetail.css" />
     <Content Include="Content\product.review.css" />
     <Content Include="Content\shoppingCart.css" />
+    <Content Include="Content\searchProduction.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />

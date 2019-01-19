@@ -1,34 +1,45 @@
 ﻿@model PagedList.IPagedList<HHMarketWebApp.Models.SearchProduction>
 @using PagedList.Mvc;
+@{
+    var listItem = Model;
+}
 
-<div style="width: 100%; margin-top:60px">
-</div>
-<div style="margin-top: 50px;">
+<link rel="stylesheet" type="text/css" href="~/Content/searchProduction.css">
+
+<div style="margin-top: 50px; min-width: 50%;">
     <div class="row">
         @foreach (var item in Model)
         {
-         //   var item = productionGroup.searchProductionList[0];
-
-            <table width="100%" style="margin: 20px;">
-                <tr>
-                    <td width="100%" style="vertical-align:top">
-                        <table cellspacing="10px" id="tableItem/@item.ProductId">
+         <table width="100%" style="margin: 20px;">
+                <tr width="100%" celllspace="0">
+                    <td  width="100%">
+                        <table  width="100%"  id="tableItem/@item.ProductId">
                             <tr id="item/@item.ProductId" style="height:0px;">
-                                <td width="20%" style="vertical-align:top; ">
-                                    <img id="image/@item.ProductId" src="~/assets/production/@item.ProductId/@item.Color/@item.Picture.Split(',')[0]" alt="No Image" width="150">
+                                <td width="20%">
+                                    <img id="image/@item.ProductId" src="~/assets/production/@item.ProductId/@item.Color/@item.Picture.Split(',')[0]" alt="No Image" style="width:150px; min-width:150px; height:150px;">
                                 </td>
-                                <td width="70%" style="vertical-align:top;">
-                                    <div style="display:block; vertical-align:top; ">
-                                        <span class="title-production" id="TitleProduction" style="display:block">
-                                            @Html.DisplayFor(model => item.Name)
-                                        </span>
-                                        <span class="customer-info" style="display:block"> @Html.DisplayFor(model => item.Description)</span>
-                                        <span class="customer-info" style="display:block">Sold by HHMarket</span>
+                                <td  width="60%" style="position:relative; vertical-align:top;">
+                                    <div class="div-content-prodution">
+                                        <div style="display:block; vertical-align:top; ">
+                                            <span class="title-production" id="TitleProduction" style="display:block">
+                                                @Html.DisplayFor(model => item.Name)
+                                            </span>
+                                            <span class="text-info"> @Html.DisplayFor(model => item.Description)</span>
+                                            <span class="text-info" >Sold by HHMarket</span>
+                                        </div>
+                                        <div class="div-star-review-rating">
+                                            <img id="img/@item.ProductId/star1" class="star">
+                                            <img id="img/@item.ProductId/star2" class="star">
+                                            <img id="img/@item.ProductId/star3" class="star">
+                                            <img id="img/@item.ProductId/star4" class="star">
+                                            <img id="img/@item.ProductId/star5" class="star">
+
+                                        </div>
                                     </div>
                                 </td>
-
-                                <td width="10%" style="text-align:right; padding-right: 10px;">
-                                    <span class="customer-info" id="priceForEachID">
+                               
+                                <td width="20%" style="text-align:right; padding-right: 10px; ">
+                                    <span id="priceForEachID">
                                         $ @Html.DisplayFor(model => item.Price)
                                     </span>
                                 </td>
@@ -40,9 +51,8 @@
                 </tr>
                 <tr>
                     <td width="100%" colspan="3">
-                        <div style="width: 100%; height: 0.5px; background-color: lightgray; margin-top: 10px; margin-bottom:10px;"></div>
+                        <div class="line-gray" ></div>
                     </td>
-
                 </tr>
 
             </table>
@@ -52,4 +62,92 @@
         @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
     </div>
 </div>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+    var modelPro = null;
+    $(document).ready(function () {
+
+           modelPro = @Html.Raw(Json.Encode(listItem));
+     
+        if (modelPro != null && modelPro != "undefined") {
+            displayDisplayReviewRating()
+           
+        }
+
+    });
+    function setUpEmtyStars(productionId) {
+  
+        for (var k = setUpEmtyStars; k >= 1; k--) {
+            var id = "img/" + productionId + "/star" + k;
+            var img = document.getElementById(id);
+            img.setAttribute("src", "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgiIGhlaWdodD0iMTgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmlld0JveD0iMCAwIDE4IDE4Ij48cGF0aCBmaWxsPSIjZTZlN2U4IiBkPSJNOSAwbDIuNSA2LjhoNi41bC01LjQgNC4yIDIgNy01LjYtNC4zLTUuNiA0LjMgMi03LTUuNC00LjJoNi41eiIvPjwvc3ZnPg==");
+            
+        }
+
+    }
+    function displayDisplayReviewRating() {
+
+        function setUpRatedStar(overrallRating, productionId) {
+            if (overrallRating == 0)
+                setUpEmtyStars(productionId);
+            for (var j = 1; j <= overrallRating; j++) {
+                var id = "img/" + productionId + "/star" + j;
+                var img = document.getElementById(id);
+                img.setAttribute("src", "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjgiIGhlaWdodD0iMjgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmlld0JveD0iMCAwIDE4IDE4IiBlbmFibGUtYmFja2dyb3VuZD0ibmV3IDAgMCAxOCAxOCI+PHBhdGggZmlsbD0iIzAwMDAwMCIgZD0iTTkgMGwyLjUgNi44aDYuNWwtNS40IDQuMiAyIDctNS42LTQuMy01LjYgNC4zIDItNy01LjQtNC4yaDYuNXoiLz48L3N2Zz4=");              // img.classList.add("star");
+
+            }
+            for (var j = overrallRating+1; j <= 5; j++) {
+                var id = "img/" + productionId + "/star" + j;
+                var img = document.getElementById(id);
+                img.setAttribute("src", "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgiIGhlaWdodD0iMTgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmlld0JveD0iMCAwIDE4IDE4Ij48cGF0aCBmaWxsPSIjZTZlN2U4IiBkPSJNOSAwbDIuNSA2LjhoNi41bC01LjQgNC4yIDIgNy01LjYtNC4zLTUuNiA0LjMgMi03LTUuNC00LjJoNi41eiIvPjwvc3ZnPg==");
+
+            }
+        }
+
+        function setUpRatedStarPartial(position, productionId) {
+
+            for (var j = 1; j < position; j++) {
+                var id = "img/" + productionId + "/star" + j;
+                var img = document.getElementById(id);
+                img.setAttribute("src", "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjgiIGhlaWdodD0iMjgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmlld0JveD0iMzUgMzUgMTggMTgiIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMzUgMzUgMTggMTgiPjxwYXRoIGZpbGw9IiMwMDAwMDAiIGQ9Ik00NCA0OC44bC01LjYgNC4yIDEuOS03LjEtNS4zLTRoNi42bDIuNC02LjkiLz48cGF0aCBmaWxsPSIjZTZlN2U4IiBkPSJNNDQgMzVsMi40IDYuOWg2LjZsLTUuMyA0IDEuOSA3LjEtNS42LTQuMiIvPjwvc3ZnPg==");
+
+            }
+            // set for position
+            var img1 = document.getElementById("img/" + productionId + "/star" + position);
+            img1.setAttribute("src", "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAiIGhlaWdodD0iMTAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmlld0JveD0iMzUgMzUgMTggMTgiIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMzUgMzUgMTggMTgiPjxwYXRoIGZpbGw9IiMwMDAwMDAiIGQ9Ik00NCA0OC44bC01LjYgNC4yIDEuOS03LjEtNS4zLTRoNi42bDIuNC02LjkiLz48cGF0aCBmaWxsPSIjZTZlN2U4IiBkPSJNNDQgMzVsMi40IDYuOWg2LjZsLTUuMyA0IDEuOSA3LjEtNS42LTQuMiIvPjwvc3ZnPg==");
+
+            for (var j = position + 1; j <= 5; j++) {
+                var id = "img/" + productionId + "/star" + j;
+                var img2 = document.getElementById(id);
+                img2.setAttribute("src", "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgiIGhlaWdodD0iMTgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmlld0JveD0iMCAwIDE4IDE4Ij48cGF0aCBmaWxsPSIjZTZlN2U4IiBkPSJNOSAwbDIuNSA2LjhoNi41bC01LjQgNC4yIDIgNy01LjYtNC4zLTUuNiA0LjMgMi03LTUuNC00LjJoNi41eiIvPjwvc3ZnPg==");
+       
+            }
+           
+        }
+
+        for (var i = 0; i < modelPro.length; i++) {
+            var overrallRating = modelPro[i].OverallRating;
+            var prodId = modelPro[i].ProductId;
+     
+            if (overrallRating == 0 || overrallRating == 1 || overrallRating == 2 || overrallRating == 3 || overrallRating == 4 || overrallRating == 5 ) {
+                setUpRatedStar(overrallRating, prodId);
+            }
+            else if (overrallRating > 1 && overrallRating < 2) {
+                setUpRatedStarPartial(2);
+            }
+            else if (overrallRating > 2 && overrallRating < 3) {
+                setUpRatedStarPartial(3);
+            }
+            else if (overrallRating > 3 && overrallRating < 4) {
+                setUpRatedStarPartial(4);
+            }
+            else if (overrallRating > 4 && overrallRating < 5) {
+                setUpRatedStarPartial(5);
+            }
+        }
+
+
+    }
+</script>
 
