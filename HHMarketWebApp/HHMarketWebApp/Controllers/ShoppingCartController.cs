@@ -288,10 +288,28 @@ namespace HHMarketWebApp.Controllers
             if (ModelState.IsValid)
             {
                 // update amount to cart detail table'
-                CartDetail cartDetail = db.CartDetails.FirstOrDefault(item => item.ProductDetailsId == model.ProductDetailsId);
-                cartDetail.Amount = (short)(model.Amount);
-                await db.SaveChangesAsync();
+                if (model.Amount == 0)
+                {
+                    db.CartDetails.Where(p => p.CartDetailsId == model.CartDetailsId)
+                        .ToList().ForEach(p => db.CartDetails.Remove(p));
+                    await db.SaveChangesAsync();
 
+
+                    var list = db.CartDetails.Where(p => p.CartId == model.CartId).ToList();
+                    if (list.Count() <= 0)
+                    {
+                        db.Carts.Where(p => p.CartId == model.CartId)
+                          .ToList().ForEach(p => db.Carts.Remove(p));
+                    }
+
+                    await db.SaveChangesAsync();
+                }
+                else
+                {
+                    CartDetail cartDetail = db.CartDetails.FirstOrDefault(item => item.CartDetailsId == model.CartDetailsId);
+                    cartDetail.Amount = (short)(model.Amount);
+                    await db.SaveChangesAsync();
+                }
                 ModelState.Clear();
 
                 return this.Json(new
@@ -300,6 +318,75 @@ namespace HHMarketWebApp.Controllers
                     SuccessTitle = "Successful!",
                     SuccessMsg = "Thank you so much for your order!"
                 });
+            }
+
+            return this.Json(new
+            {
+                EnableError = true,
+                ErrorTitle = "Error",
+                ErrorMsg = "Something goes wrong, please try again later"
+            });
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> RemoveCartItem(CartDetailItem model)
+        {
+            if (ModelState.IsValid)
+            {
+                if (FormsAuth.UserManager.User != null)
+                {
+                    // update amount to cart detail table
+                    db.CartDetails.Where(p => p.CartDetailsId == model.CartDetailsId)
+                         .ToList().ForEach(p => db.CartDetails.Remove(p));
+                    await db.SaveChangesAsync();
+
+
+                    var list = db.CartDetails.Where(p => p.CartId == model.CartId).ToList();
+                    if (list.Count() <= 0)
+                    {
+                        db.Carts.Where(p => p.CartId == model.CartId)
+                          .ToList().ForEach(p => db.Carts.Remove(p));
+                    }
+
+                    await db.SaveChangesAsync();
+                }
+                else
+                {
+                    /* remove cart item of this ProductDetailId in cookies */
+                    HttpCookie reqCartItemCookies = Request.Cookies["CartItems[" + model.ProductDetailsId.ToString() + "]"];
+                    if (reqCartItemCookies != null)
+                    {
+                        reqCartItemCookies.Expires = DateTime.Now.AddDays(-1D);
+                    }
+
+                    /* update productDetailID list in cookies */
+                    HttpCookie reqIDListCookies = Request.Cookies["ProductDetailIDlist"];
+                    if (reqIDListCookies != null)
+                    {
+                        string dataAsString = reqIDListCookies.Value;
+                        List<int> listdata = new List<int>();
+                        listdata = dataAsString.Split(',').Select(x => Convert.ToInt32(x)).ToList();
+                        listdata.Remove(model.ProductDetailsId);
+
+                        // Stringify your list
+                        var yourListString = String.Join(",", listdata);
+
+                        HttpCookie IDListCookies = new HttpCookie("ProductDetailIDlist", yourListString)
+                        {
+                            Expires = DateTime.Now.AddDays(1)
+                        };
+                        HttpContext.Response.Cookies.Add(IDListCookies);
+                    }
+                }
+
+                ModelState.Clear();
+                return this.Json(new
+                {
+                    EnableSuccess = true,
+                    SuccessTitle = "Successful!",
+                    SuccessMsg = "Thank you so much for your order!"
+                });
+
             }
 
             return this.Json(new

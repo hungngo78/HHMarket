@@ -143,7 +143,7 @@
             setupQuantityUI();
             calTotalBill();
             showImage();
-
+           
         });
 
         //function submitOrder() {
@@ -197,11 +197,13 @@
                     }
                 } else return;
                 if (k == -1) return;
-
+                alert("shoppingCart[k].CartDetailsId " + shoppingCart[k].CartDetailsId);
                 var amount = document.getElementById("quantity/" + shoppingCart[k].ProductDetailsId).options.item(document.getElementById("quantity/" + shoppingCart[k].ProductDetailsId).selectedIndex).value;
                 var data = {
                     "Amount": amount,
                     "ProductDetailsId": id,
+                    "CartDetailsId": shoppingCart[k].CartDetailsId,
+                    "CartId": shoppingCart[k].CartId,
                 };
 
                 $.ajax({
@@ -211,8 +213,8 @@
                     data: JSON.stringify({ model: data }),
                     dataType: "json",
                     success: function (result) {
-                         alert('Thank you for your order!');
-                        shoppingCart[k].Amount = amount;
+                         //alert('You updated quantity successfully!');
+                         shoppingCart[k].Amount = amount;
                          calTotalBill();
                        
                     },
@@ -224,7 +226,43 @@
                 });
             }
             return false;
-        }
+            }
+            function exRemoveItem(CartDetailsId, CartId, ProductDetailsId) {
+                var data = {
+                    "CartDetailsId": CartDetailsId,
+                    "CartId": CartId,
+                    "ProductDetailsId": ProductDetailsId
+                };
+
+                $.ajax({
+                    type: "POST",
+                    url: "RemoveCartItem", // the method we are calling
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify({ model: data }),
+                    dataType: "json",
+                    success: function (result) {
+                        alert('Thank you for your order!');
+                        var rowItem = document.getElementById("item/" + CartDetailsId);
+                        // var tableItem = document.getElementById("tableItem/" + id);
+                        rowItem.setAttribute("style", "height: 0px");
+                        rowItem.parentNode.removeChild(rowItem);
+                        for (var i = 0; i < shoppingCart.length; i++) {
+                            if (shoppingCart[i].CartDetailsId == CartDetailsId) {
+                                shoppingCart.splice(i, 1);
+                                calTotalBill();
+                                //remove item on server
+                                break;
+                            }
+                        }
+
+                    },
+                    error: function (result) {
+                        alert('You have error when submit quantity. Could you please try again!');
+                    }
+
+                });
+                return false;
+            }
         function removeItem(id) {
             //alert("removeItem");
             var retValue = confirm("Do you want to remove?");
@@ -246,39 +284,7 @@
 
                     //alert(" k = " + k);
 
-                    var data = {
-                        "CartDetailsId": id,
-                        "CartId": k,
-                        "ProductDetailsId": p
-                    };
-
-                    $.ajax({
-                        type: "POST",
-                        url: "RemoveCartItem", // the method we are calling
-                        contentType: "application/json; charset=utf-8",
-                        data: JSON.stringify({ model: data }),
-                        dataType: "json",
-                        success: function (result) {
-                            alert('Thank you for your order!');
-                            var rowItem = document.getElementById("item/" + id);
-                            // var tableItem = document.getElementById("tableItem/" + id);
-                            rowItem.setAttribute("style", "height: 0px");
-                            rowItem.parentNode.removeChild(rowItem);
-                            for (var i = 0; i < shoppingCart.length; i++) {
-                                if (shoppingCart[i].CartDetailsId == id) {
-                                    shoppingCart.splice(i, 1);
-                                    calTotalBill();
-                                    //remove item on server
-                                    break;
-                                }
-                            }
-
-                        },
-                        error: function (result) {
-                            alert('You have error when submit quantity. Could you please try again!');
-                          }
-
-                    });
+                    exRemoveItem(id, k, p);
                     return false;
                 }
 
@@ -337,45 +343,69 @@
         }
 
         function updateTotalPricePro(prodItem) {
+            // alert(" prodItem.ProductDetailsId = " + prodItem.ProductDetailsId);
              var productionTotalPrice = document.getElementById("productionTotalPrice/" + prodItem.ProductDetailsId);
             //get quantity
-            var productionQuantity = document.getElementById("quantity/" + prodItem.ProductDetailsId).options.item(document.getElementById("quantity/" + prodItem.ProductDetailsId).selectedIndex).value;
+            var index = document.getElementById("quantity/" + prodItem.ProductDetailsId).selectedIndex;
 
-            // if (productionTotalPrice != "+10")
-            productionTotalPrice.innerHTML = "$" + prodItem.Price * productionQuantity;
-
-
+            var productionQuantity = document.getElementById("quantity/" + prodItem.ProductDetailsId).options.item(index).value;
+               
+                // if (productionTotalPrice != "+10")
+                productionTotalPrice.innerHTML = "$" + prodItem.Price * productionQuantity;
+          
 
         }
         function setupQuantityUI() {
 
             if (shoppingCart != null && shoppingCart != "undefined") {
                for (var i = 0; i < shoppingCart.length; i++) {
-
                    var quantitySelect = document.getElementById("quantity/"+shoppingCart[i].ProductDetailsId);
-                    quantitySelect.style = "width:60px;"
-                   if (shoppingCart[i].TotalAmountProduction > 10) {
+                   quantitySelect.style = "width:60px;"
+                  
+                   if (shoppingCart[i].TotalAmountProduction > 30) {
                        for (var j = 1; j <= 10; j++) {
                            var option = document.createElement("option");
                            option.text = "" + j;
                            option.value = j;
                            quantitySelect.add(option);
                        }
-                       var option = document.createElement("option");
-                       option.text = "10+";
-                       quantitySelect.add(option);
+                      // var option = document.createElement("option");
+                      // option.text = "10+";
+                      // quantitySelect.add(option);
                    } else {
-                       for (var k = 1; k <= shoppingCart[i].TotalAmountProduction; k++) {
-                           var option = document.createElement("option");
-                           option.text =  k;
-                           option.value = k;
-                           quantitySelect.add(option);
+                       if (shoppingCart[i].TotalAmountProduction != 0) {
+                           for (var k = 1; k <= shoppingCart[i].TotalAmountProduction; k++) {
+                               var option = document.createElement("option");
+                               option.text = k;
+                               option.value = k;
+                               quantitySelect.add(option);
+                           }
                        }
                    }
-                   quantitySelect.selectedIndex = shoppingCart[i].Amount-1;
+
+                   if (shoppingCart[i].Amount > shoppingCart[i].TotalAmountProduction && shoppingCart[i].TotalAmountProduction!= 0) {
+                       shoppingCart[i].Amount = shoppingCart[i].TotalAmountProduction;
+                       quantitySelect.selectedIndex = shoppingCart[i].Amount - 1;
+                       changeQuantity(shoppingCart[i].ProductDetailsId);
+                   } else {
+                       if (shoppingCart[i].Amount!= 0 && shoppingCart[i].Amount <= shoppingCart[i].TotalAmountProduction)
+                           quantitySelect.selectedIndex = shoppingCart[i].Amount - 1;
+                   }
+                   if (shoppingCart[i].Amount == 0 || 0 == shoppingCart[i].TotalAmountProduction) {
+                       shoppingCart[i].Amount = 0;
+                       var option = document.createElement("option");
+                       option.text = "0";
+                       option.value = 0;
+                       quantitySelect.add(option);
+                       quantitySelect.selectedIndex = shoppingCart[i].Amount;
+                       changeQuantity(shoppingCart[i].ProductDetailsId);
+
+                   }
 
                    // add totalPrice each Production
-                   updateTotalPricePro(shoppingCart[i])
+                   updateTotalPricePro(shoppingCart[i]);
+                  
+
                }
 
            }
