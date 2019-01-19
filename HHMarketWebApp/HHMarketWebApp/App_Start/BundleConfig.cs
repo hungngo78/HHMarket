@@ -26,6 +26,7 @@ namespace HHMarketWebApp
                       "~/Content/bootstrap.css",
                       "~/Content/site.css",
                       "~/Content/Header-Nightsky.css",
+                      "~/Content/dropdown_navbar.css",
                       "~/Content/hhstyle.css",
                       "~/Content/myCss.css"));
         }

@@ -15,6 +15,8 @@ namespace HHMarketWebApp.Models
 
         public decimal Price { get; set; }
 
+        public decimal CategoryId { get; set; }
+
         public string CategoryName { get; set; }
 
         public string CategoryDescription { get; set; }

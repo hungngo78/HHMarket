@@ -46,6 +46,49 @@ namespace HHMarketWebApp.Controllers
             return View(prs.ToPagedList(pageNumber, pageSize));
         }
 
+        public ActionResult ProductDetail(int id)
+        {
+            DBModelContainer db = new DBModelContainer();
+            ProductionDetail pr = new ProductionDetail();
+            pr.ProductId = id;
+            pr.listdata = (from p in db.ProductDetails
+                           join production in db.Products on p.ProductId equals production.ProductId
+                           where p.ProductId == id
+                           select new ProductionDetail()
+                           {
+                               Color = p.Color,
+                               Description = production.Description,
+                               Price = p.Price,
+                               Size = p.Size,
+                               Amount = p.Amount,
+                               Picture = p.Picture,
+                               ProductDetailsId = p.ProductDetailsId,
+                               ProductId = p.ProductId,
+                               ProductionName = production.Name
+                           }).ToList();
+
+            // return View(productionDetail.FirstOrDefault());
+            pr.reviewListData = (from r in db.Reviews
+                                 join p in db.Products on r.ProductId equals p.ProductId
+                                 join u in db.Users on r.UserId equals u.UserId
+                                 where p.ProductId == id
+                                 select new ReviewProduction()
+                                 {
+                                     ProductId = r.ProductId,
+
+                                     Title = r.Title,
+                                     Content = r.Content,
+                                     OverallRating = r.OverallRating,
+
+                                     ReviewId = r.ReviewId,
+                                     UserId = r.UserId,
+                                     UserName = u.UserName,
+                                     ReviewDate = r.ReviewDate
+                                 }).ToList();
+
+            return View(pr);
+        }
+
         public ActionResult ReviewProduction(int id)
         {
             DBModelContainer db = new DBModelContainer();
@@ -134,99 +177,65 @@ namespace HHMarketWebApp.Controllers
             return View(reviewDetails);
         }
 
-        public ActionResult ProductDetail(int id)
-        {
-            DBModelContainer db = new DBModelContainer();
-            ProductionDetail pr = new ProductionDetail();
-            pr.ProductId = id;
-            pr.listdata = (from p in db.ProductDetails
-                           join production in db.Products on p.ProductId equals production.ProductId
-                           where p.ProductId == id
-                           select new ProductionDetail()
-                           {
-                               Color = p.Color,
-                               Description = production.Description,
-                               Price = p.Price,
-                               Size = p.Size,
-                               Amount = p.Amount,
-                               Picture = p.Picture,
-                               ProductDetailsId = p.ProductDetailsId,
-                               ProductId = p.ProductId,
-                               ProductionName = production.Name
-                           }).ToList();
-
-            // return View(productionDetail.FirstOrDefault());
-            pr.reviewListData = (from r in db.Reviews
-                                 join p in db.Products on r.ProductId equals p.ProductId
-                                 join u in db.Users on r.UserId equals u.UserId
-                                 where p.ProductId == id
-                                 select new ReviewProduction()
-                                 {
-                                     ProductId = r.ProductId,
-
-                                     Title = r.Title,
-                                     Content = r.Content,
-                                     OverallRating = r.OverallRating,
-
-                                     ReviewId = r.ReviewId,
-                                     UserId = r.UserId,
-                                     UserName = u.UserName,
-                                     ReviewDate = r.ReviewDate
-                                 }).ToList();
-
-            return View(pr);
-        }
-
         [HttpPost]
         //public ActionResult AddNew([Bind(Include = "OverallRating,Title,Content")] ReviewProduction1 model)
         public async Task<ActionResult> AddNew(ReviewProduction model)
         {
-            if (ModelState.IsValid)
+            if (UserManager.User != null)
             {
-                // save to DB
-                DBModelContainer db = new DBModelContainer();
-                
-                Review review = new Review();
-                review.UserId = UserManager.User.Id;
-                review.ProductId = model.ProductId;
-                review.ReviewDate = DateTime.Now;
-                review.Title = model.Title;
-                review.Content = model.Content;
-                review.OverallRating = model.OverallRating;
+                if (ModelState.IsValid)
+                {
+                    // save to DB
+                    DBModelContainer db = new DBModelContainer();
 
-                db.Reviews.Add(review);
-                await db.SaveChangesAsync();
-                
+                    Review review = new Review();
+                    review.UserId = UserManager.User.Id;
+                    review.ProductId = model.ProductId;
+                    review.ReviewDate = DateTime.Now;
+                    review.Title = model.Title;
+                    review.Content = model.Content;
+                    review.OverallRating = model.OverallRating;
 
-                // Info.  
-                /*
+                    db.Reviews.Add(review);
+                    await db.SaveChangesAsync();
+
+                    // Info.  
+                    /*
+                    return this.Json(new
+                    {
+                        EnableSuccess = true,
+                        SuccessTitle = "Success",
+                        SuccessMsg = "Add new review sucessfully"
+                    });*/
+
+                    List<ReviewProduction> reviewList = (from r in db.Reviews
+                                                         join u in db.Users on r.UserId equals u.UserId
+                                                         where r.ProductId == model.ProductId
+                                                         select new ReviewProduction
+                                                         {
+                                                             ReviewId = r.ReviewId,
+                                                             Title = r.Title,
+                                                             Content = r.Content,
+                                                             OverallRating = r.OverallRating,
+                                                             UserName = u.UserName,
+                                                             ReviewDate = r.ReviewDate,
+                                                         }).ToList();
+                    return PartialView("_PartialPage_ReviewList", reviewList);
+                }
+
                 return this.Json(new
                 {
-                    EnableSuccess = true,
-                    SuccessTitle = "Success",
-                    SuccessMsg = "Add new review sucessfully"
-                });*/
-                
-                List<ReviewProduction> reviewList = (from r in db.Reviews
-                                                     join u in db.Users on r.UserId equals u.UserId
-                                                     where r.ProductId == model.ProductId
-                                                     select new ReviewProduction
-                                                     {
-                                                         ReviewId = r.ReviewId,
-                                                         Title = r.Title,
-                                                         Content = r.Content,
-                                                         OverallRating = r.OverallRating,
-                                                         UserName = u.UserName,
-                                                         ReviewDate = r.ReviewDate,
-                                                     }).ToList();
-                return PartialView("_PartialPage_ReviewList", reviewList);
+                    EnableError = true,
+                    ErrorTitle = "Error",
+                    ErrorMsg = "Something goes wrong, please try again later"
+                });
             }
-            
+
             return this.Json(new
             {
                 EnableError = true,
                 ErrorTitle = "Error",
-                ErrorMsg = "Something goes wrong, please try again later"
+                ErrorMsg = "Please login first"
             });
         }
 

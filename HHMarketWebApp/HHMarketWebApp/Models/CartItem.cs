@@ -8,6 +8,7 @@ namespace HHMarketWebApp.Models
     public class CartItem
     {
         public decimal Price { get; set; }
-        public int ProductDetailsId { get; set; }
+        public int ProductDetailsId { get; set; } 
+        public int Amount { get; set; }
     }
 }

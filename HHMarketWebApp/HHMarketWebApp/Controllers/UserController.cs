@@ -50,6 +50,7 @@ namespace HHMarketWebApp.Controllers
             return RedirectToAction("Login", "User");
         }
 
+        #region Not Used
         // GET: User
         public async Task<ActionResult> Index()
         {
@@ -159,5 +160,7 @@ namespace HHMarketWebApp.Controllers
             }
             base.Dispose(disposing);
         }
+        
+        #endregion
     }
 }
