@@ -186,7 +186,7 @@ namespace HHMarketWebApp.Controllers
 
         [HttpPost]
         //public ActionResult AddNew([Bind(Include = "OverallRating,Title,Content")] ReviewProduction1 model)
-        public async Task<ActionResult> AddNew(ReviewProduction model)
+        public async Task<ActionResult> AddNewReview(ReviewProduction model)
         {
             if (UserManager.User != null)
             {
@@ -232,17 +232,15 @@ namespace HHMarketWebApp.Controllers
 
                 return this.Json(new
                 {
-                    EnableError = true,
-                    ErrorTitle = "Error",
-                    ErrorMsg = "Something goes wrong, please try again later"
+                    ResponseType = Config.SOMETHING_WRONG_WITH_POST_REQUEST,
+                    Msg = "Something goes wrong, please try again later"
                 });
             }
 
             return this.Json(new
             {
-                EnableError = true,
-                ErrorTitle = "Error",
-                ErrorMsg = "Please login first"
+                ResponseType = Config.NEED_LOGIN,
+                Msg = "Please login first"
             });
         }
 

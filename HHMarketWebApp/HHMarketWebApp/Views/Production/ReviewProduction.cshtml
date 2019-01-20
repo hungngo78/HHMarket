@@ -42,7 +42,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <button class="btn-review" data-toggle="modal" data-target="#addReviewModal">Write a Review</button>
+                                <button id="btn_review_id" class="btn-review" data-toggle="modal" data-target="#addReviewModal">Write a Review</button>
                             </td>
                         </tr>
                     </table>
@@ -118,7 +118,7 @@
 
 <div class="modal fade" id="addReviewModal" tabindex="-1" role="dialog" aria-labelledby="addReviewModalTitle" aria-hidden="true" data-keyboard="false" data-backdrop="static">
     <div class="modal-dialog" role="document">
-        @using (Ajax.BeginForm("AddNew", "ReviewProduction",
+        @using (Ajax.BeginForm("AddNewReview", "ReviewProduction",
             new AjaxOptions { HttpMethod = "POST", OnSuccess = "onAjaxRequestSuccess" },
             new { @id = "AjaxformId", @class = "form-horizontal", role = "form" }))
         {
@@ -252,7 +252,17 @@
 
         var bigStarContainner = document.getElementById("starsContainer");
         setUpRatingStars(bigStarContainner, overrallRating);
-     
+
+        $("#btn_review_id").click(function (event) {
+            var flg = @Html.Raw(Json.Encode(HttpContext.Current.User.Identity.IsAuthenticated));
+            if (!flg) {
+                alert('Please login first');
+                event.preventDefault();
+                event.stopImmediatePropagation();  
+                document.location.href = "../User/Login";
+            }
+        });
+
 		$("#AjaxformId").submit(function (event) {
 	        event.preventDefault();
 	        event.stopImmediatePropagation();  
@@ -268,7 +278,6 @@
 	        }
 	
             var action = $("#AjaxformId").attr("action");
-            alert(action);
 	        var postData = {
 	            "OverallRating": count,
 	            "Title": document.getElementById("ryp-review-title").value,
@@ -284,24 +293,23 @@
 	            contentType: "application/json; charset=utf-8",
 	            data: JSON.stringify({ model: postData }), 
                 success: function (result) {
-                    //alert("success11");
-                    // Result.  
-	                //onAjaxRequestSuccess(result);
+                    if (result.ResponseType == '2') {
+                        alert(result.Msg);
+                        document.location.href = "../User/Login";
+                    }
+                    else {
+                        alert("take review comment successfully");
+                        var dismiss = document.getElementById('modelDismiss');
+                        dismiss.click();
 
-                    var dismiss = document.getElementById('modelDismiss');
-                    dismiss.click();
-
-                    $("#reviewListAjax").html(result);      
+                        $("#reviewListAjax").html(result);
+                    }
 	            },
-	            error: function (jqXHR, textStatus, errorThrown) {
-	                //do your own thing  
-                    alert("fail11");
+                error: function (result) {  
+                    alert(result.Msg);
 	            }
 	        });  
 	    });
-	
-	    //var onAjaxRequestSuccess = function (result) {	       
-	    //}
     });
 
     function closeModal() {
