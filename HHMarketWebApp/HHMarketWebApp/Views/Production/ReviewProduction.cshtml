@@ -22,7 +22,11 @@
     <table width="100%" >
         <tbody id="reviewListID">
             <tr style="margin: 10px;">
-                <td width="20%"><img id="productImg" src="~/assets/aa1.jpg" width="180" height="180" alt="" /></td>
+                <td width="20%">
+                    <a id="productDetailId" href="#">
+                        <img id="productImg" src="~/assets/aa1.jpg" width="180" height="180" alt="" />
+                    </a>
+                </td>
                 <td width="30%">
                     <table>
                         <tr>
@@ -335,6 +339,7 @@
     function setUpImage(product) {
         var imageList = product.Picture.split(',');
 
+        document.getElementById("productDetailId").href = "../Production/ProductDetail?id=" + product.ProductId;
         document.getElementById("productImg").src =
             '/assets/production/' + product.ProductId + '/' + product.Color + '/' + imageList[0];
 
