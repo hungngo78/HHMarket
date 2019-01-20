@@ -7,8 +7,6 @@ namespace HHMarketWebApp
 {
     public static class Config
     {
-        public const int NEED_LOGIN = 1;
-
-       
+        public const int NEED_LOGIN = 2;
     }
 }

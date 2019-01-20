@@ -461,25 +461,22 @@ namespace HHMarketWebApp.Controllers
 
                     return this.Json(new
                     {
-                        EnableSuccess = true,
-                        SuccessTitle = "Successful!",
-                        SuccessMsg = "Thank you so much for your order!"
+                        ResponseType = 0,
+                        Msg = "Thank you so much for your order!"
                     });
                 }
 
                 return this.Json(new
                 {
-                    EnableError = true,
-                    ErrorTitle = "Error",
-                    ErrorMsg = "Something goes wrong, please try again later"
+                    ResponseType = 1,
+                    Msg = "Something goes wrong, please try again later"
                 });
             }
 
             return this.Json(new
             {
-                EnableError = true,
-                ErrorType = Config.NEED_LOGIN,
-                ErrorMsg = "Please login first"
+                ResponseType = Config.NEED_LOGIN,
+                Msg = "Please login first"
             });
         }
     }

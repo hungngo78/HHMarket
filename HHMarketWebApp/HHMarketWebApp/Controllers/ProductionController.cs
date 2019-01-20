@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Net;
-using System.Web;
 using System.Web.Mvc;
 using HHMarketWebApp.Models;
 using FormsAuth;
@@ -52,6 +49,15 @@ namespace HHMarketWebApp.Controllers
             DBModelContainer db = new DBModelContainer();
             ProductionDetail pr = new ProductionDetail();
             pr.ProductId = id;
+
+            var names = (from p in db.Products
+                        join c in db.Categories on p.CategoryId equals c.CategoryId
+                        where p.ProductId == id
+                        select new { ProductName = p.Name,
+                                     CategoryName = c.Name
+                        }).FirstOrDefault();
+            pr.Title = names.CategoryName + " > " + names.ProductName;
+
             pr.listdata = (from p in db.ProductDetails
                            join production in db.Products on p.ProductId equals production.ProductId
                            where p.ProductId == id

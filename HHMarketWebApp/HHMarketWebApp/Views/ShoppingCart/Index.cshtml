@@ -166,18 +166,20 @@
                     data: JSON.stringify({ model: shoppingCart[0]}),
                     dataType: "json",
                     success: function (result) {
-                        onAjaxRequestSuccess();
+                        onAjaxRequestSuccess(result);
                     },
                     error: function (result) {
-                        //alert('You vave error when submit order. Could you please try again!');
-                        if (result.ErrorType == 1)
-                            document.location.href = "../User/Login";
+                        alert('You have error when submit order. Could you please try again!');
+                        document.location.href = "../Category/Index";
                     }
                 });
 
                 var onAjaxRequestSuccess = function (result) {
-                    alert('Thank you for your order!');
-                    document.location.href = "../Category/Index";
+                    alert(result.Msg);
+                    if (result.ResponseType == '2')
+                        document.location.href = "../User/Login";
+                    else
+                        document.location.href = "../Category/Index";
                 }
             }
             return false;
