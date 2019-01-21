@@ -198,7 +198,6 @@
     <Content Include="assets\aa1.jpg" />
     <Content Include="assets\aa2.jpg" />
     <Content Include="assets\aa3.jpg" />
-    <Content Include="assets\nightsky.jpg" />
     <Content Include="assets\page1.jpg" />
     <Content Include="assets\page2.jpg" />
     <Content Include="assets\page3.jpg" />
@@ -207,6 +206,7 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\category.css" />
     <Content Include="Content\dropdown_navbar.css" />
     <Content Include="Content\Header-Nightsky.css" />
     <Content Include="Content\hhstyle.css" />
@@ -214,6 +214,7 @@
     <Content Include="Content\PagedList.css" />
     <Content Include="Content\productDetail.css" />
     <Content Include="Content\product.review.css" />
+    <Content Include="Content\searchProduction.css" />
     <Content Include="Content\shoppingCart.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
