@@ -8,6 +8,17 @@ body {
    height:150px;
  }
 
+.div-image-left {
+    float: left;
+    width: 35%;
+    display: block;
+    overflow: hidden;
+}
+.div-image-right {
+    float: right;
+    width: 55%;
+    overflow: hidden;
+}
 .productdetail_image {
   border: solid 1px #9b9b9b;
   background-size: contain;
@@ -32,6 +43,7 @@ body {
  height: auto;
  margin-top: 20px;
  margin-bottom: 20px;
+ display:block;
 }
 
 
@@ -69,13 +81,13 @@ body {
 
 
 .product_detail_left {
-    width: 40%;
+    width: 50%;
     float: left;
     padding: 10px;
 }
 
 .product_detail_right {
-    width: 60%;
+    width: 50%;
     background-color: rgba(217, 217, 217, 0.06);
     vertical-align: top;
     padding: 10px;

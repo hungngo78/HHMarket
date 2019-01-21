@@ -80,8 +80,7 @@
 
     });
     function setUpEmtyStars(productionId) {
-
-        for (var k = setUpEmtyStars; k >= 1; k--) {
+        for (var k = 5; k >= 1; k--) {
             var id = "img/" + productionId + "/star" + k;
             var img = document.getElementById(id);
             img.setAttribute("src", "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgiIGhlaWdodD0iMTgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmlld0JveD0iMCAwIDE4IDE4Ij48cGF0aCBmaWxsPSIjZTZlN2U4IiBkPSJNOSAwbDIuNSA2LjhoNi41bC01LjQgNC4yIDIgNy01LjYtNC4zLTUuNiA0LjMgMi03LTUuNC00LjJoNi41eiIvPjwvc3ZnPg==");
@@ -92,8 +91,10 @@
     function displayDisplayReviewRating() {
 
         function setUpRatedStar(overrallRating, productionId) {
-            if (overrallRating == 0)
+            if (overrallRating == 0) {
                 setUpEmtyStars(productionId);
+                return;
+            }
             for (var j = 1; j <= overrallRating; j++) {
                 var id = "img/" + productionId + "/star" + j;
                 var img = document.getElementById(id);

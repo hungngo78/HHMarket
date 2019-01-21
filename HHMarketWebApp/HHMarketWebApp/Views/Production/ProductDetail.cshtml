@@ -17,23 +17,19 @@
     <div>
         <p style="color:blue; padding-bottom: 10px;">@Model.Title</p>
         <div style="width:100%">
-                <div class="product_detail_left">
-                    <div>
-                        <table>
-                            <tr>
-                                <td>
-                                    <table id="imgTable"></table>
-                                </td>
-                                <td>
-                                    <img id="largeImageId" align="middle" class="productdetail_image_large" src="">
-                                </td>
-                            </tr>
-                        </table>
-                        <div class="btn_addtocart" align="center">
-                            <button class="Add-to-Cart" id="addToCartID">Add to Cart</button>
-                        </div>
+            <div class="product_detail_left">
+                <div style="display: table-cell; vertical-align: middle;">
+                    <div class="div-image-left">
+                        <table id="imgTable"></table>
+                    </div>
+                    <div class="div-image-right">
+                        <img id="largeImageId" align="middle" class="productdetail_image_large" src="">
                     </div>
                 </div>
+                <div class="btn_addtocart" align="center">
+                    <button class="Add-to-Cart" id="addToCartID">Add to Cart</button>
+                </div>
+            </div>
                 <div class="product_detail_right">
                     <div>
                         <table>
@@ -289,7 +285,7 @@
     }
    
     function displayReviewStar() {
-
+       
         var reviewRow = document.getElementById("starReiewID");
         reviewRow.innerHTML = ' ';
         // add start
@@ -299,21 +295,58 @@
                 //alert(modelReview[i].Title);
                 count += modelReview[i].OverallRating;
             }
-
-            var generalRating = Math.round(count / modelReview.length);
+            var overrallRating = count / modelReview.length;
             document.getElementById("reviewCountID").textContent = "" + modelReview.length + " customer reviews";
-            for (var j = 0; j < generalRating; j++) {
-                reviewRow.insertCell(j).innerHTML = '<img class="star" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjgiIGhlaWdodD0iMjgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmlld0JveD0iMCAwIDE4IDE4IiBlbmFibGUtYmFja2dyb3VuZD0ibmV3IDAgMCAxOCAxOCI+PHBhdGggZmlsbD0iIzAwMDAwMCIgZD0iTTkgMGwyLjUgNi44aDYuNWwtNS40IDQuMiAyIDctNS42LTQuMy01LjYgNC4zIDItNy01LjQtNC4yaDYuNXoiLz48L3N2Zz4=" />';
+
+            if (overrallRating == 0 || overrallRating == 1 || overrallRating == 2 || overrallRating == 3 || overrallRating == 4 || overrallRating == 5) {
+                setUpRatedStar(overrallRating, reviewRow);
             }
-            for (var k = generalRating; k < 5; k++) {
-                reviewRow.insertCell(j).innerHTML = '<img class="star"  src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgiIGhlaWdodD0iMTgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmlld0JveD0iMCAwIDE4IDE4Ij48cGF0aCBmaWxsPSIjZTZlN2U4IiBkPSJNOSAwbDIuNSA2LjhoNi41bC01LjQgNC4yIDIgNy01LjYtNC4zLTUuNiA0LjMgMi03LTUuNC00LjJoNi41eiIvPjwvc3ZnPg==" />';
+            else if (overrallRating > 1 && overrallRating < 2) {
+                setUpRatedStarPartial(1, reviewRow);
+            }
+            else if (overrallRating > 2 && overrallRating < 3) {
+                setUpRatedStarPartial(2, reviewRow);
+            }
+            else if (overrallRating > 3 && overrallRating < 4) {
+                setUpRatedStarPartial(3, reviewRow);
+            }
+            else if (overrallRating > 4 && overrallRating < 5) {
+                setUpRatedStarPartial(4, reviewRow);
             }
         } else {
+            setUpEmtyStars(overrallRating, eviewRow);
+        }
 
-            for (var a = 0; a < 5; a++) {
-                reviewRow.insertCell(a).innerHTML = '<img class="star"  src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgiIGhlaWdodD0iMTgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmlld0JveD0iMCAwIDE4IDE4Ij48cGF0aCBmaWxsPSIjZTZlN2U4IiBkPSJNOSAwbDIuNSA2LjhoNi41bC01LjQgNC4yIDIgNy01LjYtNC4zLTUuNiA0LjMgMi03LTUuNC00LjJoNi41eiIvPjwvc3ZnPg==" />';
+        function setUpRatedStarPartial(position, reviewRow) {
+
+            for (var j = 0; j < position; j++) {
+                reviewRow.insertCell(j).innerHTML = '<img class="star" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjgiIGhlaWdodD0iMjgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmlld0JveD0iMCAwIDE4IDE4IiBlbmFibGUtYmFja2dyb3VuZD0ibmV3IDAgMCAxOCAxOCI+PHBhdGggZmlsbD0iIzAwMDAwMCIgZD0iTTkgMGwyLjUgNi44aDYuNWwtNS40IDQuMiAyIDctNS42LTQuMy01LjYgNC4zIDItNy01LjQtNC4yaDYuNXoiLz48L3N2Zz4=" />';
+              }
+            // set for position
+            reviewRow.insertCell(position).innerHTML = '<img class="star" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAiIGhlaWdodD0iMTAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmlld0JveD0iMzUgMzUgMTggMTgiIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMzUgMzUgMTggMTgiPjxwYXRoIGZpbGw9IiMwMDAwMDAiIGQ9Ik00NCA0OC44bC01LjYgNC4yIDEuOS03LjEtNS4zLTRoNi42bDIuNC02LjkiLz48cGF0aCBmaWxsPSIjZTZlN2U4IiBkPSJNNDQgMzVsMi40IDYuOWg2LjZsLTUuMyA0IDEuOSA3LjEtNS42LTQuMiIvPjwvc3ZnPg==" />';
+        
+            for (var j = position + 1; j < 5; j++) {
+                reviewRow.insertCell(j).innerHTML = '<img class="star" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgiIGhlaWdodD0iMTgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmlld0JveD0iMCAwIDE4IDE4Ij48cGF0aCBmaWxsPSIjZTZlN2U4IiBkPSJNOSAwbDIuNSA2LjhoNi41bC01LjQgNC4yIDIgNy01LjYtNC4zLTUuNiA0LjMgMi03LTUuNC00LjJoNi41eiIvPjwvc3ZnPg==" />';
+              }
+        }
+
+        function setUpEmtyStars(reviewRow) {
+            for (var k = 0; k < 5; k++) {
+                reviewRow.insertCell(k).innerHTML = '<img class="star"  src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgiIGhlaWdodD0iMTgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmlld0JveD0iMCAwIDE4IDE4Ij48cGF0aCBmaWxsPSIjZTZlN2U4IiBkPSJNOSAwbDIuNSA2LjhoNi41bC01LjQgNC4yIDIgNy01LjYtNC4zLTUuNiA0LjMgMi03LTUuNC00LjJoNi41eiIvPjwvc3ZnPg==" />';
             }
+        }
+        function setUpRatedStar(overrallRating, reviewRow) {
+            if (overrallRating == 0) {
+                setUpEmtyStars(reviewRow);
+                return;
+            }
+            for (var j = 0; j < overrallRating; j++) {
+                reviewRow.insertCell(j).innerHTML = '<img class="star" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjgiIGhlaWdodD0iMjgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmlld0JveD0iMCAwIDE4IDE4IiBlbmFibGUtYmFja2dyb3VuZD0ibmV3IDAgMCAxOCAxOCI+PHBhdGggZmlsbD0iIzAwMDAwMCIgZD0iTTkgMGwyLjUgNi44aDYuNWwtNS40IDQuMiAyIDctNS42LTQuMy01LjYgNC4zIDItNy01LjQtNC4yaDYuNXoiLz48L3N2Zz4=" />';
 
+            }
+            for (var j = overrallRating; j < 5; j++) {
+                reviewRow.insertCell(j).innerHTML = '<img class="star"  src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgiIGhlaWdodD0iMTgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmlld0JveD0iMCAwIDE4IDE4Ij48cGF0aCBmaWxsPSIjZTZlN2U4IiBkPSJNOSAwbDIuNSA2LjhoNi41bC01LjQgNC4yIDIgNy01LjYtNC4zLTUuNiA0LjMgMi03LTUuNC00LjJoNi41eiIvPjwvc3ZnPg==" />';
+            }
         }
 
 
