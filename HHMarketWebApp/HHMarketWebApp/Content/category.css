@@ -1,0 +1,16 @@
+﻿
+
+.category-title-content {
+    width: 90%;
+    height: 30px;
+    padding-top: 8px;
+    margin-top: 16px;
+    margin-left: 10px;
+    border-top: 1px solid #e6e7e8;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 18px;
+}
+.div-category-item {
+    background-color:white; 
+    margin-top:10px;
+}

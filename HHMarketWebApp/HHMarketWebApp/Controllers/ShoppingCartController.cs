@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
@@ -315,17 +314,16 @@ namespace HHMarketWebApp.Controllers
 
                 return this.Json(new
                 {
-                    EnableSuccess = true,
-                    SuccessTitle = "Successful!",
-                    SuccessMsg = "Thank you so much for your order!"
+                    ResponseType = Config.SUCCESS,
+                    Msg = "Update quantity successfully!"
+                  
                 });
             }
 
             return this.Json(new
             {
-                EnableError = true,
-                ErrorTitle = "Error",
-                ErrorMsg = "Something goes wrong, please try again later"
+                ResponseType = Config.SUCCESS,
+                Msg = "Something goes wrong, please try again later"
             });
         }        
 
@@ -385,18 +383,16 @@ namespace HHMarketWebApp.Controllers
                 ModelState.Clear();
                 return this.Json(new
                 {
-                    EnableSuccess = true,
-                    SuccessTitle = "Successful!",
-                    SuccessMsg = "Thank you so much for your order!"
+                    ResponseType = Config.SUCCESS,
+                    Msg = "Thank you so much for your order!"
                 });
 
             }
 
             return this.Json(new
             {
-                EnableError = true,
-                ErrorTitle = "Error",
-                ErrorMsg = "Something goes wrong, please try again later"
+                ResponseType = Config.SUCCESS,
+                Msg = "Something goes wrong, please try again later"
             });
         }
 
@@ -461,14 +457,14 @@ namespace HHMarketWebApp.Controllers
 
                     return this.Json(new
                     {
-                        ResponseType = 0,
+                        ResponseType = Config.SUCCESS,
                         Msg = "Thank you so much for your order!"
                     });
                 }
 
                 return this.Json(new
                 {
-                    ResponseType = 1,
+                    ResponseType = Config.SOMETHING_WRONG_WITH_POST_REQUEST,
                     Msg = "Something goes wrong, please try again later"
                 });
             }
