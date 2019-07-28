@@ -1,8 +1,24 @@
- .productdetail_image_rectangle{
+body {
+    font-size: 15px;
+}
+ 
+
+.productdetail_image_rectangle{
    width: 150px;
    height:150px;
  }
 
+.div-image-left {
+    float: left;
+    width: 35%;
+    display: block;
+    overflow: hidden;
+}
+.div-image-right {
+    float: right;
+    width: 55%;
+    overflow: hidden;
+}
 .productdetail_image {
   border: solid 1px #9b9b9b;
   background-size: contain;
@@ -27,25 +43,26 @@
  height: auto;
  margin-top: 20px;
  margin-bottom: 20px;
+ display:block;
 }
 
 
 .Add-to-Cart {
-  width: 141px;
-  height: 38px;
-  border-radius: 8px;
-  background-image: linear-gradient(to bottom, #f4eac6, #f5a623, #f5ab32, #f4c16d);
-  border: solid 1px #f5a623;
-  font-family: AmericanTypewriter;
-  font-size: 15px;
-  font-weight: bold;
-  font-style: normal;
-  font-stretch: normal;
-  line-height: normal;
-  letter-spacing: normal;
-  background-color: transparent;
-  color: #ffffff;
-  text-align: center;
+    width: 150px;
+    height: 38px;
+    border-radius: 8px;
+    background-image: linear-gradient(to bottom, #13b2bd, #13b2bd, #13b2bd, #13b2bd);
+    border: solid 1px #08807c;
+    font-family: AmericanTypewriter;
+    font-size: 18px;
+    font-weight: bold;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    background-color: transparent;
+    color: white;
+    text-align: center;
 }
 
 
@@ -62,10 +79,43 @@
   color: #046ce5;
 }
 
+
+.product_detail_left {
+    width: 50%;
+    float: left;
+    padding: 10px;
+}
+
 .product_detail_right {
-  width:60%; 
-  background-color: rgba(151, 151, 151, 0.06);
-  vertical-align: top;
-  padding: 10px;
+    width: 50%;
+    background-color: rgba(217, 217, 217, 0.06);
+    vertical-align: top;
+    padding: 10px;
+    float: right;
+}
+
+.star {
+    width: 18px;
+    height: 18px;
+    background-size: 100%;
+}
+
+.review-count {
+    
+    color:blue; 
+    padding-top: 10px; 
+    padding-left: 10px; 
+    text-decoration: underline;
+}
+
+.price-product {
+    color:red; 
+    padding-top:10px; 
+    font-size:18px;
+}
+.product-title {
+    color:navy;
+    font-family: "Segoe UI","Segoe WP",Arial,Sans-Serif;
+    font-size: 2.5rem;
 }
 

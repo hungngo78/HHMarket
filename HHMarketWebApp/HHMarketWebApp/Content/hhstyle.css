@@ -90,7 +90,7 @@ body {
 	margin:0;
 	font-size:18px;
 	font-weight:300;
-	color:#333
+	color:crimson;
 }
 
 a, a:link, a:active, a:visited {
@@ -98,37 +98,10 @@ a, a:link, a:active, a:visited {
 	cursor: pointer;
 }
 
-
-
-.button{
-	display:block;
-	height:45px;
-	width:85%;
-	padding:0 1em;
-	font-size:13px;
-	font-weight:500;
-	line-height:45px;
-	letter-spacing:0.05em;
-	text-transform:uppercase;
-	text-align:center;
-	background: #939393;
-	color:#fff;
-	cursor:pointer;
-	border-radius: 2.1875rem
-}
-.button:hover{
-	color:#fff;
-	background:#0276b4
-}
 .button span{
 	letter-spacing:0.1em
 }
 
-.button-alt:hover{
-	background:#f7f7f7;
-	border:1px solid #ccc;
-	color:#666
-}
 .link-button{
 	background:transparent none;
 	border:none;

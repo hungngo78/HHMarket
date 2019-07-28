@@ -1,10 +1,9 @@
 ﻿@model PagedList.IPagedList<HHMarketWebApp.Models.Category>
 @using PagedList.Mvc;
 
-<div style="width: 100%; margin-top:60px">
-</div>
+<link rel="stylesheet" type="text/css" href="~/Content/category.css">
 
-<div id="myCarousel" class="carousel slide" data-ride="carousel">
+<div id="myCarousel" class="carousel slide" data-ride="carousel" style="margin-top: 60px;">
     <!-- Indicators -->
     <ol class="carousel-indicators">
         <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
@@ -44,16 +43,15 @@
 
 
 
-<div class="container" style="margin-top: 50px;">
+<div class="container" style="margin-top: 30px;">
     <div class="row">
         @foreach (var item in Model)
         {
-        <div class="col-sm-3" style="background-color:white;">
+        <div class="col-sm-3" style="background-color:white; margin-top:10px;">
             <a href="../Production/Index?categoryId=@item.CategoryId&page=1">
-            <!--a href="../Production/ReviewProduction?id=2"-->
                 <div class="Rectangle">
                     <img src="~/assets/@Html.DisplayFor(model =>item.Picture)" style="padding-top:10px; padding-bottom:10px" class="product_img" alt="No Image" />
-                    <div class="TempoCategoryTile-content">
+                    <div class="category-title-content">
                         <p class="product_lb">@Html.DisplayFor(modelItem => item.Name)</p>
                     </div>
                 </div>

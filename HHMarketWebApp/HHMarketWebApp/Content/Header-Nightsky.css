@@ -4,7 +4,7 @@ body {
 
 .header-nightsky {
     color: white;
-    background: url("../assets/nightsky.jpg") no-repeat;
+    background-color:#009999;
     background-size: cover;
     background-position: bottom;
     padding-bottom: 20px;
@@ -150,12 +150,13 @@ body {
 }
 
 .flipkart-navbar-dropdown {
-    background-color: rgba(151, 151, 151, 0.6);
-    border: 1px solid rgba(151, 151, 151, 0.6);
-    border-radius: 2px 0 0 2px;
-    color: #565656;
+    background-color: white;
+    border: 0.5px solid rgba(151, 151, 151, 0.6);
+    border-radius: 1px 0 0 1px;
+    color: darkred;
     padding: 10px 10px;
     height: 43px;
+    font-size: 15px;
     cursor: pointer;
 }
 
@@ -167,4 +168,17 @@ body {
     padding: 10px 0;
     height: 43px;
     cursor: pointer;
+}
+
+.category-search-left{
+    width: 25%;
+    float: left;
+}
+.category-search-right {
+    width: 75%;
+    float: right;
+}
+.div-category-search {
+    width: 100%;
+    display: block;
 }
