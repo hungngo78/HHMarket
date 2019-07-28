@@ -1,2 +1,2 @@
 html/* linguist-vendored
-HHMarketWebApp/*.js linguist-vendored
+*.cs    diff=csharp
