@@ -1,2 +1,2 @@
 html/* linguist-vendored
-*.cs    diff=csharp
+*.cs linguist-language=csharp
