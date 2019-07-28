@@ -1,2 +1,2 @@
 html/* linguist-vendored
-*.js linguist-language=.Net
+HHMarketWebApp/*.js linguist-vendored
